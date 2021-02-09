@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import warnings
 from time import sleep
-
+from bs4 import BeautifulSoup as bs
 
 class WebDriver:
     options = Options()
@@ -30,9 +30,35 @@ class WebDriver:
                     self.match = True
             return True
         except :
-            raise RuntimeError ("Error Scrolling...")
-    def initializeNextPage(self):
-        pass
+            return False
+
+    def initializeNextPage(self,elementTag="name",nextButtonName):
+        self.elementTag = elementTag
+        self.nextButtonName = nextButtonName
+
+        if self.elementTag == "name":
+            self.driver.find_element_by_name(self.nextButtonName).send_keys(Keys.ENTER)
+            return True
+        if self.elementTag == "class":
+            self.driver.find_element_by_class_name(self.nextButtonName).send_keys(Keys.ENTER)
+            return True
+        if self.elementTag == "id":
+            self.driver.find_element_by_id(self.nextButtonName).send_keys(Keys.ENTER)
+            return True
+        return False
+
+    def categoryFinder(self,*args, **kwargs):
+        self.elementTag = elementTag
+        self.html = bs(html, 'html.parser')
+        self.container = self.html.find()
+
+
+
+        # if self.elementTag == "class":
+        #     self.container = self.driver.find_element_by_class_name(elementContainerValue)
+        #     self.compiled = self.container.find_elements_by_tag_name(elementIndividual)            
+        #     # container = self.driver.find_element_by_class_name(elementContainerValue)
+            # self.container = self.container.find_elements_by_tag_name(elementIndividual)
 
     def saveData(self):
         pass
@@ -40,7 +66,7 @@ class WebDriver:
     def localNameFinder(self):
         pass
     
-    def categoryFinder(self):
+    def listParser(self):
         pass
 
     def titleFinder(self):
