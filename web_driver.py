@@ -19,9 +19,21 @@ class WebDriver:
             print(self.driver.current_url)
         except:
             raise RuntimeError('Error initializing the webdriver')
-    def initializeBrowser(self):
-        pass
 
+    def initializeScroller(self):
+        # # this will scroll down until the end of pages  so that all pages tag will be fetched
+        # lenOfPage = self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
+        # match = False
+        # while (match == False):
+        #     lastCount = lenOfPage
+        #     sleep(3)
+        #     lenOfPage = driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
+        #     print(now_checker(),"INFO:SEARCHING PAGES")
+        #     if lastCount == lenOfPage:
+        #         match = True
+        #         print(now_checker(),"INFO:SEARCHED COMPLETED")
+        pass
+    
     def nextPageChecker(self):
         pass
 
