@@ -17,8 +17,16 @@ class WebDriver:
         print(f"Scraping {self.url} ...")
 
     def initializeBrowser(self):
-        self.driver.get(self.url)
-        print(self.driver.title())
+        try:
+            options = Options()
+            options.add_argument('--no-sandbox')
+            options.add_experimental_option("prefs", {"profile.default_content_setting_values.notifications": 1})
+            options.add_argument("--headless")
+            driver = webdriver.Chrome(options=options)
+            warnings.filterwarnings('ignore')
+            return driver
+        except:
+            raise RuntimeError('Error initializing the webdriver')
 
     def nextPageChecker(self):
         pass
