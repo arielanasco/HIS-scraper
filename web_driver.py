@@ -3,9 +3,14 @@ from selenium.webdriver.chrome.options import Options
 import warnings
 
 class WebDriver:
-    def __init__(self,url):
-        self.url = url
-    
+    options = Options()
+    options.add_argument('--no-sandbox')
+    options.add_experimental_option("prefs", {"profile.default_content_setting_values.notifications": 1})
+    options.add_argument("--headless")
+    warnings.filterwarnings('ignore')
+
+    def __init__(self,Driver=webdriver.Chrome(options=options)):
+        self.driver = Driver
     def displaySiteInfo(self):
         try:
             self.driver.get(self.url)
@@ -13,14 +18,9 @@ class WebDriver:
         except:
             raise RuntimeError('Error initializing the webdriver')
 
-    def initializeScroller(self):
-        options = Options()
-        options.add_argument('--no-sandbox')
-        options.add_experimental_option("prefs", {"profile.default_content_setting_values.notifications": 1})
-        options.add_argument("--headless")
-        driver = webdriver.Chrome(options=options)
-        warnings.filterwarnings('ignore')
-        return driver
+    def initialize(self,url):
+        pass
+    
     def nextPageChecker(self):
         pass
 
