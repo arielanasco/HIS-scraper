@@ -13,11 +13,7 @@ class WebDriver:
     def __init__(self,url):
         self.url = url
     def displaySiteInfo(self):
-        try:
-            self.driver.get(self.url)
-            print(self.driver.current_url)
-        except:
-            raise RuntimeError('Error initializing the webdriver')
+        pass
 
     def initialize(self,url):
         pass
