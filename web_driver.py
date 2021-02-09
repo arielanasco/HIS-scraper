@@ -3,12 +3,12 @@ from selenium.webdriver.chrome.options import Options
 import warnings
 
 class WebDriver:
-    self.options = Options()
-    self.options.add_argument('--no-sandbox')
-    self.options.add_experimental_option("prefs", {"profile.default_content_setting_values.notifications": 1})
-    self.options.add_argument("--headless")
+    options = Options()
+    options.add_argument('--no-sandbox')
+    options.add_experimental_option("prefs", {"profile.default_content_setting_values.notifications": 1})
+    options.add_argument("--headless")
     self.driver = webdriver.Chrome(options=options)
-    self.warnings.filterwarnings('ignore')
+    warnings.filterwarnings('ignore')
 
     def __init__(self,url):
         self.url = url
