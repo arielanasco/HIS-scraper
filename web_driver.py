@@ -1,23 +1,6 @@
 # from selenium import webdriver
 # from selenium.webdriver.chrome.options import Options
-# from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.support import expected_conditions as EC
-# from selenium.webdriver.common.by import By
-# from selenium.common.exceptions import TimeoutException,NoSuchElementException
-# from bs4 import BeautifulSoup as bs
-# from time import sleep
-# import pandas as pd
-# import json
-# import hashlib
-# from datetime import datetime as stamp
-# from datetime import timedelta
-# import datetime
-# from datetime import date
-# from datetime import time
-# from sqlalchemy import create_engine
-# import mysql.connector as connect
-# import warnings
-# import sys
+
 class WebDriver:
     def __init__(self,url):
         self.url = url
