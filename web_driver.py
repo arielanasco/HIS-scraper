@@ -19,15 +19,18 @@ class WebDriver:
         print(f"Target URL: {self.driver.current_url}")
 
     def initializeScroll(self):
-        self.lenOfPage = self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
-        self.match = False
-        while (self.match == False):
-            self.lastCount = self.lenOfPage
-            sleep(3)
-            self.lenOfPage = driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
-            if self.lastCount == self.lenOfPage:
-                self.match = True
-
+        try:
+            self.lenOfPage = self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
+            self.match = False
+            while (self.match == False):
+                self.lastCount = self.lenOfPage
+                sleep(3)
+                self.lenOfPage = self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
+                if self.lastCount == self.lenOfPage:
+                    self.match = True
+            return True
+        except :
+            raise RuntimeError ("Error Scrolling...")
     def initializeNextPage(self):
         pass
 
