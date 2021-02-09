@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import warnings
+import logging
+
 
 class WebDriver:
     options = Options()
@@ -12,8 +14,12 @@ class WebDriver:
 
     def __init__(self,url):
         self.url = url
+
     def displaySiteInfo(self):
-        pass
+        try:
+            logging.info(f"Target URL: {self.driver.current_url}")
+        except:
+            raise RuntimeError ("Unable to display the current url")
 
     def initialize(self,url):
         pass
