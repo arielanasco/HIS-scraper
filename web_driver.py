@@ -32,7 +32,7 @@ class WebDriver:
         except :
             return False
 
-    def initializeNextPage(self,elementTag="name",nextButtonName):
+    def initializeNextPage(self,nextButtonName,elementTag="name"):
         self.elementTag = elementTag
         self.nextButtonName = nextButtonName
 
@@ -51,8 +51,6 @@ class WebDriver:
         self.elementTag = elementTag
         self.html = bs(html, 'html.parser')
         self.container = self.html.find()
-
-
 
         # if self.elementTag == "class":
         #     self.container = self.driver.find_element_by_class_name(elementContainerValue)
