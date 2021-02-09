@@ -18,7 +18,7 @@ class WebDriver:
     def displaySiteInfo(self):
         print(f"Target URL: {self.driver.current_url}")
 
-    def initializeScroll(self,url):
+    def initializeScroll(self):
         self.lenOfPage = self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
         self.match = False
         while (self.match == False):
