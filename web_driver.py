@@ -8,19 +8,20 @@ class WebDriver:
     options.add_experimental_option("prefs", {"profile.default_content_setting_values.notifications": 1})
     options.add_argument("--headless")
     warnings.filterwarnings('ignore')
+    driver=webdriver.Chrome(options=options)
 
-    def __init__(self,Driver=webdriver.Chrome(options=options)):
-        self.driver = Driver
+    def __init__(self,url):
+        self.url = url
     def displaySiteInfo(self):
         try:
-            self.driver.get(self.url)
+            driver.get(self.url)
             print(self.driver.current_url)
         except:
             raise RuntimeError('Error initializing the webdriver')
 
     def initialize(self,url):
         pass
-    
+
     def nextPageChecker(self):
         pass
 
