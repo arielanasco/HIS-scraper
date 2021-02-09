@@ -18,7 +18,7 @@ class WebDriver:
 
     def initializeBrowser(self):
         self.driver.get(self.url)
-        return self.driver.title()
+        print(f"{self.driver.title()}")
 
     def nextPageChecker(self):
         pass
