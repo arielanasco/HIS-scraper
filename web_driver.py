@@ -1,5 +1,6 @@
-# from selenium import webdriver
-# from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+import warnings
 
 class WebDriver:
     def __init__(self,url):
@@ -9,7 +10,13 @@ class WebDriver:
         print(f"Scraping {self.url} ...")
 
     def initializeBrowser(self):
-        pass
+        options = Options()
+        options.add_argument('--no-sandbox')
+        options.add_experimental_option("prefs", {"profile.default_content_setting_values.notifications": 1})
+        options.add_argument("--headless")
+        driver = webdriver.Chrome(options=options)
+        warnings.filterwarnings('ignore')
+        driver.get(self.url)
 
     def nextPageChecker(self):
         pass
