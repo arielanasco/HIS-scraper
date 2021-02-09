@@ -14,14 +14,13 @@ class WebDriver:
         self.url = url
     
     def displaySiteInfo(self):
-        print(f"Scraping {self.url} ...")
-
-    def initializeBrowser(self):
         try:
             self.driver.get(self.url)
             print(self.driver.current_url)
         except:
             raise RuntimeError('Error initializing the webdriver')
+    def initializeBrowser(self):
+        pass
 
     def nextPageChecker(self):
         pass
