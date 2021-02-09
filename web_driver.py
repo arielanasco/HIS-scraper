@@ -1,14 +1,14 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import warnings
-import logging
+from time import sleep
 
 
 class WebDriver:
     options = Options()
     options.add_argument('--no-sandbox')
     options.add_experimental_option("prefs", {"profile.default_content_setting_values.notifications": 1})
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
     warnings.filterwarnings('ignore')
     driver = webdriver.Chrome(options=options)
 
@@ -19,7 +19,14 @@ class WebDriver:
         print(f"Target URL: {self.driver.current_url}")
 
     def initializeScroll(self,url):
-        pass
+        self.lenOfPage = self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
+        self.match = False
+        while (self.match == False):
+            self.lastCount = self.lenOfPage
+            sleep(3)
+            self.lenOfPage = driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
+            if self.lastCount == self.lenOfPage:
+                self.match = True
 
     def initializeNextPage(self):
         pass
