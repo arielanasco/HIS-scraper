@@ -15,7 +15,7 @@ class WebDriver:
     
     def displaySiteInfo(self):
         try:
-            self.driver.get(self.urll)
+            self.driver.get(self.url)
             print(self.driver.current_url)
         except:
             raise RuntimeError('Error initializing the webdriver')
