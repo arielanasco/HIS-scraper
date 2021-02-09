@@ -16,15 +16,12 @@ class WebDriver:
         self.url = url
 
     def displaySiteInfo(self):
-        try:
-            logging.info(f"Target URL: {self.driver.current_url}")
-        except:
-            raise RuntimeError ("Unable to display the current url")
+        print(f"Target URL: {self.driver.current_url}")
 
-    def initialize(self,url):
+    def initializeScroll(self,url):
         pass
 
-    def nextPageChecker(self):
+    def initializeNextPage(self):
         pass
 
     def saveData(self):
