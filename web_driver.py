@@ -60,35 +60,8 @@ class WebDriver:
                 self.liTag = self.liTag.find_next_sibling()
             else:
                 break
-        self.df = pd.DataFrame(self.collector, columns = ['URL', 'Category'])
-        self.df = self.df.drop_duplicates().reset_index(drop=True)
-        return self.df
-        #     if data.find("ul"):
-        #         self.data_ = data.find_all("li")
-        #         for aTag in self.data_:
-        #             self.aTag_ = aTag.find("a").get("href")
-        #             self.categoryData = re.sub(r'\([0-9]*\)', '', aTag.find("a").get_text())
-        #             self.categoryData = re.sub(r'\W+', '', self.categoryData)
-        #             self.collector.append([self.aTag_,self.categoryData])
-        #     else:
-        #         self.aTag_ = data.find("a").get("href")
-        #         self.categoryData = re.sub(r'\([0-9]*\)', '', data.find("a").get_text())
-        #         self.categoryData = re.sub(r'\W+', '', self.categoryData)
-        #         self.collector.append([self.aTag_,self.categoryData])
+        return self.collector
 
-# self.collector = []
-# self.elementTag = kwargs.get("elementTag")
-# html = bs(category, 'html.parser')
-# category = html.find(class_="popover")
-# listcategory = category.find_all("li")
-# for data in self.listcategory:
-# self.aTag = data.find("a")[0].get("href")
-# self.categoryData = re.sub(r'\([0-9]*\)', '', data.find("a").get_text())
-# self.categoryData = re.sub(r'\W+', '', self.categoryData)
-# self.collector.append([self.aTag,self.categoryData])            
-# self.df = pd.DataFrame(self.collector, columns = ['URL', 'Category'])
-# self.df = self.df.drop_duplicates().reset_index(drop=True)
-# return self.df
     def saveData(self):
         pass
 
