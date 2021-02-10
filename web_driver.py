@@ -54,7 +54,6 @@ class WebDriver:
         self.category = self.html.find(class_=self.elementTag)
         self.listcategory = self.category.find_all("li")
         for data in self.listcategory:
-            # check all individual "li" tag if they contain more than one or one "a" tag
             for aTag in data.find_all("a"):
                 aTagDict = aTag.attrs
                 aTagDict['category'] = re.sub(r'\([0-9]*\)', '', aTag.get_text())
