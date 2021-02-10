@@ -68,7 +68,7 @@ class WebDriver:
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 self.collector.append([self.aTag_,self.categoryData])
         self.df = pd.DataFrame(self.collector, columns = ['URL', 'Category'])
-        self.df = self.df.drop_duplicates()
+        self.df = self.df.drop_duplicates().reset_index(drop=True)
         return self.df
 
 
