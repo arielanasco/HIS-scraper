@@ -4,6 +4,8 @@ import warnings
 from time import sleep
 from bs4 import BeautifulSoup as bs
 import re
+import pandas as pd
+
 class WebDriver:
     options = Options()
     options.add_argument('--no-sandbox')
@@ -52,7 +54,7 @@ class WebDriver:
         self.html = bs(kwargs.get("html"), 'html.parser')
         self.category = self.html.find(class_=self.elementTag)
         self.listcategory = self.category.find_all("li")
-        for data in listcategory:
+        for data in self.listcategory:
             if data.find("ul"):
                 self.data_ = data.find_all("li")
                 for aTag in self.data_:
@@ -65,7 +67,8 @@ class WebDriver:
                 self.categoryData = re.sub(r'\([0-9]*\)', '', data.find("a").get_text())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 self.collector.append([self.aTag_,self.categoryData])
-        return self.collector
+        return pd.DataFrame(self.collector, columns = ['URL', 'Category']) 
+
 
     def saveData(self):
         pass
