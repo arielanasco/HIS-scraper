@@ -55,7 +55,7 @@ class WebDriver:
         self.category = self.html.find(class_=self.elementTag)
         self.listcategory = self.category.find_all("li")
         for data in self.listcategory:
-                self.aTag = data.find("a").get("href")
+                self.aTag = data.find("a")[0].get("href")
                 self.categoryData = re.sub(r'\([0-9]*\)', '', data.find("a").get_text())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 self.collector.append([self.aTag,self.categoryData])            
