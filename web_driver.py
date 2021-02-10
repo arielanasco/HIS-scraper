@@ -56,7 +56,8 @@ class WebDriver:
         for data in self.listcategory:
             for aTag in data.find_all("a"):
                 aTagDict = aTag.attrs
-                aTagDict['category'] = re.sub(r'\([0-9]*\)', '', aTag.get_text())
+                categoryData = re.sub(r'\([0-9]*\)', '', aTag.get_text())
+                aTagDict['category'] = re.sub(r'\W+', '', categoryData)
                 self.collector.append(aTagDict)
         return self.collector
 
