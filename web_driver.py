@@ -48,16 +48,21 @@ class WebDriver:
         return False
 
     def categoryFinder(self,*args, **kwargs):
+        self.collector = []
         self.elementTag = elementTag
         self.html = bs(html, 'html.parser')
-        self.container = self.html.find()
+        self.category = self.html.find(class_=self.elementTag)
+        self.listcategory = self.category.find_all("li")
+        for data in self.listcategory:
+            # check all individual "li" tag if they contain more than one or one "a" tag
+            for aTag in data.find_all("a"):
+                aTagDict = aTag.attrs
+                aTagDict['category'] = re.sub(r'\([0-9]*\)', '', aTag.get_text())
+                self.collector.append(aTagDict)
+        return self.collector
 
-        # if self.elementTag == "class":
-        #     self.container = self.driver.find_element_by_class_name(elementContainerValue)
-        #     self.compiled = self.container.find_elements_by_tag_name(elementIndividual)            
-        #     # container = self.driver.find_element_by_class_name(elementContainerValue)
-            # self.container = self.container.find_elements_by_tag_name(elementIndividual)
-
+for _ in collector:
+    print(_)
     def saveData(self):
         pass
 
