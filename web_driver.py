@@ -47,10 +47,10 @@ class WebDriver:
             return True
         return False
 
-    def categoryFinder(self,*args, **kwargs):
+    def categoryFinder(self,**kwargs):
         self.collector = []
-        self.elementTag = elementTag
-        self.html = bs(html, 'html.parser')
+        self.elementTag = kwargs.get("elementTag")
+        self.html = bs(kwargs.get("html"), 'html.parser')
         self.category = self.html.find(class_=self.elementTag)
         self.listcategory = self.category.find_all("li")
         for data in self.listcategory:
