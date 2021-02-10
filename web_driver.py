@@ -3,7 +3,7 @@ from selenium.webdriver.chrome.options import Options
 import warnings
 from time import sleep
 from bs4 import BeautifulSoup as bs
-
+import re
 class WebDriver:
     options = Options()
     options.add_argument('--no-sandbox')
@@ -61,7 +61,6 @@ class WebDriver:
                 self.collector.append(aTagDict)
         return self.collector
 
-for _ in collector:
     print(_)
     def saveData(self):
         pass
