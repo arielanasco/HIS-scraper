@@ -55,7 +55,7 @@ class WebDriver:
         self.category = self.html.find(class_=self.elementTag)
         self.liTag = self.category.li
         while True:
-            self.collector.append([self.litag.find("a").get("href"),self.litag.find("a").get_text()])
+            self.collector.append([self.liTag.find("a").get("href"),self.liTag.find("a").get_text()])
             if self.liTag.find_next_sibling():
                 self.liTag = self.liTag.find_next_sibling()
             else:
