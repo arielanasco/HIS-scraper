@@ -51,7 +51,7 @@ class WebDriver:
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
         self.category = self.html.find(class_=self.elementTag)
-        self.listcategory = self.category.find("li")
+        self.listcategory = self.category.find_all("li")
         for data in listcategory:
             if data.find("ul"):
                 self.data_ = data.find_all("li")
@@ -66,6 +66,7 @@ class WebDriver:
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 self.collector.append([self.aTag_,self.categoryData])
         return self.collector
+
     def saveData(self):
         pass
 
