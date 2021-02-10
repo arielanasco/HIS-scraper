@@ -53,16 +53,16 @@ class WebDriver:
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
         self.category = self.html.find(class_=self.elementTag)
-        self.listcategory = self.category.find_all("li")
-        for data in self.listcategory:
-                self.aTag = data.find("a")[0].get("href")
-                self.categoryData = re.sub(r'\([0-9]*\)', '', data.find("a").get_text())
-                self.categoryData = re.sub(r'\W+', '', self.categoryData)
-                self.collector.append([self.aTag,self.categoryData])            
+        self.liTag = self.category.li
+        while True:
+            self.collector.append([self.litag.find("a").get("href"),self.litag.find("a").get_text()])
+            if self.liTag.find_next_sibling():
+                self.liTag = self.liTag.find_next_sibling()
+            else:
+                break
         self.df = pd.DataFrame(self.collector, columns = ['URL', 'Category'])
         self.df = self.df.drop_duplicates().reset_index(drop=True)
         return self.df
-
         #     if data.find("ul"):
         #         self.data_ = data.find_all("li")
         #         for aTag in self.data_:
@@ -75,10 +75,20 @@ class WebDriver:
         #         self.categoryData = re.sub(r'\([0-9]*\)', '', data.find("a").get_text())
         #         self.categoryData = re.sub(r'\W+', '', self.categoryData)
         #         self.collector.append([self.aTag_,self.categoryData])
-        # self.df = pd.DataFrame(self.collector, columns = ['URL', 'Category'])
-        # self.df = self.df.drop_duplicates().reset_index(drop=True)
-        # return self.df
 
+# self.collector = []
+# self.elementTag = kwargs.get("elementTag")
+# html = bs(category, 'html.parser')
+# category = html.find(class_="popover")
+# listcategory = category.find_all("li")
+# for data in self.listcategory:
+# self.aTag = data.find("a")[0].get("href")
+# self.categoryData = re.sub(r'\([0-9]*\)', '', data.find("a").get_text())
+# self.categoryData = re.sub(r'\W+', '', self.categoryData)
+# self.collector.append([self.aTag,self.categoryData])            
+# self.df = pd.DataFrame(self.collector, columns = ['URL', 'Category'])
+# self.df = self.df.drop_duplicates().reset_index(drop=True)
+# return self.df
     def saveData(self):
         pass
 
