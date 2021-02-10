@@ -61,7 +61,6 @@ class WebDriver:
                 self.collector.append(aTagDict)
         return self.collector
 
-    print(_)
     def saveData(self):
         pass
 
