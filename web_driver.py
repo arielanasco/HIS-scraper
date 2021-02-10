@@ -18,7 +18,7 @@ class WebDriver:
     def displaySiteInfo(self):
         print(f"Target URL: {self.driver.current_url}")
 
-    def initializeScroll(self):
+    def initScroll(self):
         try:
             self.lenOfPage = self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
             self.match = False
@@ -32,10 +32,9 @@ class WebDriver:
         except :
             return False
 
-    def initializeNextPage(self,nextButtonName,elementTag="name"):
+    def initNextPage(self,nextButtonName,elementTag="name"):
         self.elementTag = elementTag
         self.nextButtonName = nextButtonName
-
         if self.elementTag == "name":
             self.driver.find_element_by_name(self.nextButtonName).send_keys(Keys.ENTER)
             return True
@@ -66,9 +65,6 @@ class WebDriver:
         pass
 
     def localNameFinder(self):
-        pass
-    
-    def listParser(self):
         pass
 
     def titleFinder(self):
