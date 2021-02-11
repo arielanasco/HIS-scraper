@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup as bs
 import re
 
 class Site4(WebDriver):
-    def categoryFinder(self,**kwargs):
+    def categoryParser(self,**kwargs):
         self.collector = []
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
