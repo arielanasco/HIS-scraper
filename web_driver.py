@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
 import warnings
 from time import sleep
 from bs4 import BeautifulSoup as bs
@@ -32,7 +33,7 @@ class WebDriver:
                                             "profile.managed_default_content_settings.media_stream":2,
                                             })
 
-        self.options.add_argument("--headless")
+#        self.options.add_argument("--headless")
         self.options.add_argument(f'--user-agent="{sample(self.userAgentList,1)[0]}"')
         self.driver = webdriver.Chrome(options=self.options)
 
