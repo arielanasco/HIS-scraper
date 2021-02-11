@@ -85,23 +85,49 @@ class WebDriver:
                 break
         return self.collector
 
-    def saveData(self):
-        pass
-
-    def localNameFinder(self):
-        pass
+    def localNameFinder(self,**kwargs):
+        try:
+            self.elementLocalName = kwargs.get("elementLocalName")
+            self.html = bs(kwargs.get("html"), 'html.parser')
+            return self.elementLocalName.find("p").get_text()
+        except:
+            raise Exception(f"Unable to locate the name with the class name ={self.elementlocalName}")
 
     def titleFinder(self):
-        pass
+        try:
+            self.elementTitle= kwargs.get("elementTitle")
+            self.html = bs(kwargs.get("html"), 'html.parser')
+            return self.elementTitle.find("p").get_text()
+        except:
+            raise Exception(f"Unable to locate the name with the class name ={self.elementTitle}")    
+    
     def descriptionFinder(self):
-        pass
+        try:
+            self.elementDescription= kwargs.get("elementDescription")
+            self.html = bs(kwargs.get("html"), 'html.parser')
+            return self.elementDescription.find("p").get_text()
+        except:
+            raise Exception(f"Unable to locate the name with the class name ={self.elementDescription}")  
 
     def priceFinder(self):
-        pass
+        try:
+            self.elementPrice= kwargs.get("elementPrice")
+            self.html = bs(kwargs.get("html"), 'html.parser')
+            return self.elementPrice.find("p").get_text()
+        except:
+            raise Exception(f"Unable to locate the name with the class name ={self.elementPrice}")  
 
     def capacityFinder(self):
-        pass
+        try:
+            self.elementCapacity= kwargs.get("elementCapacity")
+            self.html = bs(kwargs.get("html"), 'html.parser')
+            return self.elementCapacity.find("p").get_text()
+        except:
+            raise Exception(f"Unable to locate the name with the class name ={self.elementCapacity}")  
 
     def imageUrlFinder(self):
+        pass
+
+    def saveData(self):
         pass
 
