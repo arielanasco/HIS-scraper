@@ -6,6 +6,7 @@ class Site4(WebDriver):
     pass
 
 site4= Site4("https://furusato-izumisano.jp/items/ranking.php")
-site4.driver.get(site4.url)
-site4.driver.current_url
-listcategory = site4.categoryFinder(html= site4.driver.page_source, elementTag = "category_list01")
+site4.driver.get(site3.url)
+site4.displaySiteInfo()
+listcategory = site4.categoryFinder(html= site4.driver.page_source, elementTag = "slide-child")
+site4.driver.close()
