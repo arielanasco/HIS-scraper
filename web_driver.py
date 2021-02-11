@@ -65,7 +65,7 @@ class WebDriver:
             self.driver.find_element_by_class_name(self.nextButtonName).click()
             return True
         if self.elementTag == "id":
-            self.driver.find_element_by_id(self.nextButtonName).click()
+            self.driver.find_element_by_id(self.nextButtonName).send_keys(Keys.ENTER)
             return True
         return False
 
