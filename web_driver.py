@@ -87,8 +87,8 @@ class WebDriver:
 
     def listParser(self,**kwargs):
         self.itemList = []
-        self.URL = kwargs.get("data[0]")
-        self.category =  kwargs.get("data[1]")
+        self.URL = URL
+        self.cat =  category
         self.driver.get(self.URL)
         self.elementContainer = kwargs.get("elementContainer")
         self.html = bs(self.driver.page_source, 'html.parser')
