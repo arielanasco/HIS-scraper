@@ -11,6 +11,7 @@ class WebDriver:
     options.add_argument('--no-sandbox')
     options.add_experimental_option("prefs", {"profile.default_content_setting_values.notifications": 1})
     options.add_argument("--headless")
+    options.add_argument('--user-agent=""Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36""')
     warnings.filterwarnings('ignore')
     driver = webdriver.Chrome(options=options)
 
