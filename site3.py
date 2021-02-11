@@ -7,5 +7,5 @@ class Site3(WebDriver):
 
 site3= Site3("https://mifurusato.jp/item_list.html")
 site3.driver.get(site3.url)
-site3.driver.current_url
+site3.displaySiteInfo()
 listcategory = site3.categoryFinder(html= site3.driver.page_source, elementTag = "l_footer_catefory")
