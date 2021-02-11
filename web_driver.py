@@ -84,21 +84,32 @@ class WebDriver:
             else:
                 break
         return self.collector
-        
+
     def listParser(self,**kwargs):
         self.itemList = []
-        for data in self.collector:
-            self.driver.get(data[0])
-            sleep(3)
-            self.container = self.html.find(class_=self.elementContainer)
-            self.liTag = self.category.li
-            while True:
-                self.itemList.append([self.liTag.find("a").get("href"),data[1]])
-            if self.liTag.find_next_sibling():
-                self.liTag = self.liTag.find_next_sibling()
-            else:
-                break
+        self.driver.get(self.collector[0][0])
+        sleep(3)
+        self.container = self.html.find(class_=self.elementContainer)
+        self.liTag = self.category.li
+        while True:
+            self.itemList.append([self.liTag.find("a").get("href"),data[1]])
+        if self.liTag.find_next_sibling():
+            self.liTag = self.liTag.find_next_sibling()
+        else:
+            break
         return self.itemList
+        # for data in self.collector:
+        #     self.driver.get(data[0])
+        #     sleep(3)
+        #     self.container = self.html.find(class_=self.elementContainer)
+        #     self.liTag = self.category.li
+        #     while True:
+        #         self.itemList.append([self.liTag.find("a").get("href"),data[1]])
+        #     if self.liTag.find_next_sibling():
+        #         self.liTag = self.liTag.find_next_sibling()
+        #     else:
+        #         break
+        # return self.itemList
     
     def localNameFinder(self,**kwargs):
         try:
