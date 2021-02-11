@@ -9,12 +9,12 @@ class Site1(WebDriver):
 site1= Site1("https://furu-po.com/")
 site1.driver.get(site1.url)
 site1.displaySiteInfo()
-data = []
+dataResult = []
 for data in site1.categoryParser(html= site1.driver.page_source, elementTag = "popover"):
     site1.driver.get(data[0])
     while True:
         sleep(3)
-        data.append(site1.listParser(elementContainer = "itemlist"))
+        dataResult.append(site1.listParser(elementContainer = "itemlist"),data =data)
         if site1.initScroll():
             if initNextPage(nextButtonName="next",elementTag="class"):
                 print(site1.driver.current_url) 
