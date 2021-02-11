@@ -9,7 +9,17 @@ import pandas as pd
 class WebDriver:
     options = Options()
     options.add_argument('--no-sandbox')
-    options.add_experimental_option("prefs", {"profile.default_content_setting_values.notifications": 1})
+    options.add_experimental_option("prefs", {"profile.managed_default_content_settings.images":2,
+                                            "profile.default_content_setting_values.notifications":2,
+                                            "profile.managed_default_content_settings.stylesheets":2,
+                                            "profile.managed_default_content_settings.cookies":2,
+                                            "profile.managed_default_content_settings.javascript":1,
+                                            "profile.managed_default_content_settings.plugins":1,
+                                            "profile.managed_default_content_settings.popups":2,
+                                            "profile.managed_default_content_settings.geolocation":2,
+                                            "profile.managed_default_content_settings.media_stream":2,
+                                    })
+
     options.add_argument("--headless")
     options.add_argument('--user-agent=""Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36""')
     warnings.filterwarnings('ignore')
