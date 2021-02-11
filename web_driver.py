@@ -59,13 +59,13 @@ class WebDriver:
         self.elementTag = elementTag
         self.nextButtonName = nextButtonName
         if self.elementTag == "name":
-            self.driver.find_element_by_name(self.nextButtonName).send_keys(Keys.ENTER)
+            self.driver.find_element_by_name(self.nextButtonName).click()
             return True
         if self.elementTag == "class":
-            self.driver.find_element_by_class_name(self.nextButtonName).send_keys(Keys.ENTER)
+            self.driver.find_element_by_class_name(self.nextButtonName).click()
             return True
         if self.elementTag == "id":
-            self.driver.find_element_by_id(self.nextButtonName).send_keys(Keys.ENTER)
+            self.driver.find_element_by_id(self.nextButtonName).click()
             return True
         return False
 
