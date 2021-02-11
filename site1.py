@@ -13,4 +13,4 @@ site1.displaySiteInfo()
 dataResult = []
 categorylist = site1.categoryParser(html= site1.driver.page_source, elementTag = "popover")
 site1.driver.get(categorylist[0][0])
-site1.listParser(html = site1.driver.page_source, elementContainer = "itemlist",category=categorylist[0][1])
+site1.listParser(html = site1.driver.page_source, elementContainer = "itemlist", category=categorylist[0][1])

@@ -86,9 +86,9 @@ class WebDriver:
                 break
         return self.collector
 
-    def listParser(self,html,elementContainer,Category):
+    def listParser(self,html,elementContainer,category):
         self.itemList = []
-        self.category = Category
+        self.category = category
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
         self.container = self.html.find(class_=self.elementContainer)
