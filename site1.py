@@ -21,7 +21,7 @@ for data in site1.categoryParser(html= site1.driver.page_source, elementTag = "p
             else:
                 html = bs(site1.driver.page_source, 'html.parser')
                 nextTag = html.find(class_ = "next")
-                    if not nextTag.a:
+                    if !nextTag.a:
                         print("No next page")
                         break
         else:
