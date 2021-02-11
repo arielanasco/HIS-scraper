@@ -11,28 +11,30 @@ site1= Site1("https://furu-po.com/")
 site1.driver.get(site1.url)
 site1.displaySiteInfo()
 dataResult = []
-for data in site1.categoryParser(html= site1.driver.page_source, elementTag = "popover"):
-    site1.driver.get(data[0])
-    while True:
-        sleep(3)
-        dataResult.append(site1.listParser(elementContainer = "itemlist",URL= data[0], category=data[1]))
-        if site1.initScroll():
-            if site1.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a").send_keys(Keys.ENTER):
-                print(f"Current URL: {site1.driver.current_url}")
-            else:
-                html = bs(site1.driver.page_source, 'html.parser')
-                nextTag = html.find(class_ = "next")
-                if not nextTag.a:
-                    print("No next page")
-                    break            
-            # if site1.initNextPage(nextButtonName="next",elementTag="class"):
-            #     print(site1.driver.current_url) 
-            # else:
-            #     html = bs(site1.driver.page_source, 'html.parser')
-            #     nextTag = html.find(class_ = "next")
-            #     if not nextTag.a:
-            #         print("No next page")
-            #         break
-        else:
-            raise Exception ("Error initScroll()")
-# site1.driver.close()
+categorylist = site1.categoryParser(html= site1.driver.page_source, elementTag = "popover")
+print(site1.listParser(elementContainer = "itemlist",URL= categorylist[0][0], category=categorylist[0][1])
+# for data in site1.categoryParser(html= site1.driver.page_source, elementTag = "popover"):
+#     site1.driver.get(data[0])
+#     while True:
+#         sleep(3)
+#         dataResult.append(site1.listParser(elementContainer = "itemlist",URL= data[0], category=data[1]))
+#         if site1.initScroll():
+#             if site1.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a").send_keys(Keys.ENTER):
+#                 print(f"Current URL: {site1.driver.current_url}")
+#             else:
+#                 html = bs(site1.driver.page_source, 'html.parser')
+#                 nextTag = html.find(class_ = "next")
+#                 if not nextTag.a:
+#                     print("No next page")
+#                     break            
+#             # if site1.initNextPage(nextButtonName="next",elementTag="class"):
+#             #     print(site1.driver.current_url) 
+#             # else:
+#             #     html = bs(site1.driver.page_source, 'html.parser')
+#             #     nextTag = html.find(class_ = "next")
+#             #     if not nextTag.a:
+#             #         print("No next page")
+#             #         break
+#         else:
+#             raise Exception ("Error initScroll()")
+# # site1.driver.close()

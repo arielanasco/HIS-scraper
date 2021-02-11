@@ -92,6 +92,7 @@ class WebDriver:
         self.cat = kwargs.get("category")  
         self.driver.get(self.URL)
         self.elementContainer = kwargs.get("elementContainer")
+        self.driver.get(self.URL)
         self.html = bs(self.driver.page_source, 'html.parser')
         self.container = self.html.find(class_=self.elementContainer)
         self.ChildElement = self.container.find_next()
