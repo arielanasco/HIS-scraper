@@ -11,7 +11,7 @@ from random import sample
 
 class WebDriver:
     warnings.filterwarnings('ignore')
-    
+
     def __init__(self,url):
         self.url = url
         self.userAgentList = [
@@ -32,7 +32,7 @@ class WebDriver:
                                             "profile.managed_default_content_settings.media_stream":2,
                                             })
 
-        self.options.add_argument("--headless")
+        # self.options.add_argument("--headless")
         self.options.add_argument(f'--user-agent="{sample(self.userAgentList,1)[0]}"')
         self.driver = webdriver.Chrome(options=self.options)
 
