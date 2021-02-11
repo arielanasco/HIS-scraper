@@ -14,7 +14,7 @@ for data in site1.categoryParser(html= site1.driver.page_source, elementTag = "p
     site1.driver.get(data[0])
     while True:
         sleep(3)
-        dataResult.append(site1.listParser(elementContainer = "itemlist"),data =data)
+        dataResult.append(site1.listParser(elementContainer = "itemlist"),data=data)
         if site1.initScroll():
             if initNextPage(nextButtonName="next",elementTag="class"):
                 print(site1.driver.current_url) 
