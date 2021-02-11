@@ -90,11 +90,11 @@ class WebDriver:
         self.driver.get(self.collector[0][0])
         sleep(3)
         self.container = self.html.find(class_=self.elementContainer)
-        self.liTag = self.category.li
+        self.ChildElement = self.category.next_element()
         while True:
-            self.itemList.append([self.liTag.find("a").get("href"),data[1]])
-        if self.liTag.find_next_sibling():
-            self.liTag = self.liTag.find_next_sibling()
+            self.itemList.append([self.ChildElement.find("a").get("href"),data[1]])
+        if self.ChildElement.find_next_sibling():
+            self.ChildElement = self.ChildElement.find_next_sibling()
         else:
             break
         return self.itemList
