@@ -16,14 +16,22 @@ for data in site1.categoryParser(html= site1.driver.page_source, elementTag = "p
         sleep(3)
         dataResult.append(site1.listParser(elementContainer = "itemlist",URL= data[0], category=data[1]))
         if site1.initScroll():
-            if site1.initNextPage(nextButtonName="next",elementTag="class"):
-                print(site1.driver.current_url) 
+            if site1.driver.find_elemnt_by_xpath("//*[@id="form_events"]/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a").click():
+                print(site1.driver.current_url)
             else:
                 html = bs(site1.driver.page_source, 'html.parser')
                 nextTag = html.find(class_ = "next")
                 if not nextTag.a:
                     print("No next page")
-                    break
+                    break            
+            # if site1.initNextPage(nextButtonName="next",elementTag="class"):
+            #     print(site1.driver.current_url) 
+            # else:
+            #     html = bs(site1.driver.page_source, 'html.parser')
+            #     nextTag = html.find(class_ = "next")
+            #     if not nextTag.a:
+            #         print("No next page")
+            #         break
         else:
             raise Exception ("Error initScroll()")
 # site1.driver.close()
