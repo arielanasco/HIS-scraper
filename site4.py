@@ -8,7 +8,7 @@ class Site4(WebDriver):
         self.collector = []
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.container = self.html.find(class_="category_list01")
+        self.container = self.html.find(class_="category_container")
         self.category = self.container.find(class_=self.elementTag)
         self.liTag = self.category.li
         while True:
