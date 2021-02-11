@@ -54,7 +54,7 @@ class WebDriver:
         except :
             return False
 
-    def initNextPage(self,nextButtonName,elementTag="name"):
+    def initNextPage(self,nextButtonName,elementTag):
         self.elementTag = elementTag
         self.nextButtonName = nextButtonName
         if self.elementTag == "name":
