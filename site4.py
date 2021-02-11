@@ -1,4 +1,4 @@
-# This is the Scraper code for https://mifurusato.jp/item_list.html website
+# This is the Scraper code for https://furusato-izumisano.jp/items/ranking.php website
 from web_driver import WebDriver
 from bs4 import BeautifulSoup as bs
 import re
@@ -15,7 +15,7 @@ class Site4(WebDriver):
             # self.categoryData = re.sub(r'\([0-9]*\)', '', self.liTag.find("a").get_text())
             self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
             self.categoryData = re.sub(r'\W+', '', self.categoryData)
-            self.collector.append([f'https://mifurusato.jp{self.liTag.find("a").get("href")}',self.categoryData])
+            self.collector.append([f'https://furusato-izumisano.jp{self.liTag.find("a").get("href")}',self.categoryData])
             if self.liTag.find_next_sibling():
                 self.liTag = self.liTag.find_next_sibling()
             else:
