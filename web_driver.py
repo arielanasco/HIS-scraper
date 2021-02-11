@@ -92,7 +92,7 @@ class WebDriver:
         self.html = bs(self.driver.page_source, 'html.parser')
         sleep(3)
         self.container = self.html.find(class_=self.elementContainer)
-        self.ChildElement = self.category.find_next()
+        self.ChildElement = self.container.find_next()
         while True:
             self.itemList.append(self.ChildElement.find("a").get("href"))
             if self.ChildElement.find_next_sibling():
