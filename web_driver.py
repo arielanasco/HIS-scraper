@@ -31,9 +31,9 @@ class WebDriver:
     options.add_argument("--headless")
     options.add_argument(f'--user-agent="{sample(userAgentList,1)[0]}"')
     warnings.filterwarnings('ignore')
-    self.driver = webdriver.Chrome(options=options)
     def __init__(self,url):
         self.url = url
+        self.driver = webdriver.Chrome(options=options)
 
     def displaySiteInfo(self):
         print(f"Target URL: {self.driver.current_url}")
