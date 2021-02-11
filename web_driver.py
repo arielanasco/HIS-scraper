@@ -31,7 +31,7 @@ class WebDriver:
     options.add_argument("--headless")
     options.add_argument(f'--user-agent="{sample(userAgentList,1)[0]}"')
     warnings.filterwarnings('ignore')
-    driver = webdriver.Chrome(options=options)
+    self.driver = webdriver.Chrome(options=options)
     def __init__(self,url):
         self.url = url
 
