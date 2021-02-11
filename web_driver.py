@@ -10,7 +10,8 @@ from random import sample
 
 
 class WebDriver:
-
+    warnings.filterwarnings('ignore')
+    
     def __init__(self,url):
         self.url = url
         self.userAgentList = [
@@ -33,7 +34,6 @@ class WebDriver:
 
         self.options.add_argument("--headless")
         self.options.add_argument(f'--user-agent="{sample(self.userAgentList,1)[0]}"')
-        self.warnings.filterwarnings('ignore')
         self.driver = webdriver.Chrome(options=self.options)
 
     def displaySiteInfo(self):
