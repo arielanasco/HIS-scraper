@@ -86,12 +86,9 @@ class WebDriver:
                 break
         return self.collector
 
-    def listParser(self,**kwargs):
+    def listParser(self,URL,Category):
         self.itemList = []
-        self.URL = kwargs.get("URL")
-        self.cat = kwargs.get("category")  
-        self.elementContainer = kwargs.get("elementContainer")
-        self.driver.get(self.URL)
+        self.elementContainer = elementContainer
         self.html = bs(self.driver.page_source, 'html.parser')
         self.container = self.html.find(class_=self.elementContainer)
         self.ChildElement = self.container.find_next()
