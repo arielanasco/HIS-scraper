@@ -90,7 +90,6 @@ class WebDriver:
         self.itemList = []
         self.URL = kwargs.get("URL")
         self.cat = kwargs.get("category")  
-        self.driver.get(self.URL)
         self.elementContainer = kwargs.get("elementContainer")
         self.driver.get(self.URL)
         self.html = bs(self.driver.page_source, 'html.parser')
