@@ -35,6 +35,7 @@ class WebDriver:
 
     def displaySiteInfo(self):
         print(f"Target URL: {self.driver.current_url}")
+        print(f"Expected User-Agent: {self.user_agent}")
         print(f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}")
 
     def initScroll(self):
