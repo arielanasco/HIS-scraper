@@ -1,6 +1,7 @@
 # This is the Scraper code for https://mifurusato.jp/item_list.html website
 from web_driver import WebDriver
 from bs4 import BeautifulSoup as bs
+import re
 
 class Site4(WebDriver):
     def categoryFinder(self,**kwargs):
