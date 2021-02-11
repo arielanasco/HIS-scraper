@@ -20,7 +20,7 @@ class WebDriver:
 
     def displaySiteInfo(self):
         print(f"Target URL: {self.driver.current_url}")
-        pritn(f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}")
+        print(f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}")
 
     def initScroll(self):
         try:
