@@ -29,7 +29,7 @@ class WebDriver:
                                             })
 
     options.add_argument("--headless")
-    options.add_argument(f'--user-agent={sample(userAgentList,1)[0]}')
+    options.add_argument(f'--user-agent="{sample(userAgentList,1)[0]}"')
     warnings.filterwarnings('ignore')
     driver = webdriver.Chrome(options=options)
     def __init__(self,url):
@@ -37,7 +37,6 @@ class WebDriver:
 
     def displaySiteInfo(self):
         print(f"Target URL: {self.driver.current_url}")
-        print(f"Expected User-Agent: {self.user_agent}")
         print(f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}")
 
     def initScroll(self):
