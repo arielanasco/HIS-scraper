@@ -24,7 +24,7 @@ class Site3(WebDriver):
             else:
                 break    
         return self.itemList
-        
+
 site3= Site3("https://mifurusato.jp/item_list.html")
 site3.driver.get(site3.url)
 site3.displaySiteInfo()
@@ -48,10 +48,4 @@ for data in categorylist:
         except NoSuchElementException:
             print(f"Done scraping for category {data[1]}")
             break
-        if len(dataResult) == 100:
-            break
     print(f"Collected URL: {len(dataResult)}")
-    if len(dataResult) == 100:
-        break
-
-site3.driver.close()
