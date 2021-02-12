@@ -32,5 +32,10 @@ for data in categorylist:
         except NoSuchElementException:
             print(f"Done scraping for category {data[1]}")
             break
+        if len(dataResult) == 100:
+            break
     print(f"Collected URL: {len(dataResult)}")
+    if len(dataResult) == 100:
+        break
+
 site3.driver.close()
