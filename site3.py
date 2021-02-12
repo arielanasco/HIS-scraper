@@ -23,22 +23,22 @@ class Site3(WebDriver):
             else:
                 break    
         return self.itemList
-***
-        self.itemList = dataResult
-        self.category = category
-        self.elementContainer = elementContainer
-        self.html = bs(html, 'html.parser')
-        self.container = self.html.find(id=self.elementContainer)
-        self.container = self.container.find(class_="item_list")
-        self.ChildElement = self.container.find_next()
-        while True:
-            self.itemList.append([self.ChildElement.find("a").get("href"),self.category])
-            if self.ChildElement.find_next_sibling():
-                self.ChildElement = self.ChildElement.find_next_sibling()
-            else:
-                break    
-        return self.itemList
-****
+# ***
+#         self.itemList = dataResult
+#         self.category = category
+#         self.elementContainer = elementContainer
+#         self.html = bs(html, 'html.parser')
+#         self.container = self.html.find(id=self.elementContainer)
+#         self.container = self.container.find(class_="item_list")
+#         self.ChildElement = self.container.find_next()
+#         while True:
+#             self.itemList.append([self.ChildElement.find("a").get("href"),self.category])
+#             if self.ChildElement.find_next_sibling():
+#                 self.ChildElement = self.ChildElement.find_next_sibling()
+#             else:
+#                 break    
+#         return self.itemList
+# ****
 site3= Site3("https://mifurusato.jp/item_list.html")
 site3.driver.get(site3.url)
 site3.displaySiteInfo()
