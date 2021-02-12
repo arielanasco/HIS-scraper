@@ -14,6 +14,10 @@ categorylist = site1.categoryParser(html= site1.driver.page_source, elementTag =
 for data in categorylist:
     print(f"Scraping....{data[0]}")
     site1.driver.get(data[0])
+    if site1.initScroll():
+        print("Scrolling down...")
+    else:
+        print("Already scrolled down")
     while True:
         dataResult = site1.listParser(html = site1.driver.page_source, elementContainer = "itemlist", category=data[1],dataResult = dataResult)
         if site1.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a").send_keys(Keys.ENTER):
