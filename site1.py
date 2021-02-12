@@ -32,11 +32,4 @@ for data in categorylist:
         except NoSuchElementException:
             print(f"Done scraping for category {data[1]}")
             break
-    print(f"Current length of collected URL: {len(dataResult)}")
-
-
-# for _ in dataResult:
-#     print(_)
-
-
-# https://furu-po.com/goods_list/280
+    print(f"Collected URL: {len(dataResult)}")

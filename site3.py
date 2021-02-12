@@ -1,6 +1,10 @@
 # This is the Scraper code for https://mifurusato.jp/item_list.html website
-
 from web_driver import WebDriver
+from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class Site3(WebDriver):
     pass
@@ -8,5 +12,25 @@ class Site3(WebDriver):
 site3= Site3("https://mifurusato.jp/item_list.html")
 site3.driver.get(site3.url)
 site3.displaySiteInfo()
-listcategory = site3.categoryParser(html= site3.driver.page_source, elementTag = "l_footer_catefory")
+dataResult = []
+categorylist = site3.categoryParser(html= site3.driver.page_source, elementTag = "l_footer_catefory")
+for data in categorylist:
+    print(f"Scraping....{data[0]}")
+    site3.driver.get(data[0])
+    if site3.initScroll():
+        print("Scrolling down...")
+    else:
+        print("Already scrolled down")
+    while True:
+        element_present = EC.presence_of_element_located((By.CLASS_NAME, "itemlist"))
+        WebDriverWait(site3.driver, 3).until(element_present)
+        dataResult = site3.listParser(html = site3.driver.page_source, elementContainer = "itemlist", category=data[1],dataResult = dataResult)
+        try: 
+            nextButton = site3.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a")
+            nextButton.send_keys(Keys.ENTER)
+            print(f"Scraping {site3.driver.current_url}")
+        except NoSuchElementException:
+            print(f"Done scraping for category {data[1]}")
+            break
+    print(f"Collected URL: {len(dataResult)}")
 site3.driver.close()
