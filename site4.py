@@ -25,7 +25,7 @@ class Site4(WebDriver):
 site4= Site4("https://furusato-izumisano.jp/items/ranking.php")
 site4.driver.get(site4.url)
 site4.displaySiteInfo()
-listcategory = site4.categoryFinder(html= site4.driver.page_source, elementTag = "slide-child")
+listcategory = site4.categoryParser(html= site4.driver.page_source, elementTag = "slide-child")
 for data in listcategory:
     print(f"Scraping....{data[0]}")
 site4.driver.close()
