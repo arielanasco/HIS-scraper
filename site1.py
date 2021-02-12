@@ -27,7 +27,7 @@ for data in categorylist:
         dataResult = site1.listParser(html = site1.driver.page_source, elementContainer = "itemlist", category=data[1],dataResult = dataResult)
         try: 
             nextButton = site1.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a")
-            nextButton.send_keys(Keys.ENTER):
+            nextButton.send_keys(Keys.ENTER)
             print(f"Scraping {site1.driver.current_url}")
         except NoSuchElementException::
             print(f"Done scraping for category {data[1]}")
