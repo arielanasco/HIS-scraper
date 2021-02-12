@@ -22,7 +22,7 @@ for data in categorylist:
     else:
         print("Already scrolled down")
     while True:
-        element_present = EC.presence_of_element_located((By.CLASS_NAME, "itemlist"))
+        element_present = EC.presence_of_element_located((By.CLASS_NAME, "item_list l_grid_row"))
         WebDriverWait(site3.driver, 3).until(element_present)
         dataResult = site3.listParser(html = site3.driver.page_source, elementContainer = "itemlist", category=data[1],dataResult = dataResult)
         try: 
