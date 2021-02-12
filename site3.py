@@ -5,9 +5,24 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from bs4 import BeautifulSoup as bs
 
 class Site3(WebDriver):
-    pass
+    def listParser(self,html,elementContainer,category,dataResult):
+        self.itemList = dataResult
+        self.category = category
+        self.elementContainer = elementContainer
+        self.html = bs(html, 'html.parser')
+        self.container = self.html.find(class_=self.elementContainer)
+        self.container = self.container.ul
+        self.ChildElement = self.container.find_next()
+        while True:
+            self.itemList.append([self.ChildElement.find("a").get("href"),self.category])
+            if self.ChildElement.find_next_sibling():
+                self.ChildElement = self.ChildElement.find_next_sibling()
+            else:
+                break    
+        return self.itemList
 
 site3= Site3("https://mifurusato.jp/item_list.html")
 site3.driver.get(site3.url)
@@ -24,7 +39,7 @@ for data in categorylist:
     while True:
         element_present = EC.presence_of_element_located((By.ID, "list"))
         WebDriverWait(site3.driver, 3).until(element_present)
-        dataResult = site3.listParser(html = site3.driver.page_source, elementContainer = "item_list l_grid_row", category=data[1],dataResult = dataResult)
+        dataResult = site3.listParser(html = site3.driver.page_source, elementContainer = "list", category=data[1],dataResult = dataResult)
         try: 
             nextButton = site3.driver.find_element_by_xpath("//*[@id='list']/div[2]/span[6]/a")
             nextButton.send_keys(Keys.ENTER)
