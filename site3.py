@@ -13,7 +13,7 @@ class Site3(WebDriver):
         self.category = category
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
-        self.container = self.html.find(class_=self.elementContainer)
+        self.container = self.html.find(id=self.elementContainer)
         self.container = self.container.find(class_="item_list")
         self.ChildElement = self.container.find_next()
         while True:
