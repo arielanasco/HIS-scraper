@@ -10,7 +10,9 @@ site1.driver.get(site1.url)
 site1.displaySiteInfo()
 dataResult = []
 categorylist = site1.categoryParser(html= site1.driver.page_source, elementTag = "popover")
-print(categorylist[0])
+data = categorylist[0]
+dataResult = site1.listParser(html = site1.driver.page_source, elementContainer = "itemlist", category=data[1],dataResult = dataResult)
+print(dataResult)
 # for data in categorylist:
 #     print(f"Scraping....{data[0]}")
 #     site1.driver.get(data[0])
