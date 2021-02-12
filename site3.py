@@ -13,8 +13,8 @@ class Site3(WebDriver):
         self.category = category
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
-        self.container = self.html.find('div', attrs ={'id':self.elementContainer})
-        self.container_ = self.container.find('ul', attrs ={'class':'item_list l_grid_row'})
+        # self.container = self.html.find('div', attrs ={'id':self.elementContainer})
+        self.container_ =  self.html.find('ul', attrs ={'class':'item_list l_grid_row'})
         self.ChildElement = self.container_.find_next()
         while True:
             self.itemList.append([self.ChildElement.find("a").get("href"),self.category])
