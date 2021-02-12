@@ -21,5 +21,5 @@ for data in categorylist:
         else:
             break
             print(f"Done scraping for category {data[1]}")
-for _ in dataResult:
-    print(_)
+# for _ in dataResult:
+#     print(_)
