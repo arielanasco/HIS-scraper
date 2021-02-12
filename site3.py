@@ -41,8 +41,11 @@ for data in categorylist:
         element_present = EC.presence_of_element_located((By.ID, "list"))
         WebDriverWait(site3.driver, 3).until(element_present)
         dataResult = site3.listParser(html = site3.driver.page_source, elementContainer = "list", category=data[1], dataResult = dataResult)
-        try: 
-            nextButton = site3.driver.find_element_by_xpath("//*[@id='list']/div[2]/span[6]/a")
+        try:
+            try:
+                nextButton = site3.driver.find_element_by_xpath("//*[@id='list']/div[2]/span[6]/a")
+            except NoSuchElementException:
+                nextButton = site3.driver.find_element_by_xpath("//*[@id='list']/div[2]/span[7]/a")
             nextButton.send_keys(Keys.ENTER)
             print(f"Scraping {site3.driver.current_url}")
         except NoSuchElementException:
