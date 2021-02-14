@@ -31,7 +31,7 @@ site3.displaySiteInfo()
 dataResult = []
 categorylist = site3.categoryParser(html= site3.driver.page_source, elementTag = "l_footer_catefory")
 for data in categorylist:
-    print(f"Scraping....{data[0]}")
+    print(f"{data[0]} {data[1]}")
     # site3.driver.get(data[0])
     # if site3.initScroll():
     #     print("Scrolling down...")

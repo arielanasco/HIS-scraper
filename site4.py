@@ -27,5 +27,5 @@ site4.driver.get(site4.url)
 site4.displaySiteInfo()
 listcategory = site4.categoryParser(html= site4.driver.page_source, elementTag = "slide-child")
 for data in listcategory:
-    print(f"Scraping....{data[0]}")
+    print(f"{data[0]} {data[1]}")
 site4.driver.close()

@@ -15,7 +15,7 @@ site1.displaySiteInfo()
 dataResult = []
 categorylist = site1.categoryParser(html= site1.driver.page_source, elementTag = "popover")
 for data in categorylist:
-    print(f"Scraping....{data[0]}")
+    print(f"{data[0]} {data[1]}")
     # site1.driver.get(data[0])
     # if site1.initScroll():
     #     print("Scrolling down...")
