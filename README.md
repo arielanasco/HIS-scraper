@@ -16,4 +16,4 @@ This is a list of website needed to scrape data.
 |Mitsukoshi Isetan Furusato Tax Payment|https://mifurusato.jp/|
 |Hometown pallet||Can't locate the site/URL|
 |au PAY Hometown tax payment||Can't locate the site/URL|
-|Rakuten Furusato tax payment |https://item.rakuten.co.jp |Can't locate the site/URL|
+|Rakuten Furusato tax payment |www.rakuten.ne.jp ||
