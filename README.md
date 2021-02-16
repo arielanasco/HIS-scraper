@@ -1,7 +1,5 @@
 # HIS-scraper
 
-This is a list of website needed to scrape data.
-
 |Name           |Sites          |
 | ------------- | ------------- |
 |Rakuten hometown tax payment|https://event.rakuten.co.jp/|
