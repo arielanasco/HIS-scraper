@@ -41,15 +41,26 @@ class WebDriver:
         print(f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}")
     
 class ScraperCategory(WebDriver):
-   categorylist = []
-   isActive = False
-   data = []
+   categoryList = []
 
    def __init__(self, url):
       self.url = url
       super().__init__()
 
-
+    def categoryParser(self,**kwargs):
+        self.elementTag = kwargs.get("elementTag")
+        self.html = bs(kwargs.get("html"), 'html.parser')
+        self.category = self.html.find(class_=self.elementTag)
+        self.liTag = self.category.li
+        while True:
+            # self.categoryData = re.sub(r'\([0-9]*\)', '', self.liTag.find("a").get_text())
+            self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
+            self.categoryData = re.sub(r'\W+', '', self.categoryData)
+            collector.append([self.liTag.find("a").get("href"),self.categoryData])
+            if self.liTag.find_next_sibling():
+                self.liTag = self.liTag.find_next_sibling()
+            else:
+                break
 
 class ScraperData(WebDriver):
    isActive = False
