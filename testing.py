@@ -9,8 +9,8 @@ class Site1(WebDriver):
    def __init__(self,url):
       super().__init__(url)
    def Test(self, url_category):
-      print(url_category)
-      self.driver.get(url_category)
+      crawler = WebDriver.Crawler(url_category)
+      crawler.driver.get(url_category)
       
 site1= Site1("https://furu-po.com/")
 site1.driver.get(site1.url)
