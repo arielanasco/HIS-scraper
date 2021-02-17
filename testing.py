@@ -19,7 +19,7 @@ for _ in site1.categoryList:
    print(_)
 
 print(f"Took {round((final-start),2)} to complete scraping")
-url = ["https://furu-po.com/","https://gooogle.com","https://mifurusato.jp/item_list.html"]
+url = ["https://furu-po.com/","https://google.com","https://mifurusato.jp/item_list.html"]
 start = time.perf_counter()
 t1 = threading.Thread(target = ItemCollector ,args=(url[0],))
 t2 = threading.Thread(target = ItemCollector ,args=(url[1],))
