@@ -9,7 +9,7 @@ class Site1(WebDriver):
 
    def __init__(self, url):
       self.url = url
-      super().__init(url)
+      super().__init__()
 
 
 
