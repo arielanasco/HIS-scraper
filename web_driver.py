@@ -41,11 +41,11 @@ class WebDriver:
         print(f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}")
     
 class ScraperCategory(WebDriver):
-   categoryList = []
+    categoryList = []
 
-   def __init__(self, url):
-      self.url = url
-      super().__init__()
+    def __init__(self, url):
+        self.url = url
+        super().__init__()
 
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
@@ -63,9 +63,9 @@ class ScraperCategory(WebDriver):
                 break
 
 class ScraperData(WebDriver):
-   isActive = False
-   data = []
+    isActive = False
+    data = []
 
-   def __init__(self, url):
-      self.url = url
-      super().__init__()
+    def __init__(self, url):
+        self.url = url
+        super().__init__()
