@@ -11,6 +11,7 @@ class Site1(WebDriver):
    def Test(self, url_category):
       crawler = WebDriver.Crawler(url_category)
       crawler.driver.get(url_category)
+      print(crawler.driver.current_url)
       
 site1= Site1("https://furu-po.com/")
 site1.driver.get(site1.url)
