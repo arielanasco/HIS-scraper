@@ -21,7 +21,7 @@ class WebDriver:
         "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:24.0) Gecko/20100101 Firefox/24.0"
         ]
         self.options = Options()
-        self.options.add_argument('--no-sandbox')
+        # self.options.add_argument('--no-sandbox')
         self.options.add_experimental_option("prefs", {"profile.managed_default_content_settings.images":2,
                                             "profile.default_content_setting_values.notifications":2,
                                             "profile.managed_default_content_settings.stylesheets":2,

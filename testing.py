@@ -7,6 +7,7 @@ def ItemCollector(url_category):
    scrapeURL = ScraperList(url_category)
    scrapeURL.driver.get(scrapeURL.url)
    print(scrapeURL.driver.title)
+   scrapeURL.driver.close()
 
 start = time.perf_counter()
 site1= ScraperCategory("https://furu-po.com/")
