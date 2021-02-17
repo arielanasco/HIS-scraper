@@ -62,7 +62,7 @@ class ScraperCategory(WebDriver):
             else:
                 break
 
-class ScraperData(WebDriver):
+class ScraperList(WebDriver):
     isActive = False
     data = []
 
