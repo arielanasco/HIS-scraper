@@ -23,10 +23,13 @@ url = ["https://furu-po.com/","https://google.com","https://mifurusato.jp/item_l
 start = time.perf_counter()
 t1 = threading.Thread(target = ItemCollector ,args=(url[0],))
 t2 = threading.Thread(target = ItemCollector ,args=(url[1],))
+t3 = threading.Thread(target = ItemCollector ,args=(url[2],))
 t1.start()
 t2.start()
+t3.start()
 t1.join()
 t2.join()
+t3.join()
 final = time.perf_counter()
 print(f"Took {round((final-start),2)} to complete to thread ")
 
