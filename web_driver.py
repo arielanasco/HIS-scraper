@@ -12,12 +12,14 @@ from random import sample
 
 class WebDriver:
     warnings.filterwarnings('ignore')
-    def __init__(self,url):
+    def __init__(self,url="https://google.com"):
         self.url = url
         self.userAgentList = [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393",
+        "Mozilla/5.0 CK={} (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko",
+        "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:24.0) Gecko/20100101 Firefox/24.0"
         ]
         self.options = Options()
         self.options.add_argument('--no-sandbox')
@@ -38,65 +40,4 @@ class WebDriver:
     def displaySiteInfo(self):
         print(f"Target URL: {self.driver.current_url}")
         print(f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}")
-
-    def initScroll(self):
-        try:
-            self.lenOfPage = self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
-            self.match = False
-            while (self.match == False):
-                self.lastCount = self.lenOfPage
-                sleep(3)
-                self.lenOfPage = self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
-                if self.lastCount == self.lenOfPage:
-                    self.match = True
-            return True
-        except :
-            return False
-
-    def initNextPage(self,nextButtonName,elementTag):
-        self.elementTag = elementTag
-        self.nextButtonName = nextButtonName
-        if self.elementTag == "name":
-            self.driver.find_element_by_name(self.nextButtonName).click()
-            return True
-        if self.elementTag == "class":
-            self.driver.find_element_by_class_name(self.nextButtonName).click()
-            return True
-        if self.elementTag == "id":
-            self.driver.find_element_by_id(self.nextButtonName).send_keys(Keys.ENTER)
-            return True
-        return False
-
-    def categoryParser(self,**kwargs):
-        self.collector = []
-        self.elementTag = kwargs.get("elementTag")
-        self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_=self.elementTag)
-        self.liTag = self.category.li
-        while True:
-            # self.categoryData = re.sub(r'\([0-9]*\)', '', self.liTag.find("a").get_text())
-            self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
-            self.categoryData = re.sub(r'\W+', '', self.categoryData)
-            self.collector.append([self.liTag.find("a").get("href"),self.categoryData])
-            if self.liTag.find_next_sibling():
-                self.liTag = self.liTag.find_next_sibling()
-            else:
-                break
-        return self.collector
-
-    def listParser(self,html,elementContainer,category,dataResult):
-        self.itemList = dataResult
-        self.category = category
-        self.elementContainer = elementContainer
-        self.html = bs(html, 'html.parser')
-        self.container = self.html.find(class_=self.elementContainer)
-        self.ChildElement = self.container.find_next()
-        while True:
-            self.itemList.append([self.ChildElement.find("a").get("href"),self.category])
-            if self.ChildElement.find_next_sibling():
-                self.ChildElement = self.ChildElement.find_next_sibling()
-            else:
-                break    
-        return self.itemList
-
 
