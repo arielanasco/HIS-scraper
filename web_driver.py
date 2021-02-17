@@ -12,7 +12,7 @@ from random import sample
 
 class WebDriver:
     warnings.filterwarnings('ignore')
-    def __init__(self,url):
+    def __init__(self):
         self.userAgentList = [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0",
@@ -39,3 +39,12 @@ class WebDriver:
     def displaySiteInfo(self):
         print(f"Target URL: {self.driver.current_url}")
         print(f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}")
+    
+class Scraper(WebDriver):
+   categorylist = []
+   isActive = False
+   data = []
+
+   def __init__(self, url):
+      self.url = url
+      super().__init__()
