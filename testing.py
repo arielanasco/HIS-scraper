@@ -9,7 +9,7 @@ class Site1(WebDriver):
    def __init__(self,url):
       super().__init__(url)
    def Test(self, url_category):
-      self.driver.get("https://furu-po.com/")
+      self.driver.get(url_category)
       print(self.driver.current_url)
       
 site1= Site1("https://furu-po.com/")
