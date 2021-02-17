@@ -56,7 +56,8 @@ class WebDriver:
                 self.liTag = self.liTag.find_next_sibling()
             else:
                 break
-        return self.collector    class Crawler:
+        return self.collector
+    class Crawler:
         def __init__(self,category_url):
             self.collector = []
             self.url = category_url
