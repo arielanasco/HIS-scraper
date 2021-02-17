@@ -12,7 +12,6 @@ from random import sample
 
 class WebDriver:
     warnings.filterwarnings('ignore')
-
     def __init__(self,url):
         self.url = url
         self.userAgentList = [
@@ -100,49 +99,4 @@ class WebDriver:
                 break    
         return self.itemList
 
-    def localNameFinder(self,**kwargs):
-        try:
-            self.elementLocalName = kwargs.get("elementLocalName")
-            self.html = bs(kwargs.get("html"), 'html.parser')
-            return self.elementLocalName.find("p").get_text()
-        except:
-            raise Exception(f"Unable to locate the name with the class name ={self.elementlocalName}")
-
-    def titleFinder(self):
-        try:
-            self.elementTitle= kwargs.get("elementTitle")
-            self.html = bs(kwargs.get("html"), 'html.parser')
-            return self.elementTitle.find("p").get_text()
-        except:
-            raise Exception(f"Unable to locate the name with the class name ={self.elementTitle}")    
-    
-    def descriptionFinder(self):
-        try:
-            self.elementDescription= kwargs.get("elementDescription")
-            self.html = bs(kwargs.get("html"), 'html.parser')
-            return self.elementDescription.find("p").get_text()
-        except:
-            raise Exception(f"Unable to locate the name with the class name ={self.elementDescription}")  
-
-    def priceFinder(self):
-        try:
-            self.elementPrice= kwargs.get("elementPrice")
-            self.html = bs(kwargs.get("html"), 'html.parser')
-            return self.elementPrice.find("p").get_text()
-        except:
-            raise Exception(f"Unable to locate the name with the class name ={self.elementPrice}")  
-
-    def capacityFinder(self):
-        try:
-            self.elementCapacity= kwargs.get("elementCapacity")
-            self.html = bs(kwargs.get("html"), 'html.parser')
-            return self.elementCapacity.find("p").get_text()
-        except:
-            raise Exception(f"Unable to locate the name with the class name ={self.elementCapacity}")  
-
-    def imageUrlFinder(self):
-        pass
-
-    def saveData(self):
-        pass
 
