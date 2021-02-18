@@ -9,12 +9,11 @@ from selenium.common.exceptions import NoSuchElementException
 import logging
 import  concurrent.futures 
 
-logging.basicConfig(level=logging.INFO, format="[%(asctime)s][%(levelname)s] : %(threading.current_thread().name)s %(message)s", datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s][%(levelname)s] : %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 
 
 def ItemCollector(url_category):
-   threading.current_thread().name = url_category
    scrapeURL = ScraperList(url_category)
    scrapeURL.driver.get(scrapeURL.url)
    logging.info(f"Scraping {scrapeURL.driver.title}")
@@ -57,7 +56,7 @@ def main():
    logging.info(f"Took {round((final-start),2)} to fetch list of category")
    url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
 
-   with concurrent.futures.ThreadPoolExecutor(max_workers = 5) as executor:
+   with concurrent.futures.ThreadPoolExecutor(max_workers = 5,thread_name_prefix='Scraper') as executor:
       for data in url:
          executor.submit(ItemCollector, (data))
    final = time.perf_counter()
