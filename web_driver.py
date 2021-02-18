@@ -71,7 +71,7 @@ class ScraperList(WebDriver):
         self.itemList = []
         super().__init__()
 
-    def listParser(self,html,elementContainer,category):
+    def listParser(self,html,elementContainer):
         self.category = category
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
