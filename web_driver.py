@@ -37,8 +37,7 @@ class WebDriver:
         self.driver = webdriver.Chrome(options=self.options)
 
     def displaySiteInfo(self):
-        print(f"Target URL: {self.driver.current_url}")
-        print(f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}")
+        return "Target URL: {self.driver.current_url}","User-Agent: {self.driver.execute_script('return navigator.userAgent;')}"
     
 class ScraperCategory(WebDriver):
     categoryList = []
