@@ -6,6 +6,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
+import logging
+from time import time
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
 
 def ItemCollector(url_category):
    scrapeURL = ScraperList(url_category)
@@ -20,9 +26,9 @@ def ItemCollector(url_category):
          try: 
             nextButton = scrapeURL.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a")
             nextButton.send_keys(Keys.ENTER)
-            print("Next page detected")
+            logging.info("NEXT PAGE... PLS WAIT")
          except NoSuchElementException:
-            print("No next page detected")
+            logging.info("NO NEXT PAGE... EXITING...")
             while True:
                if scrapeURL.isNotActive:            
                   scrapeURL.isNotActive = False
@@ -32,8 +38,9 @@ def ItemCollector(url_category):
                   break
             break
       except:
-         scrapeURL.driver.quit()
+         scrapeURL.driver.close()
          raise Exception (" Unable to locate the element")
+   scrapeURL.driver.close()
 def main():
    start = time.perf_counter()
    site1= ScraperCategory("https://furu-po.com/")
@@ -45,8 +52,7 @@ def main():
 
    for _ in site1.categoryList:
       print(_)
-
-   print(f"Took {round((final-start),2)} to complete scraping")
+   logging.info(f"Took {round((final-start),2)} to complete scraping")
 
    url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
    start = time.perf_counter()
@@ -57,7 +63,7 @@ def main():
    t1.join()
    t2.join()
    final = time.perf_counter()
-   print(f"Took {round((final-start),2)} to complete to thread ")
+   logging.info(f"Took {round((final-start),2)} to complete scraping category url")
 
 if __name__ == '__main__':
    main()
