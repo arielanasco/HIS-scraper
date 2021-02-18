@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 def ItemCollector(url_category):
    scrapeURL = ScraperList(url_category)
    scrapeURL.driver.get(scrapeURL.url)
-   logging.info(f"Scraping {scrapeURL.driver.title}...")
+   logging.info(f"Scraping {scrapeURL.driver.title}...\n {scrapeURL.displaySiteInfo}")
    while True:
       try:
          itemlist = WebDriverWait(scrapeURL.driver, 5).until(
