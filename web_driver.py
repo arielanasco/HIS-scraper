@@ -83,4 +83,3 @@ class ScraperList(WebDriver):
                 self.ChildElement = self.ChildElement.find_next_sibling()
             else:
                 break
-        print(self.itemList)
