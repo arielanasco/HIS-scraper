@@ -19,6 +19,7 @@ def ItemCollector(url_category):
    logging.info(f"{threading.current_thread().name}] - Scraping {scrapeURL.driver.title}")
    while True:
       try:
+         time.sleep(3)
          itemlist = WebDriverWait(scrapeURL.driver, 5).until(
             EC.presence_of_element_located((By.CLASS_NAME, "itemlist"))
          )
@@ -32,6 +33,7 @@ def ItemCollector(url_category):
             while True:
                if scrapeURL.isNotActive:            
                   scrapeURL.isNotActive = False
+                  logging.info(f"{threading.current_thread().name}] - Saving {len(scrapeURL.itemList)}")
                   for _ in scrapeURL.itemList:
                      scrapeURL.data.append(_)
                   scrapeURL.isNotActive = True
