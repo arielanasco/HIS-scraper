@@ -60,6 +60,14 @@ def main():
       executor.submit(ItemCollector, (url[0]))
       executor.submit(ItemCollector, (url[1]))
       executor.submit(ItemCollector, (url[0]))
+      executor.submit(ItemCollector, (url[0]))
+      executor.submit(ItemCollector, (url[0]))
+      executor.submit(ItemCollector, (url[0]))
+      executor.submit(ItemCollector, (url[0]))
+      executor.submit(ItemCollector, (url[0]))
+      executor.submit(ItemCollector, (url[0]))
+      executor.submit(ItemCollector, (url[0]))
+      executor.submit(ItemCollector, (url[0]))
 
    # url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
    # start = time.perf_counter()
