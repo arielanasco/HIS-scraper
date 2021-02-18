@@ -53,14 +53,14 @@ def main():
 
    # for _ in site1.categoryList:
    #    logging.info(f"Site category {_} detected")
-   logging.info(f"Took {round((final-start),2)} to fetch list of category")
+   logging.info(f"{threading.current_thread().name}] - Took {round((final-start),2)} to fetch list of category")
    url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
 
    with concurrent.futures.ThreadPoolExecutor(max_workers = 5,thread_name_prefix='Scraper') as executor:
       for data in url:
          executor.submit(ItemCollector, (data))
    final = time.perf_counter()
-   logging.info(f"Took {round((final-start),2)} to complete scraping category url")
+   logging.info(f"{threading.current_thread().name}] - Took {round((final-start),2)} to complete scraping category url")
 
 
 if __name__ == '__main__':
