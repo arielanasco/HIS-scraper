@@ -56,9 +56,9 @@ def main():
    logging.info(f"Took {round((final-start),2)} to fetch list of category")
    url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
 
-   with concurrent.futures.ThreadPoolExecutor(max_workers = 3) as executor:
-      for category in site1.categoryList:
-         executor.submit(ItemCollector, (category))
+   with concurrent.futures.ThreadPoolExecutor(max_workers = 5) as executor:
+      for data in url:
+         executor.submit(ItemCollector, (data))
    final = time.perf_counter()
    logging.info(f"Took {round((final-start),2)} to complete scraping category url")
 
