@@ -24,7 +24,7 @@ def ItemCollector(url_category):
          except NoSuchElementException:
             print("No next page detected")
             while True:
-               if scrapeURL.isNotActive:
+               if scrapeURL.isNotActive:            
                   scrapeURL.isNotActive = False
                   for _ in itemList:
                      scrapeURL.data.append(_)
