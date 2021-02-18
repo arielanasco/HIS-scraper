@@ -28,6 +28,7 @@ def ItemCollector(url_category):
                   scrapeURL.isNotActive = False
                   for _ in scrapeURL.itemList:
                      scrapeURL.data.append(_)
+                  scrapeURL.isNotActive = True
                   break
             break
       except:
@@ -47,7 +48,7 @@ for _ in site1.categoryList:
 
 print(f"Took {round((final-start),2)} to complete scraping")
 
-url = ["https://furu-po.com/goods_list/280","https://furu-po.com/goods_list/7","https://mifurusato.jp/item_list.html"]
+url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
 start = time.perf_counter()
 t1 = threading.Thread(target = ItemCollector ,args=(url[0],))
 t2 = threading.Thread(target = ItemCollector ,args=(url[1],))
