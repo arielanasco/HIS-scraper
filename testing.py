@@ -9,11 +9,12 @@ from selenium.common.exceptions import NoSuchElementException
 import logging
 import  concurrent.futures 
 
-logging.basicConfig(level=logging.INFO, format='[%(asctime)s][%(levelname)s] : %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(level=logging.INFO, format="[%(asctime)s][%(levelname)s] : %(threading.current_thread().name)s %(message)s", datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 
 
 def ItemCollector(url_category):
+   threading.current_thread().name = url_category
    scrapeURL = ScraperList(url_category)
    scrapeURL.driver.get(scrapeURL.url)
    logging.info(f"Scraping {scrapeURL.driver.title}")
