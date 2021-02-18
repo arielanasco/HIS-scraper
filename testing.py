@@ -30,7 +30,7 @@ def ItemCollector(url_category):
                      scrapeURL.data.append(_)
                   break
             break
-      finally:
+      except:
          scrapeURL.driver.quit()
          raise Exception (" Unable to locate the element")
 
