@@ -78,7 +78,7 @@ class ScraperList(WebDriver):
         self.container = self.html.find(class_=self.elementContainer)
         self.ChildElement = self.container.find_next()
         while True:
-            self.itemList.append([self.ChildElement.find("a").get("href"),self.category])
+            self.itemList.append(self.ChildElement.find("a").get("href"))
             if self.ChildElement.find_next_sibling():
                 self.ChildElement = self.ChildElement.find_next_sibling()
             else:
