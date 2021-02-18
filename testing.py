@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 import logging
+import  concurrent.futures 
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(asctime)s  - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
@@ -15,7 +16,7 @@ logger = logging.getLogger(__name__)
 def ItemCollector(url_category):
    scrapeURL = ScraperList(url_category)
    scrapeURL.driver.get(scrapeURL.url)
-   logging.info(f"Scraping {scrapeURL.driver.title}...\n {scrapeURL.displaySiteInfo()}")
+   logging.info(f"Scraping {scrapeURL.driver.title}")
    while True:
       try:
          itemlist = WebDriverWait(scrapeURL.driver, 5).until(
@@ -40,6 +41,7 @@ def ItemCollector(url_category):
          scrapeURL.driver.close()
          raise Exception (" Unable to locate the element")
    scrapeURL.driver.close()
+
 def main():
    start = time.perf_counter()
    site1= ScraperCategory("https://furu-po.com/")
@@ -52,17 +54,23 @@ def main():
    for _ in site1.categoryList:
       logging.info(f"Site category {_} detected")
    logging.info(f"Took {round((final-start),2)} to complete scraping")
-
    url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
-   start = time.perf_counter()
-   t1 = threading.Thread(target = ItemCollector ,args=(url[0],))
-   t2 = threading.Thread(target = ItemCollector ,args=(url[1],))
-   t1.start()
-   t2.start()
-   t1.join()
-   t2.join()
-   final = time.perf_counter()
-   logging.info(f"Took {round((final-start),2)} to complete scraping category url")
+
+   with concurrent.futures.ThreadPoolExecutor(max_workers = 3) as executor:
+      executor.submit(ItemCollector, (url[0]))
+      executor.submit(ItemCollector, (url[1]))
+      executor.submit(ItemCollector, (url[0]))
+
+   # url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
+   # start = time.perf_counter()
+   # t1 = threading.Thread(target = ItemCollector ,args=(url[0],))
+   # t2 = threading.Thread(target = ItemCollector ,args=(url[1],))
+   # t1.start()
+   # t2.start()
+   # t1.join()
+   # t2.join()
+   # final = time.perf_counter()
+   # logging.info(f"Took {round((final-start),2)} to complete scraping category url")
 
 if __name__ == '__main__':
    main()
