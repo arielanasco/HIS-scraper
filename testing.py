@@ -16,7 +16,7 @@ def ItemCollector(url_category):
          itemlist = WebDriverWait(scrapeURL.driver, 5).until(
             EC.presence_of_element_located((By.CLASS_NAME, "itemlist"))
          )
-         itemList = scrapeURL.listParser(html = scrapeURL.driver.page_source, elementContainer = "itemlist", category=url_category)
+         scrapeURL.listParser(html = scrapeURL.driver.page_source, elementContainer = "itemlist", category=url_category)
          try: 
             nextButton = scrapeURL.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a")
             nextButton.send_keys(Keys.ENTER)
@@ -26,7 +26,7 @@ def ItemCollector(url_category):
             while True:
                if scrapeURL.isNotActive:            
                   scrapeURL.isNotActive = False
-                  for _ in itemList:
+                  for _ in scrapeURL.itemList:
                      scrapeURL.data.append(_)
                   break
             break

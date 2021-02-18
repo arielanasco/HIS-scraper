@@ -68,10 +68,10 @@ class ScraperList(WebDriver):
 
     def __init__(self, url):
         self.url = url
+        self.itemList = []
         super().__init__()
 
     def listParser(self,html,elementContainer,category):
-        self.itemList = []
         self.category = category
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
@@ -83,4 +83,4 @@ class ScraperList(WebDriver):
                 self.ChildElement = self.ChildElement.find_next_sibling()
             else:
                 break
-        return self.itemList
+        print(self.itemList)
