@@ -34,28 +34,30 @@ def ItemCollector(url_category):
       except:
          scrapeURL.driver.quit()
          raise Exception (" Unable to locate the element")
+def main():
+   start = time.perf_counter()
+   site1= ScraperCategory("https://furu-po.com/")
+   site1.driver.get(site1.url)
+   site1.displaySiteInfo()
+   site1.categoryParser(html= site1.driver.page_source, elementTag = "popover")
+   site1.driver.close()
+   final = time.perf_counter()
 
-start = time.perf_counter()
-site1= ScraperCategory("https://furu-po.com/")
-site1.driver.get(site1.url)
-site1.displaySiteInfo()
-site1.categoryParser(html= site1.driver.page_source, elementTag = "popover")
-site1.driver.close()
-final = time.perf_counter()
+   for _ in site1.categoryList:
+      print(_)
 
-for _ in site1.categoryList:
-   print(_)
+   print(f"Took {round((final-start),2)} to complete scraping")
 
-print(f"Took {round((final-start),2)} to complete scraping")
+   url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
+   start = time.perf_counter()
+   t1 = threading.Thread(target = ItemCollector ,args=(url[0],))
+   t2 = threading.Thread(target = ItemCollector ,args=(url[1],))
+   t1.start()
+   t2.start()
+   t1.join()
+   t2.join()
+   final = time.perf_counter()
+   print(f"Took {round((final-start),2)} to complete to thread ")
 
-url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
-start = time.perf_counter()
-t1 = threading.Thread(target = ItemCollector ,args=(url[0],))
-t2 = threading.Thread(target = ItemCollector ,args=(url[1],))
-t1.start()
-t2.start()
-t1.join()
-t2.join()
-final = time.perf_counter()
-print(f"Took {round((final-start),2)} to complete to thread ")
-
+if __name__ == '__main__':
+   main()
