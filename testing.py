@@ -44,13 +44,14 @@ def ItemCollector(url_category):
 
 def main():
    start = time.perf_counter()
+   logging.info(f"{threading.current_thread().name}] - Scraping has been started...")
    site1= ScraperCategory("https://furu-po.com/")
    site1.driver.get(site1.url)
    site1.displaySiteInfo()
    site1.categoryParser(html= site1.driver.page_source, elementTag = "popover")
    site1.driver.close()
    final = time.perf_counter()
-
+   
    # for _ in site1.categoryList:
    #    logging.info(f"Site category {_} detected")
    logging.info(f"{threading.current_thread().name}] - Took {round((final-start),2)} to fetch list of category")
