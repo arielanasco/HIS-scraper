@@ -9,14 +9,14 @@ from selenium.common.exceptions import NoSuchElementException
 import logging
 import  concurrent.futures 
 
-logging.basicConfig(level=logging.INFO, format='[%(asctime)s][%(levelname)s] : %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s][%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 
 
 def ItemCollector(url_category):
    scrapeURL = ScraperList(url_category)
    scrapeURL.driver.get(scrapeURL.url)
-   logging.info(f"{threading.current_thread().name} - Scraping {scrapeURL.driver.title}")
+   logging.info(f"{threading.current_thread().name}] - Scraping {scrapeURL.driver.title}")
    while True:
       try:
          itemlist = WebDriverWait(scrapeURL.driver, 5).until(
@@ -26,9 +26,9 @@ def ItemCollector(url_category):
          try: 
             nextButton = scrapeURL.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a")
             nextButton.send_keys(Keys.ENTER)
-            logging.info(f"{threading.current_thread().name} -NEXT PAGE... PLS WAIT")
+            logging.info(f"{threading.current_thread().name}] - NEXT PAGE... PLS WAIT")
          except NoSuchElementException:
-            logging.info(f"{threading.current_thread().name} -NO NEXT PAGE... EXITING...")
+            logging.info(f"{threading.current_thread().name}] - NO NEXT PAGE... EXITING...")
             while True:
                if scrapeURL.isNotActive:            
                   scrapeURL.isNotActive = False
@@ -39,7 +39,7 @@ def ItemCollector(url_category):
             break
       except:
          scrapeURL.driver.close()
-         raise Exception (f"{threading.current_thread().name} Unable to locate the element")
+         raise Exception (f"{threading.current_thread().name}] - Unable to locate the element")
    scrapeURL.driver.close()
 
 def main():
