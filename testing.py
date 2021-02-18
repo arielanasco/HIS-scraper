@@ -8,14 +8,14 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 import logging
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(asctime)s  - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 
 
 def ItemCollector(url_category):
    scrapeURL = ScraperList(url_category)
    scrapeURL.driver.get(scrapeURL.url)
-   print(scrapeURL.driver.title)
+   logging.info(f"Scraping {scrapeURL.driver.title}...")
    while True:
       try:
          itemlist = WebDriverWait(scrapeURL.driver, 5).until(
@@ -50,7 +50,7 @@ def main():
    final = time.perf_counter()
 
    for _ in site1.categoryList:
-      print(_)
+      logging.info(f"Site category {_} detected")
    logging.info(f"Took {round((final-start),2)} to complete scraping")
 
    url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
