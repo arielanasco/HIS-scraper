@@ -53,12 +53,11 @@ def main():
    logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
    site1.categoryParser(html= site1.driver.page_source, elementTag = "popover")
    site1.driver.close()
-   url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
 
    with concurrent.futures.ThreadPoolExecutor(max_workers=4 , thread_name_prefix='Scraper') as executor:
       futures = []
       for data in site1.categoryList:
-         futures.append(executor.submit(ItemCollector, (data[0],data[1])))
+         futures.append(executor.submit(ItemCollector, (url_category = data[0],category = data[1])))
       for future in futures:
          print(future.result())
    final = time.perf_counter()
