@@ -56,8 +56,11 @@ def main():
    url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
 
    with concurrent.futures.ThreadPoolExecutor(max_workers=4 , thread_name_prefix='Scraper') as executor:
+      future = []
       for data in site1.categoryList:
-         executor.submit(ItemCollector, (data[0],data[1]))
+         future.append(executor.submit(ItemCollector, (data[0],data[1])))
+      for _ in future:
+         print(_)
    final = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} second(s)")
 
