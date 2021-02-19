@@ -73,8 +73,8 @@ class ScraperList(WebDriver):
     def listParser(self,html,elementContainer):
         # self.category = category
         self.elementContainer = elementContainer
-        # self.html = bs(html, 'html.parser')
-        self.html = html
+        self.html = bs(html, 'html.parser')
+        # self.html = html
         self.container = self.html.find(class_=self.elementContainer)
         self.ChildElement = self.container.find_next()
         while True:
