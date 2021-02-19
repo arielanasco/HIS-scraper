@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def ItemCollector(url_category,category):
    scrapeURL = ScraperList(url_category)
    scrapeURL.driver.get(scrapeURL.url)
-   logging.info(f"{threading.current_thread().name}_{category}) - Scraping...")
+   logging.info(f"{threading.current_thread().name}) - Scraping...{category}")
    while True:
       try:
          time.sleep(3)
@@ -27,13 +27,13 @@ def ItemCollector(url_category,category):
          try: 
             nextButton = scrapeURL.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a")
             nextButton.send_keys(Keys.ENTER)
-            logging.info(f"{threading.current_thread().name}_{category}) - PLS WAIT...  ACTIVE THREAD: {int(threading.activeCount())-1}")
+            logging.info(f"{threading.current_thread().name}) - ACTIVE THREAD:{int(threading.activeCount())-1} Next Page of {category}")
          except NoSuchElementException:
-            logging.info(f"{threading.current_thread().name}_{category}) - EXITING... ACTIVE THREAD: {int(threading.activeCount())-1}")
+            logging.info(f"{threading.current_thread().name}) - ACTIVE THREAD:{int(threading.activeCount())-1} Exiting {category} ")
             while True:
                if scrapeURL.isNotActive:            
                   scrapeURL.isNotActive = False
-                  logging.info(f"{threading.current_thread().name}_{category}) - Saving {len(scrapeURL.itemList)} --> {ScraperList.data}")
+                  logging.info(f"{threading.current_thread().name}_{category}) - Saving {len(scrapeURL.itemList)} --> {scrapeURL.data}")
                   for _ in scrapeURL.itemList:
                      scrapeURL.data.append(_)
                   scrapeURL.isNotActive = True
