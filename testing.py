@@ -27,9 +27,9 @@ def ItemCollector(url_category):
          try: 
             nextButton = scrapeURL.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a")
             nextButton.send_keys(Keys.ENTER)
-            logging.info(f"{threading.current_thread().name}_scrapeURL.driver.title) - NEXT PAGE... PLS WAIT")
+            logging.info(f"{threading.current_thread().name}_scrapeURL.driver.title) - PLS WAIT...  ACTIVE THREAD: {int(threading.activeCount())-1}")
          except NoSuchElementException:
-            logging.info(f"{threading.current_thread().name}_scrapeURL.driver.title) - NO NEXT PAGE... EXITING...")
+            logging.info(f"{threading.current_thread().name}_scrapeURL.driver.title) - EXITING... ACTIVE THREAD: {int(threading.activeCount())-1}")
             while True:
                if scrapeURL.isNotActive:            
                   scrapeURL.isNotActive = False
@@ -58,7 +58,7 @@ def main():
    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} second(s) to fetch list of category")
    url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
 
-   with concurrent.futures.ThreadPoolExecutor(max_workers = 3,thread_name_prefix='Scraper') as executor:
+   with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Scraper') as executor:
       for data in site1.categoryList:
          executor.submit(ItemCollector, (data[0]))
    final = time.perf_counter()
