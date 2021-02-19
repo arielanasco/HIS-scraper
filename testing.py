@@ -13,7 +13,9 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(me
 logger = logging.getLogger(__name__)
 
 
-def ItemCollector(url_category=data[0],category=data[1]):
+def ItemCollector(data):
+   url_category=data[0]
+   category=data[1]
    scrapeURL = ScraperList(url_category)
    scrapeURL.driver.get(scrapeURL.url)
    logging.info(f"{threading.current_thread().name}) - Scraping...{category}")
@@ -33,7 +35,7 @@ def ItemCollector(url_category=data[0],category=data[1]):
             while True:
                if scrapeURL.isNotActive:            
                   scrapeURL.isNotActive = False
-                  logging.info(f"{threading.current_thread().name}_{category}) - Saving {len(scrapeURL.itemList)} --> {len(scrapeURL.data})")
+                  logging.info(f"{threading.current_thread().name}_{category}) - Saving {len(scrapeURL.itemList)} --> {len(scrapeURL.data)}")
                   for _ in scrapeURL.itemList:
                      scrapeURL.data.append(_)
                   scrapeURL.isNotActive = True
