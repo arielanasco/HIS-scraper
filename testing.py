@@ -9,14 +9,14 @@ from selenium.common.exceptions import NoSuchElementException
 import logging
 import  concurrent.futures 
 
-logging.basicConfig(level=logging.INFO, format='[%(asctime)s][%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 
 
 def ItemCollector(url_category):
    scrapeURL = ScraperList(url_category)
    scrapeURL.driver.get(scrapeURL.url)
-   logging.info(f"{threading.current_thread().name}] - Scraping {scrapeURL.driver.title}")
+   logging.info(f"{threading.current_thread().name}_scrapeURL.driver.title) - Scraping...")
    while True:
       try:
          time.sleep(3)
@@ -27,13 +27,13 @@ def ItemCollector(url_category):
          try: 
             nextButton = scrapeURL.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a")
             nextButton.send_keys(Keys.ENTER)
-            logging.info(f"{threading.current_thread().name}] - NEXT PAGE... PLS WAIT")
+            logging.info(f"{threading.current_thread().name}_scrapeURL.driver.title) - NEXT PAGE... PLS WAIT")
          except NoSuchElementException:
-            logging.info(f"{threading.current_thread().name}] - NO NEXT PAGE... EXITING...")
+            logging.info(f"{threading.current_thread().name}_scrapeURL.driver.title) - NO NEXT PAGE... EXITING...")
             while True:
                if scrapeURL.isNotActive:            
                   scrapeURL.isNotActive = False
-                  logging.info(f"{threading.current_thread().name}] - Saving {len(scrapeURL.itemList)}")
+                  logging.info(f"{threading.current_thread().name}_scrapeURL.driver.title) - Saving {len(scrapeURL.itemList)} --> {ScraperList.data}")
                   for _ in scrapeURL.itemList:
                      scrapeURL.data.append(_)
                   scrapeURL.isNotActive = True
@@ -41,28 +41,28 @@ def ItemCollector(url_category):
             break
       except:
          scrapeURL.driver.close()
-         raise Exception (f"{threading.current_thread().name}] - Unable to locate the element")
+         raise Exception (f"{threading.current_thread().name}) - Unable to locate the element")
    scrapeURL.driver.close()
 
 def main():
    start = time.perf_counter()
-   logging.info(f"{threading.current_thread().name}] - Scraping has been started...")
+   logging.info(f"{threading.current_thread().name}) - Scraping has been started...")
    site1= ScraperCategory("https://furu-po.com/")
    site1.driver.get(site1.url)
    current_url, user_agent = site1.displaySiteInfo()
-   logging.info(f"{threading.current_thread().name}] - {current_url} {user_agent}")
+   logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
    site1.categoryParser(html= site1.driver.page_source, elementTag = "popover")
    site1.driver.close()
    final = time.perf_counter()
 
-   logging.info(f"{threading.current_thread().name}] - Took {round((final-start),2)} to fetch list of category")
+   logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} second(s) to fetch list of category")
    url = ["https://furu-po.com/goods_list/176","https://furu-po.com/goods_list/1150"]
 
    with concurrent.futures.ThreadPoolExecutor(max_workers = 3,thread_name_prefix='Scraper') as executor:
       for data in site1.categoryList:
          executor.submit(ItemCollector, (data[0]))
    final = time.perf_counter()
-   logging.info(f"{threading.current_thread().name}] - Took {round((final-start),2)} to complete scraping category url")
+   logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} second(s) to complete scraping category url")
 
 
 if __name__ == '__main__':
