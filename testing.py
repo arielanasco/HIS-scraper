@@ -57,7 +57,7 @@ def main():
    with concurrent.futures.ThreadPoolExecutor(max_workers=4 , thread_name_prefix='Scraper') as executor:
       futures = []
       for data in site1.categoryList:
-         futures.append(executor.submit(ItemCollector, (url_category = data[0],category = data[1])))
+         futures.append(executor.submit(ItemCollector, url_category=data[0],category=data[1]))
       for future in futures:
          print(future.result())
    final = time.perf_counter()
