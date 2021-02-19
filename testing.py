@@ -25,7 +25,7 @@ def ItemCollector(data):
          itemlist = WebDriverWait(scrapeURL.driver, 5).until(
             EC.presence_of_element_located((By.CLASS_NAME, "itemlist"))
          )
-         scrapeURL.listParser(html = scrapeURL.driver.page_source, elementContainer = "itemlist")
+         scrapeURL.listParser(html =itemlist, elementContainer = "itemlist")
          try: 
             nextButton = scrapeURL.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a")
             nextButton.send_keys(Keys.ENTER)
@@ -35,10 +35,10 @@ def ItemCollector(data):
             while True:
                if scrapeURL.isNotActive:            
                   scrapeURL.isNotActive = False
-                  logging.info(f"{threading.current_thread().name}_{category}) - Saving {len(scrapeURL.itemList)} --> {len(scrapeURL.data)}")
                   for _ in scrapeURL.itemList:
                      scrapeURL.data.append(_)
                   scrapeURL.isNotActive = True
+                  logging.info(f"{threading.current_thread().name}) - Saving collected{len(scrapeURL.itemList)} --> Total Collected URL{len(scrapeURL.data)}")
                   break
             break
       except:
