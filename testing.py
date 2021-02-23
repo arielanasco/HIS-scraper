@@ -18,8 +18,7 @@ class URLCollectorClass(ScraperList):
    def __init__(self, url):
         self.url = url
         self.itemList = []
-        super().__init__()
-
+        super().__init__(url)
    def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
       self.html = bs(html, 'html.parser')
       try:
@@ -27,30 +26,25 @@ class URLCollectorClass(ScraperList):
          self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
       except:
          self.localNameFinder = "Error in localNameFinder"
-
       try:
          self.titleFinder = self.html.find(class_="lg-info").find_next().get_text()
          self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
       except:
          self.titleFinder = "Error in titleFinder"
-
       try:
          self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
          self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
       except:
          self.descriptionFinder = "Error in descriptionFinder"
-
       try:
          self.priceFinder = self.html.find(class_="item-information").find_next(class_=priceFinder).get_text()
          self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
       except:
          self.priceFinder = "Error in priceFinder"
-
       try:
          self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
       except:
          self.capacityFinder = "Error in capacityFinder"
-
       try:
         self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("img")
         self.imageList = []
@@ -58,7 +52,6 @@ class URLCollectorClass(ScraperList):
            self.imageList.append(_.get("src"))      
       except:
          self.imageUrlFinder = "Error in imageUrlFinder"
-      
       for data in ScraperList.data:
          if itemUrl in data:
             index_ = ScraperList.data.index(data)
@@ -141,7 +134,7 @@ def main():
    site1.categoryParser(html= site1.driver.page_source, elementTag = "popover")
    data=site1.categoryList
    print(data)
-   # data=[["https://furu-po.com/goods_list/1150","test"],["https://furu-po.com/goods_list/1150","test"]]
+   # data=["https://furu-po.com/goods_list/1150","test"],["https://furu-po.com/goods_list/1150","test"]]
    site1.driver.close()
 
    with concurrent.futures.ThreadPoolExecutor(max_workers=1 , thread_name_prefix='Scraper') as executor:
