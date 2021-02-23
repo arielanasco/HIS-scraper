@@ -25,7 +25,7 @@ def URLCollector(data):
          itemlist = WebDriverWait(scrapeURL.driver, 5).until(
             EC.presence_of_element_located((By.CLASS_NAME, "itemlist"))
          )
-         scrapeURL.listParser(html = itemlist, elementContainer = "itemlist")
+         scrapeURL.listParser(html =itemlist, elementContainer = "itemlist")
          try: 
             nextButton = scrapeURL.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a")
             nextButton.send_keys(Keys.ENTER)
@@ -59,7 +59,7 @@ def DataCollector():
       scrapeURL.driver.close()
       raise Exception (f"{threading.current_thread().name}) - Unable to locate the element")
    scrapeURL.driver.close()
-
+   
 def main():
    start = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Scraping has been started...")

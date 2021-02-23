@@ -73,8 +73,9 @@ class ScraperList(WebDriver):
     def listParser(self,html,elementContainer):
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
-        self.container = self.html.find(class_=self.elementContainer)
-        self.ChildElement = self.container.find_next()
+        # self.container = self.html.find(class_=self.elementContainer)
+        self.ChildElement = self.html.find_next()
+        # self.ChildElement = self.container.find_next()
         while True:
             self.itemList.append(self.ChildElement.find("a").get("href"))
             if self.ChildElement.find_next_sibling():
