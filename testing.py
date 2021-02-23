@@ -144,7 +144,7 @@ def main():
    data=[["https://furu-po.com/goods_list/1150","test"],["https://furu-po.com/goods_list/1150","test"]]
    site1.driver.close()
 
-   with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
+   with concurrent.futures.ThreadPoolExecutor(max_workers=1 , thread_name_prefix='Scraper') as executor:
       executor.map(URLCollector, data)
 
    final = time.perf_counter()
