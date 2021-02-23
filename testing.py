@@ -109,8 +109,8 @@ def URLCollector(data):
          break
    scrapeURL.driver.close()
 
-def DataCollector():
-   item_url = "test"
+def DataCollector(data):
+   item_url = data[0]
    scrapeURL = ScraperList(item_url)
    scrapeURL.driver.get(scrapeURL.url)
    try:
@@ -150,7 +150,7 @@ def main():
    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} second(s)")
 
    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetch') as executor:
-      executor.map(DataCollector())
+      executor.map(DataCollector(), ScraperList.data)
 
    final = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} second(s)")
