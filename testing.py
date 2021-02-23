@@ -140,7 +140,8 @@ def main():
    logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
    site1.categoryParser(html= site1.driver.page_source, elementTag = "popover")
    data=site1.categoryList
-   data=[["https://furu-po.com/goods_list/1150","test"]]
+   print(data)
+   data=[["https://furu-po.com/goods_list/1150","test"],["https://furu-po.com/goods_list/1150","test"]]
    site1.driver.close()
 
    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
