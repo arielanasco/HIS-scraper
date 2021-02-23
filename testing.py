@@ -57,11 +57,11 @@ def main():
    data=site1.categoryList
    site1.driver.close()
 
-   with concurrent.futures.ThreadPoolExecutor(max_workers=4 , thread_name_prefix='Scraper') as executor:
+   with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
       futures = []
       futures.append(executor.map(ItemCollector, data))
-      # for future in concurrent.futures.as_completed(futures):
-      #    print(future.result())
+      #for future in concurrent.futures.as_completed(futures):
+      #   print(future.result())
    final = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} second(s)")
 
