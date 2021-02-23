@@ -16,7 +16,8 @@ logger = logging.getLogger(__name__)
 
 class URLCollectorClass(ScraperList):
    def __init__(self, url):
-        super().__init__(url)
+      self.url = url
+      super().__init__(url)
    def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
       self.html = bs(html, 'html.parser')
       try:
@@ -50,15 +51,22 @@ class URLCollectorClass(ScraperList):
            self.imageList.append(_.get("src"))      
       except:
          self.imageUrlFinder = "Error in imageUrlFinder"
-      for data in ScraperList.data:
-         if itemUrl in data:
-            index_ = ScraperList.data.index(data)
-            ScraperList.data[index_].insert(2,self.localNameFinder)
-            ScraperList.data[index_].insert(3,self.titleFinder)
-            ScraperList.data[index_].insert(4,self.descriptionFinder)
-            ScraperList.data[index_].insert(5,self.priceFinder)
-            ScraperList.data[index_].insert(6,self.capacityFinder)
-            ScraperList.data[index_].insert(7,self.imageList)
+      while True:
+         if ScraperList.isNotActive:            
+            ScraperList.isNotActive = False
+            for data in ScraperList.data:
+               if itemUrl in data:
+                  index_ = ScraperList.data.index(data)
+                  ScraperList.data[index_].insert(2,self.localNameFinder)
+                  ScraperList.data[index_].insert(3,self.titleFinder)
+                  ScraperList.data[index_].insert(4,self.descriptionFinder)
+                  ScraperList.data[index_].insert(5,self.priceFinder)
+                  ScraperList.data[index_].insert(6,self.capacityFinder)
+                  ScraperList.data[index_].insert(7,self.imageList)
+                  ScraperList.isNotActive = True
+                  logging.info(f"{threading.current_thread().name}) Total Collected URL{len(scrapeURL.data)}")
+                  break
+
 #
 # [['https://stack...','category','localName','title','description',price','capacity','[imageURL]'],
 # ['https://stack...','category','localName','title','description',price','capacity','[imageURL]'],
@@ -135,7 +143,7 @@ def main():
    # data=["https://furu-po.com/goods_list/1150","test"],["https://furu-po.com/goods_list/1150","test"]]
    site1.driver.close()
 
-   with concurrent.futures.ThreadPoolExecutor(max_workers=1 , thread_name_prefix='Scraper') as executor:
+   with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
       executor.map(URLCollector, data)
 
    final = time.perf_counter()
