@@ -150,7 +150,7 @@ def main():
    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} second(s)")
 
    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetch') as executor:
-      executor.map(DataCollector(), ScraperList.data)
+      executor.map(DataCollector, ScraperList.data)
 
    final = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} second(s)")
