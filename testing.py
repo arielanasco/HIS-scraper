@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(me
 logger = logging.getLogger(__name__)
 
 
-def ItemCollector(data):
+def URLCollector(data):
    url_category=data[0]
    category=data[1]
    scrapeURL = ScraperList(url_category)
@@ -21,11 +21,11 @@ def ItemCollector(data):
    logging.info(f"{threading.current_thread().name}) - Scraping...{category}")
    while True:
       try:
-         time.sleep(3)
+         time.sleep(1)
          itemlist = WebDriverWait(scrapeURL.driver, 5).until(
             EC.presence_of_element_located((By.CLASS_NAME, "itemlist"))
          )
-         scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = "itemlist")
+         scrapeURL.listParser(html = itemlist, elementContainer = "itemlist")
          try: 
             nextButton = scrapeURL.driver.find_element_by_xpath("//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a")
             nextButton.send_keys(Keys.ENTER)
@@ -46,6 +46,20 @@ def ItemCollector(data):
          raise Exception (f"{threading.current_thread().name}) - Unable to locate the element")
    scrapeURL.driver.close()
 
+def DataCollector():
+   scrapeURL = ScraperList()
+   scrapeURL.driver.get(scrapeURL.url)
+   try:
+      time.sleep(1)
+      item_info = WebDriverWait(scrapeURL.driver, 5).until(
+         EC.presence_of_element_located((By.CLASS_NAME, "item_info"))
+      )
+      scrapeURL.dataParser(html =scrapeURL.driver.page_source, elementContainer = "item_info")
+   except:
+      scrapeURL.driver.close()
+      raise Exception (f"{threading.current_thread().name}) - Unable to locate the element")
+   scrapeURL.driver.close()
+
 def main():
    start = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Scraping has been started...")
@@ -58,10 +72,8 @@ def main():
    site1.driver.close()
 
    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
-      futures = []
-      futures.append(executor.map(ItemCollector, data))
-      #for future in concurrent.futures.as_completed(futures):
-      #   print(future.result())
+      executor.map(URLCollector, data)
+
    final = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} second(s)")
 
