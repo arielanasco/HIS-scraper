@@ -106,7 +106,7 @@ def URLCollector(data):
          scrapeURL.driver.close()
          raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
          break
-      scrapeURL.driver.close()
+   scrapeURL.driver.close()
 
 def DataCollector(data):
    item_url = data[0]
