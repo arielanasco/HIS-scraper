@@ -68,7 +68,7 @@ class ScraperList(WebDriver):
     def __init__(self, url):
         self.url = url
         self.itemList = []
-        super().__init__()
+        super().__init__(url)
 
     def listParser(self,html,elementContainer):
         self.elementContainer = elementContainer

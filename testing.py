@@ -16,8 +16,6 @@ logger = logging.getLogger(__name__)
 
 class URLCollectorClass(ScraperList):
    def __init__(self, url):
-        self.url = url
-        self.itemList = []
         super().__init__(url)
    def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
       self.html = bs(html, 'html.parser')
