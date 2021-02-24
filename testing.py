@@ -54,9 +54,7 @@ class URLCollectorClass(ScraperList):
       except:
          self.imageUrlFinder = "Error in imageUrlFinder"
       while True:
-         logging.info(f"looponing {ScraperList.isNotActive}")
          if ScraperList.isNotActive: 
-            logging.info(f"Detected {ScraperList.isNotActive}")           
             ScraperList.isNotActive = False
             for data in ScraperList.data:
                if itemUrl in data:
@@ -68,7 +66,6 @@ class URLCollectorClass(ScraperList):
                   ScraperList.data[index_].insert(6,self.capacityFinder)
                   ScraperList.data[index_].insert(7,self.imageList)
                   ScraperList.isNotActive = True
-                  logging.info(f"{threading.current_thread().name}) Total Collected URL{len(ScraperList.data)}")
                   break
             break
 
