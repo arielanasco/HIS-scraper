@@ -20,6 +20,7 @@ class URLCollectorClass(ScraperList):
       super().__init__(url)
    def dataParser(self,html,itemUrl = "",localNameFinder = "",titleFinder = "",descriptionFinder = "",priceFinder = "",capacityFinder = "",imageUrlFinder = []):
       self.html = bs(html, 'html.parser')
+      logging.info(f"{threading.current_thread().name}) - Getting data now...")
       try:
          self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
          self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
@@ -110,7 +111,7 @@ def URLCollector(data):
 
 def DataCollector(data):
    item_url = data[0]
-   scrapeURL = ScraperList(item_url[0])
+   scrapeURL = ScraperList(item_url)
    scrapeURL.driver.get(scrapeURL.url)
    logging.info(f"{threading.current_thread().name}) - Fetching...{item_url}")
    try:
