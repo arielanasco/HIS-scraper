@@ -110,7 +110,7 @@ def URLCollector(data):
 
 def DataCollector(data):
    item_url = data[0]
-   scrapeURL = ScraperList(item_url)
+   scrapeURL = ScraperList(item_url[0])
    scrapeURL.driver.get(scrapeURL.url)
    logging.info(f"{threading.current_thread().name}) - Fetching...{item_url}")
    try:
