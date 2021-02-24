@@ -26,31 +26,26 @@ class URLCollectorClass(ScraperList):
          self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
       except:
          self.localNameFinder = "Error in localNameFinder"
-      logging.info(f"{self.localNameFinder}")
       try:
          self.titleFinder = self.html.find(class_="lg-info").find_next("h1").get_text()
          self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
       except:
          self.titleFinder = "Error in titleFinder"
-      logging.info(f"{self.titleFinder}")
       try:
          self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
          self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
       except:
          self.descriptionFinder = "Error in descriptionFinder"
-      logging.info(f"{self.descriptionFinder}")
       try:
          self.priceFinder = self.html.find(class_=priceFinder).find_next(class_="price").get_text()
          self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
       except:
          self.priceFinder = "Error in priceFinder"
-      logging.info(f"{self.priceFinder}")
       try:
          self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
          self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
       except:
          self.capacityFinder = "Error in capacityFinder"
-      logging.info(f"{self.capacityFinder}")
       try:
         self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("img")
         self.imageList = []
@@ -163,7 +158,7 @@ def main():
    final = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} second(s)")
 
-   with concurrent.futures.ThreadPoolExecutor(max_workers=3 , thread_name_prefix='Fetch') as executor:
+   with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetch') as executor:
       executor.map(DataCollector, ScraperList.data)
 
    final = time.perf_counter()
