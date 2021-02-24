@@ -18,7 +18,7 @@ class URLCollectorClass(ScraperList):
    def __init__(self, url):
       self.url = url
       super().__init__(url)
-   def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
+   def dataParser(self,html,itemUrl = "",localNameFinder = "",titleFinder = "",descriptionFinder = "",priceFinder = "",capacityFinder = "",imageUrlFinder = []):
       self.html = bs(html, 'html.parser')
       try:
          self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
@@ -112,6 +112,7 @@ def DataCollector(data):
    item_url = data[0]
    scrapeURL = ScraperList(item_url)
    scrapeURL.driver.get(scrapeURL.url)
+   logging.info(f"{threading.current_thread().name}) - Fetching...{item_url}")
    try:
       time.sleep(1)
       item_info = WebDriverWait(scrapeURL.driver, 5).until(
