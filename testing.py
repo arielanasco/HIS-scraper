@@ -18,7 +18,7 @@ class URLCollectorClass(ScraperList):
    def __init__(self, url):
       self.url = url
       super().__init__(url)
-   def dataParser(self,html,itemUrl = "",localNameFinder = "",titleFinder = "",descriptionFinder = "",priceFinder = "",capacityFinder = "",imageUrlFinder = []):
+   def dataParser(self,html,itemUrl = "",localNameFinder = "",titleFinder = "",descriptionFinder = "",priceFinder = "",capacityFinder = "",imageUrlFinder = ""):
       self.html = bs(html, 'html.parser')
       logging.info(f"{threading.current_thread().name}) - Getting data now...")
       try:
@@ -26,25 +26,31 @@ class URLCollectorClass(ScraperList):
          self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
       except:
          self.localNameFinder = "Error in localNameFinder"
+      logging.info(f"{self.localNameFinder}")
       try:
-         self.titleFinder = self.html.find(class_="lg-info").find_next().get_text()
+         self.titleFinder = self.html.find(class_="lg-info").find_next("h1").get_text()
          self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
       except:
          self.titleFinder = "Error in titleFinder"
+      logging.info(f"{self.titleFinder}")
       try:
          self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
          self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
       except:
          self.descriptionFinder = "Error in descriptionFinder"
+      logging.info(f"{self.descriptionFinder}")
       try:
-         self.priceFinder = self.html.find(class_="item-information").find_next(class_=priceFinder).get_text()
+         self.priceFinder = self.html.find(class_=priceFinder).find_next(class_="price").get_text()
          self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
       except:
          self.priceFinder = "Error in priceFinder"
+      logging.info(f"{self.priceFinder}")
       try:
          self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
+         self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
       except:
          self.capacityFinder = "Error in capacityFinder"
+      logging.info(f"{self.capacityFinder}")
       try:
         self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("img")
         self.imageList = []
@@ -53,7 +59,9 @@ class URLCollectorClass(ScraperList):
       except:
          self.imageUrlFinder = "Error in imageUrlFinder"
       while True:
-         if ScraperList.isNotActive:            
+         logging.info(f"looponing {ScraperList.isNotActive}")
+         if ScraperList.isNotActive: 
+            logging.info(f"Detected {ScraperList.isNotActive}")           
             ScraperList.isNotActive = False
             for data in ScraperList.data:
                if itemUrl in data:
@@ -65,10 +73,12 @@ class URLCollectorClass(ScraperList):
                   ScraperList.data[index_].insert(6,self.capacityFinder)
                   ScraperList.data[index_].insert(7,self.imageList)
                   ScraperList.isNotActive = True
-                  logging.info(f"{threading.current_thread().name}) Total Collected URL{len(scrapeURL.data)}")
+                  logging.info(f"{threading.current_thread().name}) Total Collected URL{len(ScraperList.data)}")
                   break
+            break
 
-#
+# data = ['https://furu-po.com/goods_detail.php?id=664459', 'test']
+# ScraperList.data = [['https://furu-po.com/goods_detail.php?id=664459', 'test']]
 # [['https://stack...','category','localName','title','description',price','capacity','[imageURL]'],
 # ['https://stack...','category','localName','title','description',price','capacity','[imageURL]'],
 # ['https://stack...','category','localName','title','description',price','capacity','[imageURL]']
@@ -111,7 +121,7 @@ def URLCollector(data):
 
 def DataCollector(data):
    item_url = data[0]
-   scrapeURL = ScraperList(item_url)
+   scrapeURL = URLCollectorClass(item_url)
    scrapeURL.driver.get(scrapeURL.url)
    logging.info(f"{threading.current_thread().name}) - Fetching...{item_url}")
    try:
@@ -124,9 +134,9 @@ def DataCollector(data):
                            localNameFinder = "lg-info",
                            titleFinder = "",
                            descriptionFinder = "item-description",
-                           priceFinder = "",
+                           priceFinder = "item-information",
                            capacityFinder = "info",
-                           imageUrlFinder = "" )
+                           imageUrlFinder = "slick-list" )
    except:
       scrapeURL.driver.close()
       raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
@@ -153,7 +163,7 @@ def main():
    final = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} second(s)")
 
-   with concurrent.futures.ThreadPoolExecutor(max_workers=1 , thread_name_prefix='Fetch') as executor:
+   with concurrent.futures.ThreadPoolExecutor(max_workers=3 , thread_name_prefix='Fetch') as executor:
       executor.map(DataCollector, ScraperList.data)
 
    final = time.perf_counter()
