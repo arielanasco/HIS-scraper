@@ -1,7 +1,7 @@
 # HIS-Scraper
 ## Table of Contents
-1. [ Description. ](#linkSite)
-2. [ Usage tips. ](#usage)
+1. [ Link Websites ](#linkSite)
+2. [ Updates ](#updates)
 
 <a name="linkSite"></a>
 ## 1. Link Websites
@@ -21,6 +21,6 @@
 
 
 
-<a name="usage"></a>
-## 2. Usage tips
+<a name="updates"></a>
+## 2. Updates
 
