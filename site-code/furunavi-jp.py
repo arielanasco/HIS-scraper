@@ -76,6 +76,7 @@ def main():
    site.categoryParser(html= site.driver.page_source, elementTag = "popover")
    data=site.categoryList
    site.driver.close()
+   print(data)
 
 
 if __name__ == '__main__':
