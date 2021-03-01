@@ -1,3 +1,4 @@
+# This is the scraper code for "https://furu-po.com/
 from web_driver import ScraperCategory,ScraperList
 import time
 import threading

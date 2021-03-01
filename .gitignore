@@ -1,4 +1,3 @@
 venv
 .vscode
-backup.py
-test.py
+site-code/test.py
