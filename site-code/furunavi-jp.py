@@ -16,8 +16,12 @@ import logging
 import  concurrent.futures
 from bs4 import BeautifulSoup as bs
 import re
-""" This section decalres the variables used """
+""" This section declares all the variables used """
 LINK = "https://furu-po.com/"
+
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
+logger = logging.getLogger(__name__)
+
 
 class ScraperCategory(WebDriver):
     categoryList = []
@@ -72,3 +76,7 @@ def main():
    site.categoryParser(html= site.driver.page_source, elementTag = "popover")
    data=site.categoryList
    site.driver.close()
+
+
+if __name__ == '__main__':
+   main()
