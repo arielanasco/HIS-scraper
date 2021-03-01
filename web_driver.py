@@ -44,7 +44,7 @@ class ScraperCategory(WebDriver):
 
     def __init__(self, url):
         self.url = url
-        super().__init__()
+        super().__init__(url)
 
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
