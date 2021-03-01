@@ -12,26 +12,6 @@ import  concurrent.futures
 from bs4 import BeautifulSoup as bs
 import re
 
-class ScraperCategory_(WebDriver):
-    categoryList = []
-
-    def __init__(self, url):
-        self.url = url
-        super().__init__()
-
-    def categoryParser(self,**kwargs):
-        self.elementTag = kwargs.get("elementTag")
-        self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_=self.elementTag)
-        self.liTag = self.category.li
-        while True:
-            self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
-            self.categoryData = re.sub(r'\W+', '', self.categoryData)
-            ScraperCategory.categoryList.append([self.liTag.find("a").get("href"),self.categoryData])
-            if self.liTag.find_next_sibling():
-                self.liTag = self.liTag.find_next_sibling()
-            else:
-                break
 
 def main():
    start = time.perf_counter()
