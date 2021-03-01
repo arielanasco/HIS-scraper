@@ -1,4 +1,10 @@
-# This is the site for  https://tokyu-furusato.jp/
+"""
+
+Site : Hometown pallet	
+Link : https://tokyu-furusato.jp/
+
+"""
+
 from web_driver import ScraperCategory,ScraperList
 import time
 import threading

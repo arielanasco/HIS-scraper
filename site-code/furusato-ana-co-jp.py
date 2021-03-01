@@ -1,4 +1,10 @@
-# This is the site for  https://furusato.ana.co.jp/
+"""
+
+Site : ANA's hometown tax payment	
+Link : https://furusato.ana.co.jp/	
+
+"""
+
 from web_driver import ScraperCategory,ScraperList
 import time
 import threading

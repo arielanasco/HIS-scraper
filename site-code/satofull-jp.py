@@ -1,4 +1,11 @@
-# This is the Scraper code for https://www.satofull.jp/ website
+"""
+
+Site : Satoful		
+Link : https://www.satofull.jp/
+
+"""
+
+
 from web_driver import ScraperCategory,ScraperList
 import time
 import threading
