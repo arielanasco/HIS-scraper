@@ -11,7 +11,5 @@
 |Furusato Premium|https://26p.jp/|
 |Sanochoku|https://furusato-izumisano.jp/||
 |ANA's hometown tax payment|https://furusato.ana.co.jp/|
-|Mitsukoshi Isetan Furusato Tax Payment|https://mifurusato.jp/|
 |Hometown pallet|https://tokyu-furusato.jp/|
 |au PAY Hometown tax payment|https://furusato.wowma.jp/|
-|Sanochoku |https://furusato-izumisano.jp/|

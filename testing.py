@@ -70,10 +70,9 @@ class URLCollectorClass(ScraperList):
             break
 
 # data = ['https://furu-po.com/goods_detail.php?id=664459', 'test']
-# ScraperList.data = [['https://furu-po.com/goods_detail.php?id=664459', 'test']]
-# [['https://stack...','category','localName','title','description',price','capacity','[imageURL]'],
-# ['https://stack...','category','localName','title','description',price','capacity','[imageURL]'],
-# ['https://stack...','category','localName','title','description',price','capacity','[imageURL]']
+# [['https://stack...','category1','localName1','title1','description1',price1','capacity1','[imageURL1]'],
+# ['https://stack...','category2','localName2','title2','description2',price2','capacity2','[imageURL2]'],
+# ['https://stack...','category3','localName3','title3','description3',price3','capacity3','[imageURL3]']
 #
 
 
