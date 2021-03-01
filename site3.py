@@ -1,56 +1,36 @@
-# This is the Scraper code for https://mifurusato.jp/item_list.html website
-from web_driver import WebDriver
-from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException
+# This is the site for  https://tokyu-furusato.jp/
+from web_driver import ScraperCategory,ScraperList
+import time
+import threading
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
+import logging
+import  concurrent.futures
 from bs4 import BeautifulSoup as bs
+import re
 
-class Site3(WebDriver):
-    def listParser(self,html,elementContainer,category,dataResult):
-        self.itemList = dataResult
-        self.category = category
-        self.elementContainer = elementContainer
-        self.html = bs(html, 'html.parser')
-        # self.container = self.html.find('div', attrs ={'id':self.elementContainer})
-        self.container_ =  self.html.find('ul', attrs ={'class':'item_list l_grid_row'})
-        self.ChildElement = self.container_.find_next()
-        print(self.ChildElement)
-        while True:
-            self.itemList.append([self.ChildElement.find("a").get("href"),self.category])
-            if self.ChildElement.find_next_sibling():
-                self.ChildElement = self.ChildElement.find_next_sibling()
-            else:
-                break    
-        return self.itemList
 
-site3= Site3("https://mifurusato.jp/item_list.html")
-site3.driver.get(site3.url)
-site3.displaySiteInfo()
-dataResult = []
-categorylist = site3.categoryParser(html= site3.driver.page_source, elementTag = "l_footer_catefory")
-for data in categorylist:
-    print(f"{data[0]} {data[1]}")
-    # site3.driver.get(data[0])
-    # if site3.initScroll():
-    #     print("Scrolling down...")
-    # else:
-    #     print("Already scrolled down")
-    # while True:
-    #     element_present = EC.presence_of_element_located((By.ID, "list"))
-    #     WebDriverWait(site3.driver, 3).until(element_present)
-    #     dataResult = site3.listParser(html = site3.driver.page_source, elementContainer = "list", category=data[1], dataResult = dataResult)
-    #     try:
-    #         try:
-    #             nextButton = site3.driver.find_element_by_xpath("//*[@id='list']/div[2]/span[6]/a")
-    #         except NoSuchElementException:
-    #             nextButton = site3.driver.find_element_by_xpath("//*[@id='list']/div[2]/span[7]/a")
-    #         nextButton.send_keys(Keys.ENTER)
-    #         print(f"Scraping {site3.driver.current_url}")
-    #     except NoSuchElementException:
-    #         print(f"Done scraping for category {data[1]}")
-    #         break
-    # print(f"Collected URL: {len(dataResult)}")
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
+logger = logging.getLogger(__name__)
 
-site3.driver.close()
+
+def main():
+   start = time.perf_counter()
+   logging.info(f"{threading.current_thread().name}) - Scraping has been started...")
+   site5= ScraperCategory("https://tokyu-furusato.jp/goods/result")
+   site5.driver.get(site5.url)
+   current_url, user_agent = site5.displaySiteInfo()
+   logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
+   site5.categoryParser(html= site5.driver.page_source, elementTag = "section_localnav")
+   data=site5.categoryList
+   site5.driver.close()
+
+   print(data)
+
+
+   
+if __name__ == '__main__':
+   main()
