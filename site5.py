@@ -17,7 +17,7 @@ import re
 def main():
    start = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Scraping has been started...")
-   site5= ScraperCategory("https://furusato.ana.co.jp")
+   site5= ScraperCategory("https://furusato.ana.co.jp/products/list.php")
    site5.driver.get(site5.url)
    current_url, user_agent = site5.displaySiteInfo()
    logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
