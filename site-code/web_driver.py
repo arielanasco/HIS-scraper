@@ -6,7 +6,8 @@ from time import sleep
 from bs4 import BeautifulSoup as bs
 import re
 from random import sample 
-
+from selenium.common.exceptions import TimeoutException
+import time
 
 
 class WebDriver:
@@ -37,7 +38,12 @@ class WebDriver:
         self.driver = webdriver.Chrome(options=self.options)
 
     def get(self):
-        return self.driver.get(self.url)
+        t= time.time()
+        self.driver.set_page_load_timeout(5)
+        try:
+            self.driver.get(self.url)
+        except TimeoutException:
+            driver.execute_script("window.stop();")
 
     def get_page_source(self):
         return self.driver.page_source(self.url)

@@ -68,7 +68,7 @@ class ScraperList(WebDriver):
 
 def main():
    start = time.perf_counter()
-   logging.info(f"{threading.current_thread().name}) - {__name__} has been started...")
+   logging.info(f"{threading.current_thread().name}) - Scraping has been started...")
    site=ScraperCategory(LINK)
    site.get()
    current_url, user_agent = site.displaySiteInfo()
