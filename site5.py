@@ -13,6 +13,9 @@ from bs4 import BeautifulSoup as bs
 import re
 
 
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
+logger = logging.getLogger(__name__)
+
 
 def main():
    start = time.perf_counter()
