@@ -20,13 +20,13 @@ logger = logging.getLogger(__name__)
 def main():
    start = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Scraping has been started...")
-   site5= ScraperCategory("https://tokyu-furusato.jp/goods/result")
-   site5.driver.get(site5.url)
-   current_url, user_agent = site5.displaySiteInfo()
+   site3= ScraperCategory("https://tokyu-furusato.jp/goods/result")
+   site3.driver.get(site3.url)
+   current_url, user_agent = site3.displaySiteInfo()
    logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
-   site5.categoryParser(html= site5.driver.page_source, elementTag = "section_localnav")
-   data=site5.categoryList
-   site5.driver.close()
+   site3.categoryParser(html= site3.driver.page_source, elementTag = "section_localnav")
+   data=site3.categoryList
+   site3.driver.close()
 
    print(data)
 
