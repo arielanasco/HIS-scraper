@@ -1,4 +1,10 @@
-# HIS-scraper
+# HIS-Scraper
+## Table of Contents
+1. [ Description. ](#linkSite)
+2. [ Usage tips. ](#usage)
+
+<a name="linkSite"></a>
+## 1. Link Websites
 |Name           |Sites          |
 | ------------- | ------------- |
 |Rakuten hometown tax payment|https://event.rakuten.co.jp/|
@@ -14,15 +20,7 @@
 |au PAY Hometown tax payment|https://furusato.wowma.jp/|
 
 
-1. [ Description. ](#desc)
-2. [ Usage tips. ](#usage)
-
-<a name="desc"></a>
-## 1. Description
-
-sometext
 
 <a name="usage"></a>
 ## 2. Usage tips
 
-sometext
