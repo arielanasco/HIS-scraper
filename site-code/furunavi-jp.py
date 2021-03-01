@@ -4,7 +4,7 @@ Site : Satoful
 Link : https://www.satofull.jp/
 
 """
-from ../web_driver import WebDriver
+from web_driver import WebDriver
 import time
 import threading
 from selenium.webdriver.common.by import By
