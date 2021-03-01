@@ -152,6 +152,7 @@ def main():
       executor.map(URLCollector, data)
 
    final = time.perf_counter()
+   start = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} second(s)")
 
    with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetch') as executor:
