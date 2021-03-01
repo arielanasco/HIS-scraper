@@ -43,7 +43,7 @@ class WebDriver:
         try:
             self.driver.get(self.url)
         except TimeoutException:
-            driver.execute_script("window.stop();")
+            self.driver.execute_script("window.stop();")
 
     def get_page_source(self):
         return self.driver.page_source(self.url)
