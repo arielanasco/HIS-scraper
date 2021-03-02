@@ -61,8 +61,8 @@ class DataCollector(WebDriver):
     def listParser(self,html,elementContainer):
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
-        self.container = self.html.find_all(class_=self.elementContainer)
-        self.ChildElement = self.container[2].find_next()
+        self.container = self.html.find(class_=self.elementContainer)
+        self.ChildElement = self.container.find_next()
         while True:
             self.itemList.append(self.ChildElement.find("a").get("href"))
             if self.ChildElement.find_next_sibling():
@@ -123,7 +123,7 @@ class DataCollector(WebDriver):
 
 def DataCollectorFunction(data):
     nxt_btn_xpath = "//*[@id='top']/main/div[1]/ul/li[7]/a"
-    element_container = "cards"
+    element_container = "section_search"
     url_category=data[0]
     category=data[1]
     scrapeURL = DataCollector(url_category)
