@@ -70,15 +70,15 @@ class ScraperList(WebDriver):
 
 
 if __name__ == '__main__':
-    start = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) - Scraping has been started...{LINK}")
-    site=ScraperCategory(LINK)
-    site.get()
-    current_url, user_agent = site.displaySiteInfo()
-    logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
-    site.categoryParser(html= site.driver.page_source, elementTag ="SideBox__tree")
-    data=site.categoryList
-    site.driver.close()
-    final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} for fetching categories")
-    print(data)
+   start = time.perf_counter()
+   logging.info(f"{threading.current_thread().name}) - Scraping has been started...{LINK}")
+   site=ScraperCategory(LINK)
+   site.get()
+   current_url, user_agent = site.displaySiteInfo()
+   logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
+   site.categoryParser(html= site.driver.page_source, elementTag ="SideBox__tree")
+   data=site.categoryList
+   site.driver.close()
+   final = time.perf_counter()
+   logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} for fetching categories")
+   print(data)
