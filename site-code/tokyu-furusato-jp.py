@@ -135,7 +135,7 @@ def DataCollectorFunction(data):
             itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try: 
-                nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn)
+                nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath)
                 nextButton.send_keys(Keys.ENTER)
                 logging.info(f"{threading.current_thread().name}) - ACTIVE THREAD:{int(threading.activeCount())-1} Next Page of {category}")
             except NoSuchElementException:
