@@ -38,11 +38,12 @@ class WebDriver:
         self.driver = webdriver.Chrome(options=self.options)
 
     def get(self):
-        self.driver.set_page_load_timeout(10)
-        try:
-            self.driver.get(self.url)
-        except TimeoutException:
-            self.driver.execute_script("window.stop();")
+        self.driver.get(self.url)
+        # self.driver.set_page_load_timeout(10)
+        # try:
+        #     self.driver.get(self.url)
+        # except TimeoutException:
+        #     self.driver.execute_script("window.stop();")
 
     def page_source(self):
         return self.driver.page_source
