@@ -5,7 +5,7 @@ Link : https://furusato.ana.co.jp/
 
 """
 
-from web_driver import WebDriver
+from .web_driver import WebDriver
 import time
 import threading
 from selenium.webdriver.common.by import By
@@ -34,7 +34,8 @@ class ScraperCategory(WebDriver):
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_=self.elementTag)
+        self.category = self.html.find(class_="footer_main")
+        self.category = self.category.find(class_=self.elementTag)
         self.liTag = self.category.li
         while True:
             self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
@@ -67,7 +68,8 @@ class ScraperList(WebDriver):
             else:
                 break
 
-def main():
+
+if __name__ == '__main__':
    start = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Scraping has been started...")
    site=ScraperCategory(LINK)
@@ -78,7 +80,3 @@ def main():
    data=site.categoryList
    site.driver.close()
    print(data)
-
-
-if __name__ == '__main__':
-   main()

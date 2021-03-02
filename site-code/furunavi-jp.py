@@ -4,7 +4,7 @@ Site : Satoful
 Link : https://www.satofull.jp/
 
 """
-from web_driver import WebDriver
+from .web_driver import WebDriver
 import time
 import threading
 from selenium.webdriver.common.by import By
@@ -66,7 +66,7 @@ class ScraperList(WebDriver):
             else:
                 break
 
-def main():
+if __name__ == '__main__':
    start = time.perf_counter()
    logging.info(f"{threading.current_thread().name}) - Scraping has been started...")
    site=ScraperCategory(LINK)
@@ -77,7 +77,3 @@ def main():
    data=site.categoryList
    site.driver.close()
    print(data)
-
-
-if __name__ == '__main__':
-   main()
