@@ -194,6 +194,7 @@ class URLCollectorClass(ScraperList):
    def __init__(self, url):
       self.url = url
       super().__init__(url)
+      
    def dataParser(self,html,itemUrl = "",localNameFinder = "",titleFinder = "",descriptionFinder = "",priceFinder = "",capacityFinder = "",imageUrlFinder = ""):
       self.html = bs(html, 'html.parser')
       logging.info(f"{threading.current_thread().name}) - Getting data now...")
