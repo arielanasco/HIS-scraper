@@ -45,8 +45,8 @@ class WebDriver:
         except TimeoutException:
             self.driver.execute_script("window.stop();")
 
-    def get_page_source(self):
-        return self.driver.page_source(self.url)
+    def page_source(self):
+        return self.driver.page_source
 
     def displaySiteInfo(self):
         return f"Target URL: {self.driver.current_url}" , f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}"
