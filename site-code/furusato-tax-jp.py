@@ -17,7 +17,7 @@ import  concurrent.futures
 from bs4 import BeautifulSoup as bs
 import re
 """ This section declares all the variables used """
-LINK = "https://furusato.ana.co.jp/products/list.php"
+LINK = "https://www.furusato-tax.jp/search"
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ class ScraperCategory(WebDriver):
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_="footer_main")
+        self.category = self.html.find(class_="search-parent-categories")
         self.category = self.category.find(class_=self.elementTag)
         self.liTag = self.category.li
         while True:
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     site.get()
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
-    site.categoryParser(html= site.driver.page_source, elementTag = "link_wrap")
+    site.categoryParser(html= site.driver.page_source, elementTag = "search-category-list")
     data=site.categoryList
     site.driver.close()
     final = time.perf_counter()
