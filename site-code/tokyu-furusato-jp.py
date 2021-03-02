@@ -137,28 +137,28 @@ def DataCollectorFunction(data):
             try: 
                 nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath)
                 nextButton.send_keys(Keys.ENTER)
-                logging.info(f"{threading.current_thread().name}) - ACTIVE THREAD:{int(threading.activeCount())-1} Next Page of {category}")
+                logging.info(f"{threading.current_thread().name}) -Active thread : {int(threading.activeCount())-1} Next Page of {category}")
             except NoSuchElementException:
-                logging.info(f"{threading.current_thread().name}) - ACTIVE THREAD:{int(threading.activeCount())-1} Exiting {category} ")
+                logging.info(f"{threading.current_thread().name}) -Active thread : {int(threading.activeCount())-1} Exiting {category} ")
                 while True:
                     if scrapeURL.isNotActive:            
                         scrapeURL.isNotActive = False
                         for _ in scrapeURL.itemList:
                             scrapeURL.data.append([_,category])
                         scrapeURL.isNotActive = True
-                        logging.info(f"{threading.current_thread().name}) -  Collected{len(scrapeURL.itemList)}")
+                        logging.info(f"{threading.current_thread().name}) -Collected {len(scrapeURL.itemList)} items")
                         break
                 break
         except:
             scrapeURL.driver.close()
-            raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
+            raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
             break
     scrapeURL.driver.close()
 
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) - Scraping has been started...")
+    logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
     site=ScraperCategory(LINK)
     site.get()
     current_url, user_agent = site.displaySiteInfo()
