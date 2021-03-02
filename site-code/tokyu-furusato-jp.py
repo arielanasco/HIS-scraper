@@ -128,7 +128,7 @@ def DataCollectorFunction(data):
     category=data[1]
     scrapeURL = DataCollector(url_category)
     scrapeURL.driver.get(scrapeURL.url)
-    logging.info(f"{threading.current_thread().name}) - Scraping...{scrapeURL.driver.title}:{category}")
+    logging.info(f"{threading.current_thread().name}) -Scraping...{scrapeURL.driver.title}:{category}")
     while True:
         try:
             time.sleep(1)
@@ -158,7 +158,7 @@ def DataCollectorFunction(data):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
+    logging.info(f"{threading.current_thread().name}) -Scraping for category has been started...")
     site=ScraperCategory(LINK)
     site.driver.get(site.url)
     current_url, user_agent = site.displaySiteInfo()
@@ -170,5 +170,6 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} seconds to  fetch  {len(datum)} categories")
     with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
         futures = [executor.submit(DataCollectorFunction, data) for data in datum]
-        # for future in concurrent.futures.as_completed(futures):
-        #     print(future.result())
+        for future in concurrent.futures.as_completed(futures):
+            if future.result():
+                print(future.result())
