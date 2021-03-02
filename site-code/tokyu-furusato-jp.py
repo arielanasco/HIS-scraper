@@ -61,8 +61,9 @@ class DataCollector(WebDriver):
     def listParser(self,html,elementContainer):
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
-        self.container = self.html.find(class_=self.elementContainer)
-        self.ChildElement = self.container.find_next()
+        self.container = self.html.find_all(class_="cards")
+        # self.container = self.container[2].find(class_=self.elementContainer)
+        self.ChildElement = self.container[2].find_next()
         while True:
             self.itemList.append(self.ChildElement.find("a").get("href"))
             if self.ChildElement.find_next_sibling():
@@ -128,7 +129,7 @@ def DataCollectorFunction(data):
     category=data[1]
     scrapeURL = DataCollector(url_category)
     scrapeURL.driver.get(scrapeURL.url)
-    logging.info(f"{threading.current_thread().name}) - Scraping...{scrapeURL.driver.title}:{category}")
+    logging.info(f"{threading.current_thread().name}) -Scraping...{scrapeURL.driver.title}:{category}")
     while True:
         try:
             time.sleep(1)
@@ -164,7 +165,8 @@ if __name__ == '__main__':
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="categorylist")
-    datum=site.categoryList
+    # datum=site.categoryList
+    datum=[[""]]
     site.driver.close()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} seconds to  fetch  {len(datum)} categories")
