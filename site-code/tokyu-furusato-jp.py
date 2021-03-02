@@ -40,7 +40,7 @@ class ScraperCategory(WebDriver):
             self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
             self.categoryData = re.sub(r'\W+', '', self.categoryData)
             self.index =  self.categoryData.find("]=")
-            self.categoryData = self.categoryData[:index] + "1" +self.categoryData[index:]
+            self.categoryData = self.categoryData[:self.index] + "1" +self.categoryData[self.index:]
             ScraperCategory.categoryList.append([self.liTag.find("a").get("href"),self.categoryData])
             if self.liTag.find_next_sibling():
                 self.liTag = self.liTag.find_next_sibling()
