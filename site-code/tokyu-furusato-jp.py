@@ -138,8 +138,10 @@ def DataCollectorFunction(data):
             try:
                 lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]")
                 lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
-                print(len(lenPagination))
-                nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath)
+                if len(lenPagination) == 7:
+                    nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath)
+                else:
+                    nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath1)
                 nextButton.send_keys(Keys.ENTER)
                 logging.info(f"{threading.current_thread().name}) -Active thread : {int(threading.activeCount())-1} Next Page of {category}")
             except NoSuchElementException:
