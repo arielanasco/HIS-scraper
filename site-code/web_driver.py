@@ -37,17 +37,6 @@ class WebDriver:
         self.options.add_argument(f'--user-agent="{sample(self.userAgentList,1)[0]}"')
         self.driver = webdriver.Chrome(options=self.options)
 
-    def get(self):
-        self.driver.get(self.url)
-        # self.driver.set_page_load_timeout(10)
-        # try:
-        #     self.driver.get(self.url)
-        # except TimeoutException:
-        #     self.driver.execute_script("window.stop();")
-
-    def page_source(self):
-        return self.driver.page_source
-
     def displaySiteInfo(self):
         return f"Target URL: {self.driver.current_url}" , f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}"
 

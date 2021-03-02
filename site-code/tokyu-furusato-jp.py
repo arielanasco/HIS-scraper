@@ -127,7 +127,7 @@ def DataCollectorFunction(data):
     url_category=data[0]
     category=data[1]
     scrapeURL = DataCollector(url_category)
-    scrapeURL.get()
+    scrapeURL.driver.get()
     logging.info(f"{threading.current_thread().name}) - Scraping...{scrapeURL.driver.title}:{category}")
     while True:
         try:
@@ -160,7 +160,7 @@ if __name__ == '__main__':
     start = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
     site=ScraperCategory(LINK)
-    site.get()
+    site.driver.get()
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="categorylist")
