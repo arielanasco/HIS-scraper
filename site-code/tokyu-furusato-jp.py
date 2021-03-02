@@ -141,7 +141,7 @@ def DataCollectorFunction(data):
                 print(len(lenPagination))
                 if len(lenPagination) == 9:
                     nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath1)
-                elif len(lenPagination)in[0,7] :
+                elif len(lenPagination) in [0,7] :
                     nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath)
                 nextButton.send_keys(Keys.ENTER)
                 logging.info(f"{threading.current_thread().name}) -Active thread : {int(threading.activeCount())-1} Next Page of {category}")
