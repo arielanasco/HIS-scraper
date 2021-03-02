@@ -17,7 +17,7 @@ import  concurrent.futures
 from bs4 import BeautifulSoup as bs
 import re
 """ This section declares all the variables used """
-LINK = "https://www.satofull.jp/"
+LINK = "https://www.satofull.jp/products/list.php?cnt=60&p=1"
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
@@ -33,7 +33,8 @@ class ScraperCategory(WebDriver):
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_=self.elementTag)
+        self.category = self.html.find(class_="Section")
+        self.category = self.category.find(class_=self.elementTag)
         self.liTag = self.category.li
         while True:
             self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
@@ -74,7 +75,7 @@ if __name__ == '__main__':
     site.get()
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
-    site.categoryParser(html= site.driver.page_source, elementTag ="SideBox__list--item")
+    site.categoryParser(html= site.driver.page_source, elementTag ="SideBox__tree")
     data=site.categoryList
     site.driver.close()
     final = time.perf_counter()
