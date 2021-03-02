@@ -79,5 +79,5 @@ if __name__ == '__main__':
     data=site.categoryList
     site.driver.close()
     final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)}")
+    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} for fetching categories")
     print(data)
