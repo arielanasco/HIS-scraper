@@ -156,3 +156,5 @@ if __name__ == '__main__':
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} for fetching categories")
     print(data)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
+        executor.map(DataCollectorFunction, data)
