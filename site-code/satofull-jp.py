@@ -34,6 +34,7 @@ class ScraperCategory(WebDriver):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
         self.category = self.html.find(class_="Section")
+        self.category = self.category.find(class_="SideBox__body")
         self.category = self.category.find(class_=self.elementTag)
         self.liTag = self.category.li
         while True:
