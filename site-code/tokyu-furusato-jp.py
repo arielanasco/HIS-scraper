@@ -123,6 +123,7 @@ class DataCollector(WebDriver):
 
 def DataCollectorFunction(data):
     nxt_btn_xpath = "//*[@id='top']/main/div[1]/ul/li[7]/a"
+    nxt_btn_xpath1 ="//*[@id='top']/main/div[1]/ul/li[9]/a"
     element_container = "section_search"
     url_category=data[0]
     category=data[1]
@@ -134,7 +135,10 @@ def DataCollectorFunction(data):
             time.sleep(1)
             itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
-            try: 
+            try:
+                lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]")
+                lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
+                print(len(lenPagination))
                 nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath)
                 nextButton.send_keys(Keys.ENTER)
                 logging.info(f"{threading.current_thread().name}) -Active thread : {int(threading.activeCount())-1} Next Page of {category}")
