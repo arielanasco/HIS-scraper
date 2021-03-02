@@ -58,6 +58,18 @@ class DataCollector(WebDriver):
         self.itemList = []
         super().__init__(url)
 
+    def listParser(self,html,elementContainer):
+        self.elementContainer = elementContainer
+        self.html = bs(html, 'html.parser')
+        self.container = self.html.find(class_=self.elementContainer)
+        self.ChildElement = self.container.find_next()
+        while True:
+            self.itemList.append(self.ChildElement.find("a").get("href"))
+            if self.ChildElement.find_next_sibling():
+                self.ChildElement = self.ChildElement.find_next_sibling()
+            else:
+                break
+
     def dataParser(self,html,itemUrl = "",localNameFinder = "",titleFinder = "",descriptionFinder = "",priceFinder = "",capacityFinder = "",imageUrlFinder = ""):
         self.html = bs(html, 'html.parser')
         logging.info(f"{threading.current_thread().name}) - Getting data now...")
@@ -110,17 +122,18 @@ class DataCollector(WebDriver):
             break
 
 def DataCollectorFunction(data):
-    nxt_btn = ""
+    nxt_btn_xpath = "//*[@id='top']/main/div[1]/ul/li[7]/a"
+    element_container = "cards"
     url_category=data[0]
     category=data[1]
     scrapeURL = DataCollector(url_category)
     scrapeURL.driver.get(scrapeURL.url)
-    logging.info(f"{threading.current_thread().name}) - Scraping...{category}")
+    logging.info(f"{threading.current_thread().name}) - Scraping...{scrapeURL.driver.title}:{category}")
     while True:
         try:
             time.sleep(1)
-            itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "itemlist")))
-            scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = "itemlist")
+            itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+            scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try: 
                 nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn)
                 nextButton.send_keys(Keys.ENTER)
@@ -154,7 +167,7 @@ if __name__ == '__main__':
     datum=site.categoryList
     site.driver.close()
     final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} for fetching {len(datum)}categories")
+    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} seconds to  fetch  {len(datum)} categories")
     with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
         futures = [executor.submit(DataCollectorFunction, data) for data in datum]
         for future in concurrent.futures.as_completed(futures):
