@@ -138,6 +138,7 @@ def DataCollectorFunction(data):
             try:
                 lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]")
                 lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
+                print(len(lenPagination))
                 if len(lenPagination) == 7:
                     nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath)
                 else:
@@ -174,7 +175,7 @@ if __name__ == '__main__':
     site.driver.close()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} seconds to  fetch  {len(datum)} categories")
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2 , thread_name_prefix='Scraper') as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
         futures = [executor.submit(DataCollectorFunction, data) for data in datum]
         for future in concurrent.futures.as_completed(futures):
             if future.result():
