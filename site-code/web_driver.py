@@ -38,8 +38,7 @@ class WebDriver:
         self.driver = webdriver.Chrome(options=self.options)
 
     def get(self):
-        t= time.time()
-        self.driver.set_page_load_timeout(5)
+        self.driver.set_page_load_timeout(10)
         try:
             self.driver.get(self.url)
         except TimeoutException:

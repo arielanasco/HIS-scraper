@@ -33,7 +33,7 @@ class ScraperCategory(WebDriver):
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_="l-footer__inner")
+        self.category = self.html.find(class_="vue-lv1-category-links")
         self.category = self.category.find(class_=self.elementTag)
         self.liTag = self.category.li
         while True:
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     site.get()
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
-    site.categoryParser(html= site.driver.page_source, elementTag = "vue-footer-categories")
+    site.categoryParser(html= site.driver.page_source, elementTag ="p-topCategory__list")
     data=site.categoryList
     site.driver.close()
     final = time.perf_counter()
