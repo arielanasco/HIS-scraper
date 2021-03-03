@@ -34,7 +34,7 @@ class ScraperCategory(WebDriver):
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.category.find(class_=self.elementTag)
+        self.category = self.html.find(class_=self.elementTag)
         self.liTag = self.category.find_all("li")
         for litag in self.liTag:
             self.categoryData = re.sub(r'\([^()]*\)', '', litag.find("a").get_text())
