@@ -57,7 +57,7 @@ class DataCollector(WebDriver):
     def listParser(self,html,elementContainer):
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
-        self.container = self.container.find(class_=self.elementContainer)
+        self.container = self.html.find(class_=self.elementContainer)
         self.ChildElement = self.container.find_next()
         while True:
             self.itemList.append(self.ChildElement.find("a").get("href"))
