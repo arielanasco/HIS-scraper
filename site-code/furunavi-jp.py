@@ -118,7 +118,7 @@ class DataCollector(WebDriver):
             break
 
 def DataCollectorFunction(data):
-    nxt_btn ="next"
+    nxt_btn ="//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a"
     element_container = "itemlist"
     url_category=data[0]
     category=data[1]
@@ -131,8 +131,7 @@ def DataCollectorFunction(data):
             itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
-                nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
-                nextButton = nextButton.find_elements_by_tag_name("a")
+                nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn)
                 nextButton.send_keys(Keys.ENTER)
                 logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
             except NoSuchElementException:
