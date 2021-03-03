@@ -135,9 +135,9 @@ def DataCollectorFunction(data):
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
                 try:
-                    nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
+                    nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn)
                 except:    
-                    nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn1)
+                    nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn1)
                 nextButton.send_keys(Keys.ENTER)
                 logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
             except NoSuchElementException:
