@@ -121,7 +121,7 @@ def DataCollectorFunction(data):
     while True:
         try:
             time.sleep(1)
-            itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+            itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.TAG_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
                 nextButton = scrapeURL.driver.find_element_by_class_name("pager_links")
@@ -149,11 +149,11 @@ def DataCollectorFunction(data):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) - Scraping has been started...")
+    logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
     site=ScraperCategory(LINK)
     site.driver.get(site.url)
     current_url, user_agent = site.displaySiteInfo()
-    logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
+    logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag = "link_wrap")
     datum=site.categoryList
     site.driver.close()
