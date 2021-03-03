@@ -33,7 +33,7 @@ class ScraperCategory(WebDriver):
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_="result-search")
+        self.category = self.html.find(class_="search-parent-categories")
         self.category = self.category.find(class_=self.elementTag)
         self.liTag = self.category.li
         while True:
@@ -58,7 +58,7 @@ class DataCollector(WebDriver):
     def listParser(self,html,elementContainer):
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
-        self.container = self.html.find(class_="category-sort-contents")
+        self.container = self.html.find(class_="result-search")
         self.container = self.container.find(class_=self.elementContainer)
         self.ChildElement = self.container.find_next()
         while True:
@@ -162,7 +162,7 @@ if __name__ == '__main__':
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag = "search-category-list")
-    data=site.categoryList
+    datum=site.categoryList
     site.driver.close()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching categories")
