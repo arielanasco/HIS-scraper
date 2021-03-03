@@ -144,9 +144,9 @@ def DataCollectorFunction(data):
                 elif len(lenPagination) in [0,7] :
                     nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath)
                 nextButton.send_keys(Keys.ENTER)
-                logging.info(f"{threading.current_thread().name}) -Active thread : {int(threading.activeCount())-1} Next Page of {category}")
+                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
             except NoSuchElementException:
-                logging.info(f"{threading.current_thread().name}) -Active thread : {int(threading.activeCount())-1} Exiting {category} ")
+                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
                 while True:
                     if scrapeURL.isNotActive:            
                         scrapeURL.isNotActive = False
@@ -174,9 +174,12 @@ if __name__ == '__main__':
     datum=site.categoryList
     site.driver.close()
     final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)} seconds to  fetch  {len(datum)} categories")
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(datum)} categories")
+    start = time.perf_counter()
     with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
         futures = [executor.submit(DataCollectorFunction, data) for data in datum]
         for future in concurrent.futures.as_completed(futures):
             if future.result():
                 print(future.result())
+    final = time.perf_counter()
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(datum)} items URL")
