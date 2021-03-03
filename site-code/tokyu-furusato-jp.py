@@ -180,6 +180,6 @@ if __name__ == '__main__':
         futures = [executor.submit(DataCollectorFunction, data) for data in datum]
         for future in concurrent.futures.as_completed(futures):
             if future.result():
-                print(future.result())
+                logging.info(f"{threading.current_thread().name}) -{future.result()}")
     final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(datum)} items URL")
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataCollector.data)} items URL")
