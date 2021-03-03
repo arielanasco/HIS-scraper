@@ -57,7 +57,6 @@ class DataCollector(WebDriver):
     def listParser(self,html,elementContainer):
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
-        self.container = self.html.find(class_="itemlist")
         self.container = self.container.find(class_=self.elementContainer)
         self.ChildElement = self.container.find_next()
         while True:
@@ -120,7 +119,7 @@ class DataCollector(WebDriver):
 
 def DataCollectorFunction(data):
     nxt_btn ="next"
-    element_container = "box"
+    element_container = "itemlist"
     url_category=data[0]
     category=data[1]
     scrapeURL = DataCollector(url_category)
