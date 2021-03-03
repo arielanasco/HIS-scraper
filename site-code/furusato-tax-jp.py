@@ -134,6 +134,7 @@ def DataCollectorFunction(data):
             try:
                 nextButton = scrapeURL.driver.find_element_by_class_name("nv-pager__next")
                 nextButton = nextButton.driver.find_element_by_class_name("nv-pager__link")
+                
                 nextButton.send_keys(Keys.ENTER)
                 logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
             except NoSuchElementException:
