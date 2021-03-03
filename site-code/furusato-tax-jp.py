@@ -33,7 +33,7 @@ class ScraperCategory(WebDriver):
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_="search-parent-categories")
+        self.category = self.html.find(class_="result-search")
         self.category = self.category.find(class_=self.elementTag)
         self.liTag = self.category.li
         while True:
@@ -120,8 +120,7 @@ class DataCollector(WebDriver):
             break
 
 def DataCollectorFunction(data):
-    nxt_btn ="next"
-    element_container = "list-column2"
+    element_container = "grid"
     url_category=data[0]
     category=data[1]
     scrapeURL = DataCollector(url_category)
@@ -133,7 +132,8 @@ def DataCollectorFunction(data):
             itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
-                nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
+                nextButton = scrapeURL.driver.find_element_by_class_name("nv-pager__next")
+                nextButton = nextButton.driver.find_element_by_class_name("nv-pager__link")
                 nextButton.send_keys(Keys.ENTER)
                 logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
             except NoSuchElementException:
