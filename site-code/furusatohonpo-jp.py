@@ -17,7 +17,7 @@ import  concurrent.futures
 from bs4 import BeautifulSoup as bs
 import re
 """ This section declares all the variables used """
-LINK = "https://furusatohonpo.jp/"
+LINK = "https://furusatohonpo.jp"
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
@@ -142,7 +142,7 @@ def DataCollectorFunction(data):
                     if scrapeURL.isNotActive:            
                         scrapeURL.isNotActive = False
                         for _ in scrapeURL.itemList:
-                            scrapeURL.data.append([_,category])
+                            scrapeURL.data.append([LINK+_,category])
                         scrapeURL.isNotActive = True
                         logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
                         break
@@ -174,4 +174,4 @@ if __name__ == '__main__':
             if future.result():
                 print(future.result())
     final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(datum)} items URL")
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataCollector.data)} items URL")
