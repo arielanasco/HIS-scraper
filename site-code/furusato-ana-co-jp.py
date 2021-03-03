@@ -54,15 +54,11 @@ class DataCollector(WebDriver):
     def listParser(self,html,elementContainer):
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
-        self.container = self.html.find(class_="main_column")
-        self.container = self.container.find(class_=self.elementContainer)
+        self.container = self.html.find(class_="as-flex_left")
+        self.container = self.container.find_all(self.elementContainer)
         self.ChildElement = self.container.find_next()
-        while True:
+        for ChildElement in  self.container:
             self.itemList.append(self.ChildElement.find("div").get("data-product-url"))
-            if self.ChildElement.find_next_sibling():
-                self.ChildElement = self.ChildElement.find_next_sibling()
-            else:
-                break
 
     def dataParser(self,html,itemUrl = "",localNameFinder = "",titleFinder = "",descriptionFinder = "",priceFinder = "",capacityFinder = "",imageUrlFinder = ""):
         self.html = bs(html, 'html.parser')
@@ -116,7 +112,7 @@ class DataCollector(WebDriver):
             break
 
 def DataCollectorFunction(data):
-    element_container = "as-flex_left"
+    element_container = "li"
     url_category=data[0]
     category=data[1]
     scrapeURL = DataCollector(url_category)
