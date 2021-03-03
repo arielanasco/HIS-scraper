@@ -45,7 +45,7 @@ class ScraperCategory(WebDriver):
             else:
                 break
 
-class ScraperList(WebDriver):
+class DataCollector(WebDriver):
 
     isNotActive = True
     data = []
@@ -53,7 +53,7 @@ class ScraperList(WebDriver):
     def __init__(self, url):
         self.url = url
         self.itemList = []
-        super().__init__()
+        super().__init__(url)
 
     def listParser(self,html,elementContainer):
         self.elementContainer = elementContainer
@@ -61,11 +61,96 @@ class ScraperList(WebDriver):
         self.container = self.html.find(class_=self.elementContainer)
         self.ChildElement = self.container.find_next()
         while True:
-            self.itemList.append(self.ChildElement.find("a").get("href"))
+            self.itemList.append(LINK+self.ChildElement.find("a").get("href"))
             if self.ChildElement.find_next_sibling():
                 self.ChildElement = self.ChildElement.find_next_sibling()
             else:
                 break
+
+    def dataParser(self,html,itemUrl = "",localNameFinder = "",titleFinder = "",descriptionFinder = "",priceFinder = "",capacityFinder = "",imageUrlFinder = ""):
+        self.html = bs(html, 'html.parser')
+        logging.info(f"{threading.current_thread().name}) - Getting data now...")
+        try:
+            self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
+            self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
+        except:
+            self.localNameFinder = "Error in localNameFinder"
+        try:
+            self.titleFinder = self.html.find(class_="lg-info").find_next("h1").get_text()
+            self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
+        except:
+            self.titleFinder = "Error in titleFinder"
+        try:
+            self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
+            self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
+        except:
+            self.descriptionFinder = "Error in descriptionFinder"
+        try:
+            self.priceFinder = self.html.find(class_=priceFinder).find_next(class_="price").get_text()
+            self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
+        except:
+            self.priceFinder = "Error in priceFinder"
+        try:
+            self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
+            self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
+        except:
+            self.capacityFinder = "Error in capacityFinder"
+        try:
+            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("img")
+            self.imageList = []
+            for _ in self.imageUrlFinder:
+                self.imageList.append(_.get("src"))      
+        except:
+            self.imageUrlFinder = "Error in imageUrlFinder"
+        while True:
+            if DataCollector.isNotActive: 
+                DataCollector.isNotActive = False
+                for data in DataCollector.data:
+                    if itemUrl in data:
+                        index_ = DataCollector.data.index(data)
+                        DataCollector.data[index_].insert(2,self.localNameFinder)
+                        DataCollector.data[index_].insert(3,self.titleFinder)
+                        DataCollector.data[index_].insert(4,self.descriptionFinder)
+                        DataCollector.data[index_].insert(5,self.priceFinder)
+                        DataCollector.data[index_].insert(6,self.capacityFinder)
+                        DataCollector.data[index_].insert(7,self.imageList)
+                        DataCollector.isNotActive = True
+                        break
+            break
+
+def DataCollectorFunction(data):
+    nxt_btn ="//*[@id='content']/div[4]/nav/ul[1]/li[8]/a"
+    element_container = "list-product"
+    url_category=data[0]
+    category=data[1]
+    scrapeURL = DataCollector(url_category)
+    scrapeURL.driver.get(scrapeURL.url)
+    logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
+    while True:
+        try:
+            time.sleep(1)
+            itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+            scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
+            try:
+                nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn)
+                nextButton.send_keys(Keys.ENTER)
+                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
+            except NoSuchElementException:
+                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
+                while True:
+                    if scrapeURL.isNotActive:            
+                        scrapeURL.isNotActive = False
+                        for _ in scrapeURL.itemList:
+                            scrapeURL.data.append([LINK+_,category])
+                        scrapeURL.isNotActive = True
+                        logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items | Total item {len(scrapeURL.data)}")
+                        break
+                break
+        except:
+            scrapeURL.driver.close()
+            raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
+            break
+    scrapeURL.driver.close()
 
 
 if __name__ == '__main__':
