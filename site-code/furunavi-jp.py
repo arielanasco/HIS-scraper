@@ -70,14 +70,14 @@ class ScraperList(WebDriver):
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) - Scraping has been started...")
+    logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
     site=ScraperCategory(LINK)
-    site.get()
+    site.driver.get(site.url)
     current_url, user_agent = site.displaySiteInfo()
-    logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
+    logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag = "category_list")
     data=site.categoryList
     site.driver.close()
     final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) - Took {round((final-start),2)}")
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)}")
     print(data)
