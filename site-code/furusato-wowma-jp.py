@@ -80,7 +80,7 @@ class DataCollector(WebDriver):
     def listParser(self,html,elementContainer):
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
-        self.container = self.html.find(class_="gifts")
+        self.container = self.html.find(class_="category-sort-contents")
         self.container = self.container.find(class_=self.elementContainer)
         self.ChildElement = self.container.find_next()
         while True:
@@ -142,8 +142,8 @@ class DataCollector(WebDriver):
             break
 
 def DataCollectorFunction(data):
-    nxt_btn ="c-pagination__next"
-    element_container = "c-itemList"
+    nxt_btn ="next"
+    element_container = "list-column2"
     url_category=data[0]
     category=data[1]
     scrapeURL = DataCollector(url_category)
@@ -187,11 +187,11 @@ if __name__ == '__main__':
     site.driver.close()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)}")
-    # start = time.perf_counter()
-    # with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
-    #     futures = [executor.submit(DataCollectorFunction, data) for data in datum]
-    #     for future in concurrent.futures.as_completed(futures):
-    #         if future.result():
-    #             print(future.result())
-    # final = time.perf_counter()
-    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataCollector.data)} items URL")
+    start = time.perf_counter()
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
+        futures = [executor.submit(DataCollectorFunction, data) for data in datum]
+        for future in concurrent.futures.as_completed(futures):
+            if future.result():
+                print(future.result())
+    final = time.perf_counter()
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataCollector.data)} items URL")

@@ -169,7 +169,7 @@ if __name__ == '__main__':
     site=ScraperCategory(LINK)
     site.driver.get(site.url)
     current_url, user_agent = site.displaySiteInfo()
-    logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
+    logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="categorylist")
     datum=site.categoryList
     site.driver.close()
