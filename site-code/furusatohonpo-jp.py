@@ -58,7 +58,7 @@ class DataCollector(WebDriver):
     def listParser(self,html,elementContainer):
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
-        self.container = self.html.find(class_="section_search")
+        self.container = self.html.find(class_="gifts")
         self.container = self.container.find(class_=self.elementContainer)
         self.ChildElement = self.container.find_next()
         while True:
@@ -120,9 +120,8 @@ class DataCollector(WebDriver):
             break
 
 def DataCollectorFunction(data):
-    nxt_btn_xpath = "//*[@id='top']/main/div[1]/ul/li[7]/a"
-    nxt_btn_xpath1 ="//*[@id='top']/main/div[1]/ul/li[9]/a"
-    element_container = "cards"
+    nxt_btn ="c-pagination__next"
+    element_container = "c-itemList"
     url_category=data[0]
     category=data[1]
     scrapeURL = DataCollector(url_category)
@@ -134,12 +133,7 @@ def DataCollectorFunction(data):
             itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
-                lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]")
-                lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
-                if len(lenPagination) == 9:
-                    nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath1)
-                elif len(lenPagination) in [0,7] :
-                    nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath)
+                nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
                 nextButton.send_keys(Keys.ENTER)
                 logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
             except NoSuchElementException:
@@ -169,8 +163,15 @@ if __name__ == '__main__':
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="p-topCategory__list")
-    data=site.categoryList
+    datum=site.categoryList
     site.driver.close()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} for fetching categories")
-    print(data)
+    start = time.perf_counter()
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
+        futures = [executor.submit(DataCollectorFunction, data) for data in datum]
+        for future in concurrent.futures.as_completed(futures):
+            if future.result():
+                print(future.result())
+    final = time.perf_counter()
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(datum)} items URL")
