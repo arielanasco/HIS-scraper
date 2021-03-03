@@ -120,6 +120,8 @@ class DataCollector(WebDriver):
             break
 
 def DataCollectorFunction(data):
+    nxt_btn =  "//*[@id='main']/div[3]/div[2]/div[1]/div[4]/div[3]/div/div[2]/a"
+    nxt_btn1 = "//*[@id='main']/div[2]/div[2]/div[1]/div[4]/div[3]/div/div[3]/a"
     element_container = "grid"
     url_category=data[0]
     category=data[1]
@@ -132,9 +134,10 @@ def DataCollectorFunction(data):
             itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
-                nextButton = scrapeURL.driver.find_element_by_class_name("nv-pager__next")
-                nextButton = nextButton.driver.find_element_by_class_name("nv-pager__link")
-                
+                try:
+                    nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
+                except:    
+                    nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn1)
                 nextButton.send_keys(Keys.ENTER)
                 logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
             except NoSuchElementException:
@@ -168,10 +171,10 @@ if __name__ == '__main__':
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(datum)} categories")
     start = time.perf_counter()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3 , thread_name_prefix='Scraper') as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
         futures = [executor.submit(DataCollectorFunction, data) for data in datum]
         for future in concurrent.futures.as_completed(futures):
             if future.result():
-                print(future.result())
+                logging.info(f"{threading.current_thread().name}) -{future.result()}")
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataCollector.data)} items URL")
