@@ -36,7 +36,6 @@ class ScraperCategory(WebDriver):
         self.html = bs(kwargs.get("html"), 'html.parser')
         self.category = self.html.find(class_=self.elementTag)
         self.liTag = self.category.find_all("li")
-        print(f"THis is atest{len(self.liTag)}")
         for litag in self.liTag:
             self.categoryData = re.sub(r'\([^()]*\)', '', litag.find("a").get_text())
             self.categoryData = re.sub(r'\W+', '', self.categoryData)
@@ -57,9 +56,8 @@ class DataCollector(WebDriver):
         self.html = bs(html, 'html.parser')
         self.container = self.html.find(class_="as-flex_left")
         self.container = self.container.find_all(self.elementContainer)
-        self.ChildElement = self.container.find_next()
         for ChildElement in  self.container:
-            self.itemList.append(self.ChildElement.find("div").get("data-product-url"))
+            self.itemList.append(ChildElement.find("div").get("data-product-url"))
 
     def dataParser(self,html,itemUrl = "",localNameFinder = "",titleFinder = "",descriptionFinder = "",priceFinder = "",capacityFinder = "",imageUrlFinder = ""):
         self.html = bs(html, 'html.parser')
@@ -161,7 +159,7 @@ if __name__ == '__main__':
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(datum)} categories")
     start = time.perf_counter()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2 , thread_name_prefix='Scraper') as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
         futures = [executor.submit(DataCollectorFunction, data) for data in datum]
         for future in concurrent.futures.as_completed(futures):
             if future.result():
