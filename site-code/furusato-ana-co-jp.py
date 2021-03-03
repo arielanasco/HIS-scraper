@@ -34,17 +34,12 @@ class ScraperCategory(WebDriver):
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_="footer_main")
         self.category = self.category.find(class_=self.elementTag)
-        self.liTag = self.category.li
-        while True:
-            self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
+        self.liTag = self.category.find_all("li")
+        for litag in self.liTag:
+            self.categoryData = re.sub(r'\([^()]*\)', '', litag.find("a").get_text())
             self.categoryData = re.sub(r'\W+', '', self.categoryData)
-            ScraperCategory.categoryList.append([self.liTag.find("a").get("href"),self.categoryData])
-            if self.liTag.find_next_sibling():
-                self.liTag = self.liTag.find_next_sibling()
-            else:
-                break
+            ScraperCategory.categoryList.append([litag.find("a").get("href"),self.categoryData])
 
 class DataCollector(WebDriver):
 
