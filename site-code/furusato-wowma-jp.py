@@ -148,7 +148,7 @@ def DataCollectorFunction(data):
     category=data[1]
     scrapeURL = DataCollector(url_category)
     scrapeURL.driver.get(scrapeURL.url)
-    logging.info(f"{threading.current_thread().name}) -Scraping...{scrapeURL.driver.title}:{category}")
+    logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
     while True:
         try:
             time.sleep(1)
