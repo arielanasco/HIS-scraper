@@ -137,7 +137,7 @@ def DataCollectorFunction(data):
                 nextButton = scrapeURL.driver.find_element_by_class_name("pagination")
                 nextButton = nextButton.find_element_by_class_name(nxt_btn)
                 nextButton = nextButton.find_element_by_tag_name("a")
-                nextButton.click()
+                nextButton.send_keys(Keys.ENTER)
                 logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
             except NoSuchElementException:
                 logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
