@@ -142,6 +142,7 @@ def DataCollectorFunction(data):
         scrapeURL.driver.close()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
     scrapeURL.driver.close()
+    scrapeURL.driver.quit()
 
 
 
@@ -184,6 +185,7 @@ def ItemLinkCollector(data):
             raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
             break
     scrapeURL.driver.close()
+    scrapeURL.driver.quit()
 
 
 if __name__ == '__main__':
