@@ -199,6 +199,7 @@ if __name__ == '__main__':
     # datum=site.categoryList
     datum=[['https://tokyu-furusato.jp/goods/result?chk_ctg[1]=15', 'Testing']]
     site.driver.close()
+    site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(datum)} categories")
     start = time.perf_counter()
