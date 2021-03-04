@@ -134,7 +134,8 @@ def DataCollectorFunction(data):
             itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
-                nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
+                nextButton = scrapeURL.driver.find_element_by_class_name("pagination")
+                nextButton = nextButton.find_element_by_class_name(nxt_btn)
                 nextButton = nextButton.find_element_by_tag_name("a")
                 nextButton.click()
                 logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
