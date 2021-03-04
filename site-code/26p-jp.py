@@ -59,14 +59,10 @@ class DataCollector(WebDriver):
         self.elementContainer = elementContainer
         self.html = bs(html, 'html.parser')
         self.container = self.html.find(class_="product-item-list-body")
-        self.container = self.html.find(class_=self.elementContainer)
-        self.ChildElement = self.container.find_next()
-        while True:
-            self.itemList.append(LINK+self.ChildElement.find("a").get("href"))
-            if self.ChildElement.find_next_sibling():
-                self.ChildElement = self.ChildElement.find_next_sibling()
-            else:
-                break
+        self.container = self.container.find(class_=self.elementContainer)
+        self.ChildElement = self.container.find_all("li")
+        for ChildElement in self.ChildElement: 
+            self.itemList.append(LINK+ChildElement.find("a").get("href"))
 
     def dataParser(self,html,itemUrl = "",localNameFinder = "",titleFinder = "",descriptionFinder = "",priceFinder = "",capacityFinder = "",imageUrlFinder = ""):
         self.html = bs(html, 'html.parser')
@@ -121,7 +117,6 @@ class DataCollector(WebDriver):
 
 def DataCollectorFunction(data):
     nxt_btn ="next"
-    
     element_container = "list"
     url_category=data[0]
     category=data[1]
