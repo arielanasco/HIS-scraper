@@ -92,14 +92,14 @@ class DataCollector(WebDriver):
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        logging.info(f"{threading.current_thread().name}) - Getting data now...")
+        logging.info(f"{threading.current_thread().name}) -Getting data now...")
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
         except:
             raise Exception ("Unable to locate the localNameFinder")
         try:
-            self.titleFinder = self.html.find(class_=titleFinder).get_text()
+            self.titleFinder = self.html.find(class_=titleFinder).find("gift-name").get_text()
             self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
         except:
             raise Exception ("Unable to locate the titleFinder")
@@ -109,22 +109,21 @@ class DataCollector(WebDriver):
         except:
             raise Exception ("Unable to locate the descriptionFinder")
         try:
-            self.priceFinder = self.html.find(class_=priceFinder).find("span").get_text()
+            self.priceFinder = self.html.find(class_=priceFinder).get_text()
             self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
         except:
             raise Exception ("Unable to locate the priceFinder")
         try:
-            self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
+            self.capacityFinder = self.html.find(class_=capacityFinder).find("ul").get_text()
             self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
         except:
             raise Exception ("Unable to locate the capacityFinder")
         try:
-            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("div", {"class":"p-detailMv__mainItem"})
+            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("img")
             self.imageList = []
             for _ in self.imageUrlFinder:
-                self.holder = _.find("div").get("style")
-                self.holder = self.holder.split('"')
-                self.imageList.append(self.holder[1])      
+                self.imageList.append(_.get("src"))      
+  
         except:
             raise Exception ("Unable to locate the imageUrlFinder")
         while True:
@@ -153,12 +152,12 @@ def DataCollectorFunction(data):
         item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "p-detailName__municipality")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url, 
-                           localNameFinder = "p-detailName__municipality",
-                           titleFinder = "p-detailName__ttl",
-                           descriptionFinder = "p-detailDescription",
-                           priceFinder = "p-detailName__price",
-                           capacityFinder = "p-detailAddCart__info",
-                           imageUrlFinder = "slick-track" )
+                           localNameFinder = "municipality-name",
+                           titleFinder = "detail-header",
+                           descriptionFinder = "gift-comment",
+                           priceFinder = "gift-money-contents",
+                           capacityFinder = "slider-txt",
+                           imageUrlFinder = "thumbnail-photo" )
     except:
         scrapeURL.driver.close()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
@@ -198,6 +197,7 @@ def ItemLinkCollector(data):
             raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
             break
     scrapeURL.driver.close()
+    scrapeURL.driver.quit()
 
 if __name__ == '__main__':
     start = time.perf_counter()
@@ -208,12 +208,14 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag = "list-text-area")
     datum=site.categoryList
+    datum=[['https://furusato.wowma.jp/products/list.php?parent_category=274','test']]
     site.driver.close()
+    site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(datum)} categories")
     start = time.perf_counter()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
-        futures = [executor.submit(DataCollectorFunction, data) for data in datum]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
+        futures = [executor.submit(ItemLinkCollector, data) for data in datum]
         for future in concurrent.futures.as_completed(futures):
             if future.result():
                 logging.info(f"{threading.current_thread().name}) -{future.result()}")
