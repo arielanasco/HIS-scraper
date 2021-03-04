@@ -81,7 +81,7 @@ class DataCollector(WebDriver):
             raise Exception ("Unable to locate the localNameFinder")
         try:
             self.titleFinder = self.html.find(class_=titleFinder).find_all("li")
-            self.titleFinder = re.sub(r'\W+', '', self.titleFinder[-1])
+            self.titleFinder = re.sub(r'\W+', '', self.titleFinder[-1].get_text())
         except:
             raise Exception ("Unable to locate the titleFinder")
         try:
