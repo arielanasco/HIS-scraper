@@ -149,7 +149,7 @@ def DataCollectorFunction(data):
     logging.info(f"{threading.current_thread().name}) - Fetching...{item_url}")
     try:
         time.sleep(1)
-        item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "municipality-name")))
+        item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "detail-header")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url, 
                            localNameFinder = "municipality-name",
@@ -160,6 +160,7 @@ def DataCollectorFunction(data):
                            imageUrlFinder = "thumbnail-photo" )
     except:
         scrapeURL.driver.close()
+        scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
     scrapeURL.driver.close()
     scrapeURL.driver.quit()
