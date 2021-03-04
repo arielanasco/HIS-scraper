@@ -179,7 +179,9 @@ def ItemLinkCollector(data):
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
                 nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
-                nextButton.send_keys(Keys.ENTER)
+                if nextButton.get_attribute("href") == 'javascript:void(0);':
+                    raise NoSuchElementException("End page detected")
+                nextButton.click()
                 logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
             except NoSuchElementException:
                 logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
