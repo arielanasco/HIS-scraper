@@ -210,7 +210,7 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag = "list-text-area")
     # datum=site.categoryList
-    datum=[['https://furusato.wowma.jp/products/list.php?parent_category=274','test']]
+    datum=[['https://furusato.wowma.jp/products/list.php?parent_category=5','test']]
     site.driver.close()
     site.driver.quit()
     final = time.perf_counter()
