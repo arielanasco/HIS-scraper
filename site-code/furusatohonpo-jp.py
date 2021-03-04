@@ -101,7 +101,8 @@ class DataCollector(WebDriver):
             self.imageList = []
             for _ in self.imageUrlFinder:
                 self.holder = _.find("div").get("style")
-                self.imageList.append(self.holder)      
+                self.holder = self.holder.split('"')
+                self.imageList.append(self.holder[1])      
         except:
             raise Exception ("Unable to locate the imageUrlFinder")
         while True:
