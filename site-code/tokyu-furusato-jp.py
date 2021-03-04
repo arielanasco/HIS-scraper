@@ -80,8 +80,8 @@ class DataCollector(WebDriver):
         except:
             raise Exception ("Unable to locate the localNameFinder")
         try:
-            self.titleFinder = self.html.find(class_=titleFinder).find("em",{"class":"text_area"}).find_next_sibling("font").get_text()
-            self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
+            self.titleFinder = self.html.find(class_=titleFinder).find_all("li")
+            self.titleFinder = re.sub(r'\W+', '', self.titleFinder[-1])
         except:
             raise Exception ("Unable to locate the titleFinder")
         try:
@@ -133,7 +133,7 @@ def DataCollectorFunction(data):
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url, 
                            localNameFinder = "heading_page",
-                           titleFinder = "heading_page",
+                           titleFinder = "topicpath",
                            descriptionFinder = "section_block",
                            priceFinder = "itembox-price",
                            capacityFinder = "itembox-data",
