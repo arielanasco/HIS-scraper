@@ -60,9 +60,9 @@ class DataCollector(WebDriver):
         self.html = bs(html, 'html.parser')
         self.container = self.html.find(class_=self.elementContainer)
         self.ChildElement = self.container.find_all("li")
-        for temp in self.ChildElement:
-            logging.info(f"{threading.current_thread().name}) -{temp.find('a').get('href')}")
-            self.itemList.append(temp.find("a").get("href"))
+        for _ in self.ChildElement:
+            self.temp= _.find("a").get("href")
+            self.itemList.append(self.temp)
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
