@@ -127,10 +127,10 @@ def DataCollectorFunction(data):
     logging.info(f"{threading.current_thread().name}) -Fetching...{item_url}")
     try:
         time.sleep(1)
-        item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "m_info cf")))
+        item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "m_info")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url, 
-                           localNameFinder = "m_info cf",
+                           localNameFinder = "m_info",
                            titleFinder = "page_product_single",
                            descriptionFinder = "product_description",
                            priceFinder = "product_price",
