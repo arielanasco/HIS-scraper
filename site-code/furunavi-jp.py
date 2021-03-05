@@ -170,7 +170,6 @@ def ItemLinkCollector(data):
 
                 if prev_btn != currentval.text:
                     logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
-                    prev_btn = currentval.text
                     nextButton[-1].find_element_by_class_name("page_next").click()
 
                 if prev_btn == currentval.text:
@@ -183,7 +182,9 @@ def ItemLinkCollector(data):
                             scrapeURL.isNotActive = True
                             logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items | Total item {len(scrapeURL.data)}")
                             break
-                    break        
+                    break
+                prev_btn = currentval.text
+       
             except:
                 raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
                 break
