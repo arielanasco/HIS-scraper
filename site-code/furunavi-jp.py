@@ -163,9 +163,9 @@ def ItemLinkCollector(data):
                 nextButton = nextButton.find_elements_by_tag_name("li")
                 
                 
-                if prev_btn == "":
-                    logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
-                    nextButton[-1].find_element_by_class_name("page_next").click()
+                # if prev_btn == "":
+                #     logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
+                #     nextButton[-1].find_element_by_class_name("page_next").click()
 
                 if prev_btn != currentval.text:
                     logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
@@ -190,9 +190,11 @@ def ItemLinkCollector(data):
                 
         except:
             scrapeURL.driver.close()
+            scrapeURL.driver.quit()
             raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
             break
     scrapeURL.driver.close()
+    scrapeURL.driver.quit()
 
 
 if __name__ == '__main__':
