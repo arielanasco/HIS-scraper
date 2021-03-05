@@ -189,7 +189,7 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(datum)} categories")
     start = time.perf_counter()
     with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
-        futures = [executor.submit(DataCollectorFunction, data) for data in datum]
+        futures = [executor.submit(ItemLinkCollector, data) for data in datum]
         for future in concurrent.futures.as_completed(futures):
             if future.result():
                 logging.info(f"{threading.current_thread().name}) -{future.result()}")
