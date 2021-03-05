@@ -71,7 +71,9 @@ class DataCollector(WebDriver):
         self.html = bs(html, 'html.parser')
         logging.info(f"{threading.current_thread().name}) -Getting data now...")
         try:
-            self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
+            self.localNameFinder = self.html.find(class_=localNameFinder).find("span").get_text()
+            self.localNameFinder_ = self.html.find(class_=localNameFinder).find("p").get_text()
+            self.localNameFinder = self.localNameFinder + self.localNameFinder_
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
         except:
             raise Exception ("Unable to locate the localNameFinder")
@@ -86,7 +88,7 @@ class DataCollector(WebDriver):
         except:
             raise Exception ("Unable to locate the descriptionFinder")
         try:
-            self.priceFinder = self.html.find(class_=priceFinder).get_text()
+            self.priceFinder = self.html.find(class_=priceFinder).find("i").get_text()
             self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
         except:
             raise Exception ("Unable to locate the priceFinder")
@@ -125,15 +127,15 @@ def DataCollectorFunction(data):
     logging.info(f"{threading.current_thread().name}) -Fetching...{item_url}")
     try:
         time.sleep(1)
-        item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
+        item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "m_info cf")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url, 
-                           localNameFinder = "lg-info",
-                           titleFinder = "item_detail",
-                           descriptionFinder = "item-description",
-                           priceFinder = "price",
-                           capacityFinder = "info",
-                           imageUrlFinder = "slick-track" )
+                           localNameFinder = "m_info cf",
+                           titleFinder = "page_product_single",
+                           descriptionFinder = "product_description",
+                           priceFinder = "product_price",
+                           capacityFinder = "product_detail",
+                           imageUrlFinder = "swiper-wrapper")
     except:
         scrapeURL.driver.close()
         scrapeURL.driver.quit()
@@ -149,7 +151,6 @@ def ItemLinkCollector(data):
     category=data[1]
     scrapeURL = DataCollector(url_category)
     scrapeURL.driver.get(scrapeURL.url)
-# 5
     logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
     while True:
         try:
