@@ -181,7 +181,6 @@ def ItemLinkCollector(data):
                 nextButton.click()
                 if nextButton.get_attribute("href") == 'javascript:void(0);':
                     logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
-                    logging.info(f"{threading.current_thread().name}) -{scrapeURL.itemList} ")
                     while True:
                         if scrapeURL.isNotActive:
                             scrapeURL.isNotActive = False
