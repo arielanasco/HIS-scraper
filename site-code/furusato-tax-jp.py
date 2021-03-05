@@ -97,7 +97,7 @@ class DataCollector(WebDriver):
         except:
             raise Exception ("Unable to locate the capacityFinder")
         try:
-            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find("ul").find_all("li")
+            self.imageUrlFinder = self.html.find(id=imageUrlFinder).find(class_="sld__list").find_all("li")
             self.imageList = []
             for _ in self.imageUrlFinder:
                 self.imageList.append(_.get("src")) 
@@ -134,7 +134,7 @@ def DataCollectorFunction(data):
                            descriptionFinder = "overview",
                            priceFinder = "basicinfo_price",
                            capacityFinder = "basicinfo_pay",
-                           imageUrlFinder = "sld__wrap" )
+                           imageUrlFinder = "basicinfo_slider" )
     except:
         scrapeURL.driver.close()
         scrapeURL.driver.quit()
