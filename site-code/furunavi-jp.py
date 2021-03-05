@@ -163,7 +163,7 @@ def ItemLinkCollector(data):
                 if prev_btn != nextButton[-2].text:
                     logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
                     prev_btn = nextButton[-2].text
-                    nextButton[-1].click()
+                    nextButton[-1].find_element_by_class_name("page_next").click()
 
                 elif prev_btn == nextButton[-2].text:
                     logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
