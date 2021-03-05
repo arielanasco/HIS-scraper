@@ -143,7 +143,7 @@ def DataCollectorFunction(data):
     scrapeURL.driver.quit()
 
 
-def DataCollectorFunction(data):
+def ItemLinkCollector(data):
     nxt_btn =  "//*[@id='main']/div[3]/div[2]/div[1]/div[4]/div[3]/div/div[2]/a"
     nxt_btn1 = "//*[@id='main']/div[2]/div[2]/div[1]/div[4]/div[3]/div/div[3]/a"
     element_container = "grid"
