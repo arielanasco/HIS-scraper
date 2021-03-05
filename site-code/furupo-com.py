@@ -95,7 +95,7 @@ class DataCollector(WebDriver):
         except:
             raise Exception ("Unable to locate the capacityFinder")
         try:
-            self.imageUrlFinder = self.html.find(id=imageUrlFinder).find_all("li")
+            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("li")
             self.imageList = []
             for _ in self.imageUrlFinder:
                 self.imageList.append(_.find("img").get("src")) 
