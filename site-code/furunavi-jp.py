@@ -149,7 +149,7 @@ def ItemLinkCollector(data):
     category=data[1]
     scrapeURL = DataCollector(url_category)
     scrapeURL.driver.get(scrapeURL.url)
-
+# 5
     logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
     while True:
         try:
@@ -158,14 +158,21 @@ def ItemLinkCollector(data):
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
                 nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
+                currentval = nextButton.find_element_by_class_name("current")
                 nextButton = nextButton.find_elements_by_tag_name("li")
                 
-                if prev_btn != nextButton[-2].text:
+                
+                if prev_btn == "":
+                    prev_btn = currentval.text
                     logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
-                    prev_btn = nextButton[-2].text
                     nextButton[-1].find_element_by_class_name("page_next").click()
 
-                elif prev_btn == nextButton[-2].text:
+                if prev_btn != currentval.text:
+                    logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
+                    prev_btn = currentval.text
+                    nextButton[-1].find_element_by_class_name("page_next").click()
+
+                if prev_btn == currentval.text:
                     logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
                     while True:
                         if scrapeURL.isNotActive:            
