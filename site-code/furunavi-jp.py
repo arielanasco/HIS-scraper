@@ -142,12 +142,14 @@ def DataCollectorFunction(data):
     scrapeURL.driver.quit()
 
 def ItemLinkCollector(data):
-    nxt_btn ="//*[@id='content']/div[4]/nav/ul[1]/li[8]/a"
+    prev_btn = ""
+    nxt_btn ="pagination"
     element_container = "list-product"
     url_category=data[0]
     category=data[1]
     scrapeURL = DataCollector(url_category)
     scrapeURL.driver.get(scrapeURL.url)
+
     logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
     while True:
         try:
@@ -155,20 +157,29 @@ def ItemLinkCollector(data):
             itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
-                nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn)
-                nextButton.click()
-                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
-            except NoSuchElementException:
-                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
-                while True:
-                    if scrapeURL.isNotActive:            
-                        scrapeURL.isNotActive = False
-                        for _ in scrapeURL.itemList:
-                            scrapeURL.data.append([LINK+_,category])
-                        scrapeURL.isNotActive = True
-                        logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items | Total item {len(scrapeURL.data)}")
-                        break
+                nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
+                nextButton = nextButton.find_elements_by_tag_name("li")
+                
+                if prev_btn != nextButton[-2].text:
+                    logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
+                    prev_btn = nextButton[-2].text
+                    nextButton[-1].click()
+
+                elif prev_btn == nextButton[-2].text:
+                    logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
+                    while True:
+                        if scrapeURL.isNotActive:            
+                            scrapeURL.isNotActive = False
+                            for _ in scrapeURL.itemList:
+                                scrapeURL.data.append([LINK+_,category])
+                            scrapeURL.isNotActive = True
+                            logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items | Total item {len(scrapeURL.data)}")
+                            break
+                    break        
+            except:
+                raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
                 break
+                
         except:
             scrapeURL.driver.close()
             raise Exception (f"{threading.current_thread().name}) -Unable to load the element")

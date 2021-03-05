@@ -190,7 +190,7 @@ def ItemLinkCollector(data):
                             logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
                             break
                     break
-                
+
                 logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
             except NoSuchElementException:
                 while True:
