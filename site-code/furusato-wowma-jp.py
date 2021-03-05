@@ -106,7 +106,7 @@ class DataCollector(WebDriver):
         except:
             raise Exception ("Unable to locate the descriptionFinder")
         try:
-            self.priceFinder = self.html.find(class_=priceFinder).get_text()
+            self.priceFinder = self.html.find(id=priceFinder).get_text()
             self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
         except:
             raise Exception ("Unable to locate the priceFinder")
