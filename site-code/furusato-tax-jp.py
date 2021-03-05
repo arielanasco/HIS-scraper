@@ -100,6 +100,7 @@ class DataCollector(WebDriver):
             self.imageUrlFinder = self.html.find(id=imageUrlFinder).find(class_="sld__list").find_all("li")
             self.imageList = []
             for _ in self.imageUrlFinder:
+                logging.info(f"{threading.current_thread().name}) -{_}")
                 self.imageList.append(_.get("src")) 
         except:
             raise Exception ("Unable to locate the imageUrlFinder")
