@@ -92,7 +92,7 @@ class DataCollector(WebDriver):
         except:
             raise Exception ("Unable to locate the priceFinder")
         try:
-            self.capacityFinder = self.html.find(class_=capacityFinder).find("product-tbl-info__row").get_text()
+            self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
             self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
         except:
             raise Exception ("Unable to locate the capacityFinder")
