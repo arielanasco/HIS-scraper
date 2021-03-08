@@ -5,6 +5,7 @@ Link : https://furusato.ana.co.jp/
 
 """
 
+import undetected_chromedriver as uc
 from web_driver import WebDriver
 import time
 import threading
