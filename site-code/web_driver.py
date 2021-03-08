@@ -1,5 +1,4 @@
-# from selenium import webdriver
-import undetected_chromedriver as uc
+from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 import warnings
@@ -22,7 +21,7 @@ class WebDriver:
         "Mozilla/5.0 CK={} (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko",
         "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:24.0) Gecko/20100101 Firefox/24.0"
         ]
-        self.options = uc.ChromeOptions()
+        self.options = Options()
         self.options.add_argument('--no-sandbox')
         self.options.add_experimental_option("prefs", {"profile.managed_default_content_settings.images":2,
                                             "profile.default_content_setting_values.notifications":2,
@@ -38,7 +37,7 @@ class WebDriver:
 
         self.options.add_argument("--headless")
         self.options.add_argument(f'--user-agent="{sample(self.userAgentList,1)[0]}"')
-        self.driver = uc.Chrome(options=self.options)
+        self.driver = webdriver.Chrome(options=self.options)
 
     def displaySiteInfo(self):
         return f"Target URL: {self.driver.current_url}" , f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}"
