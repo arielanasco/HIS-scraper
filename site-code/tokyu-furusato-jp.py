@@ -196,8 +196,8 @@ if __name__ == '__main__':
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="categorylist")
-    data=site.categoryList
-    # datum=[['https://tokyu-furusato.jp/goods/result?chk_ctg[1]=15', 'Testing']]
+    # data=site.categoryList
+    data=[['https://tokyu-furusato.jp/goods/result?chk_ctg[1]=15', 'Testing']]
     site.driver.close()
     site.driver.quit()
     final = time.perf_counter()
