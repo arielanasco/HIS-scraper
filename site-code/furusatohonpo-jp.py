@@ -188,8 +188,8 @@ if __name__ == '__main__':
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="p-topCategory__list")
-    data=site.categoryList
-    # datum=[['https://furusatohonpo.jp/donate/s/?categories=18','test']]
+    # data=site.categoryList
+    data=[['https://furusatohonpo.jp/donate/s/?categories=18','test']]
     site.driver.close()
     site.driver.quit()
     final = time.perf_counter()
