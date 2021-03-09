@@ -11,7 +11,7 @@ site_name = os.path.basename(__file__).split(".")[0]
 def save_image_to_file(image,category,product_name):
     dirname= os.path.join(cwd,site_name,category)
     print(dirname)
-    print(os.path.isfile(os.path.join(dirname,product_name)
+    print(os.path.isfile(os.path.join(dirname,product_name)))
     if not os.path.isfile(os.path.join(dirname,product_name)):
         os.mkdir(dirname)
     with open(os.path.join(dirname,product_name), 'wb') as out_file:
