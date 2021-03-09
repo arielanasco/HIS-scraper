@@ -196,15 +196,15 @@ if __name__ == '__main__':
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="categorylist")
-    datum=site.categoryList
+    data=site.categoryList
     # datum=[['https://tokyu-furusato.jp/goods/result?chk_ctg[1]=15', 'Testing']]
     site.driver.close()
     site.driver.quit()
     final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(datum)} categories")
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(data)} categories")
     start = time.perf_counter()
     with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
-        futures = [executor.submit(ItemLinkCollector, data) for data in datum]
+        futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
         for future in concurrent.futures.as_completed(futures):
             if future.result():
                 logging.info(f"{threading.current_thread().name}) -{future.result()}")
