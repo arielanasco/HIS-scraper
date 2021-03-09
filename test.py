@@ -9,14 +9,15 @@ site_name = os.path.basename(__file__).split(".")[0]
 
 
 def save_image_to_file(response,category,product_name):
-    dirname= os.path.join(cwd,site_name,category)
-    print(dirname)
-    print(not os.path.isfile(os.path.join(dirname,product_name)))
-    # if not os.path.isfile(os.path.join(dirname,product_name)):
-    os.mkdir(dirname)
-    with open(dirname, 'wb') as out_file:
+    dirname= os.path.join(cwd,site_name,product_name)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+    dirFile = os.path.join(dirname,product_name)
+    print (dirFile)
+    with open(dirFile, 'wb') as out_file:
         shutil.copyfileobj(response.raw, out_file)
-
+        img = Image.open(dirFile)    
+        print (img.size)
 
 def download_images(link, category,product_name):
     print ("Downloading...")
@@ -24,12 +25,10 @@ def download_images(link, category,product_name):
     save_image_to_file(response,category,product_name)
     del response
 
-download_images("https://furu-po.com/img/brank.gif","fruits","img_1.jpg")
+download_images("https://img.furusato-tax.jp/cdn-cgi/image/width=520,height=323/img/x/product/details/20200713/sd1_0e40bfca39974cbbf35002453f8d4e91e7ed22a0.jpg","fruits","img_1.jpg")
 # print(site_name)
 
 # site-name/category/item-data/imgaes_list
 
 
 # filename = os.path.join('test\testing1\img_1.jpg')
-img = Image.open("test\\testing1\\img_1.jpg")
-print (img.size)

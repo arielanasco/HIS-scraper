@@ -185,7 +185,7 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -{user_agent}")
     site.categoryParser(html= site.get(LINK).text, elementTag = "link_wrap")
     # data=site.categoryList
-    data = [['https://furusato.ana.co.jp/products/list.php?s4=ANA%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%8A%E3%83%AB&sort=number5%2CNumber1%2CScore','test']]
+    data = [['https://furusato.ana.co.jp/products/list.php?s4=ANA%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%8A%E3%83%AB&sort=number5%2CNumber1%2CScore','ANAオリジナル']]
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
     start = time.perf_counter()
