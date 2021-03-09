@@ -1,6 +1,6 @@
 """
 
-Site : Satoful	
+Site : Furupo (JTB)	
 Link : https://furu-po.com/
 
 """

@@ -5,21 +5,55 @@ Link : https://furusato.ana.co.jp/
 
 """
 
-from web_driver import WebDriver
 import time
 import threading
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException
+import requests
+
 import logging
 import  concurrent.futures
 from bs4 import BeautifulSoup as bs
 import re
 """ This section declares all the variables used """
 LINK = "https://furusato.ana.co.jp/products/list.php"
+class Webdriver:
+    def __init__(self,url):
+        self.url = url
+        self.userAgentList = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393",
+        "Mozilla/5.0 CK={} (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko",
+        "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:24.0) Gecko/20100101 Firefox/24.0"
+        ]
+        self.requests = requests
 
+
+class ScraperCategory(Webdriver):
+    categoryList = []
+
+    def __init__(self, url):
+        self.url = url
+        super().__init__(url)
+
+    def categoryParser(self,**kwargs):
+        self.elementTag = kwargs.get("elementTag")
+        self.html = bs(kwargs.get("html"), 'html.parser')
+        self.category = self.html.find(class_="search-parent-categories")
+        self.category = self.category.find(class_=self.elementTag)
+        self.liTag = self.category.li
+        while True:
+            self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
+            self.categoryData = re.sub(r'\W+', '', self.categoryData)
+            ScraperCategory.categoryList.append(["https://www.furusato-tax.jp"+self.liTag.find("a").get("href"),self.categoryData])
+            if self.liTag.find_next_sibling():
+                self.liTag = self.liTag.find_next_sibling()
+            else:
+                break
+
+
+    def __init__(self, url):
+        self.url = url
+        super().__init__(url)
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 
@@ -59,98 +93,14 @@ class DataCollector(WebDriver):
         for ChildElement in  self.container:
             self.itemList.append(ChildElement.find("div").get("data-product-url"))
 
-    def dataParser(self,html,itemUrl = "",localNameFinder = "",titleFinder = "",descriptionFinder = "",priceFinder = "",capacityFinder = "",imageUrlFinder = ""):
-        self.html = bs(html, 'html.parser')
-        logging.info(f"{threading.current_thread().name}) - Getting data now...")
-        try:
-            self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
-            self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
-        except:
-            self.localNameFinder = "Error in localNameFinder"
-        try:
-            self.titleFinder = self.html.find(class_="lg-info").find_next("h1").get_text()
-            self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
-        except:
-            self.titleFinder = "Error in titleFinder"
-        try:
-            self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
-            self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
-        except:
-            self.descriptionFinder = "Error in descriptionFinder"
-        try:
-            self.priceFinder = self.html.find(class_=priceFinder).find_next(class_="price").get_text()
-            self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
-        except:
-            self.priceFinder = "Error in priceFinder"
-        try:
-            self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
-            self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
-        except:
-            self.capacityFinder = "Error in capacityFinder"
-        try:
-            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("img")
-            self.imageList = []
-            for _ in self.imageUrlFinder:
-                self.imageList.append(_.get("src"))      
-        except:
-            self.imageUrlFinder = "Error in imageUrlFinder"
-        while True:
-            if DataCollector.isNotActive: 
-                DataCollector.isNotActive = False
-                for data in DataCollector.data:
-                    if itemUrl in data:
-                        index_ = DataCollector.data.index(data)
-                        DataCollector.data[index_].insert(2,self.localNameFinder)
-                        DataCollector.data[index_].insert(3,self.titleFinder)
-                        DataCollector.data[index_].insert(4,self.descriptionFinder)
-                        DataCollector.data[index_].insert(5,self.priceFinder)
-                        DataCollector.data[index_].insert(6,self.capacityFinder)
-                        DataCollector.data[index_].insert(7,self.imageList)
-                        DataCollector.isNotActive = True
-                        break
-            break
 
-def DataCollectorFunction(data):
-    element_container = "li"
-    url_category=data[0]
-    category=data[1]
-    scrapeURL = DataCollector(url_category)
-    scrapeURL.driver.get(scrapeURL.url)
-    logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
-    while True:
-        try:
-            time.sleep(3)
-            itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.TAG_NAME, element_container)))
-            scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
-            try:
-                nextButton = scrapeURL.driver.find_element_by_class_name("pager_links")
-                nextButton = nextButton.find_elements_by_class_name("pager_link")
-                nextButton = scrapeURL.driver.find_element_by_xpath(f"//*[@id='main_column']/div/div[3]/ul/li[{len(nextButton)}]/a")
-                nextButton.send_keys(Keys.ENTER)
-                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
-            except NoSuchElementException:
-                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
-                while True:
-                    if scrapeURL.isNotActive:            
-                        scrapeURL.isNotActive = False
-                        for _ in scrapeURL.itemList:
-                            scrapeURL.data.append([LINK+_,category])
-                        scrapeURL.isNotActive = True
-                        logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
-                        break
-                break
-        except:
-            scrapeURL.driver.close()
-            raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
-            break
-    scrapeURL.driver.close()
 
 
 if __name__ == '__main__':
     start = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
     site=ScraperCategory(LINK)
-    site.driver.get(site.url)
+    site.get()
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag = "link_wrap")
