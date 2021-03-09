@@ -13,7 +13,7 @@ def save_image_to_file(response,category,product_name):
     print(dirname)
     print(not os.path.isfile(os.path.join(dirname,product_name)))
     # if not os.path.isfile(os.path.join(dirname,product_name)):
-    #     os.mkdir(dirname)
+    os.mkdir(dirname)
     with open(dirname, 'wb') as out_file:
         shutil.copyfileobj(response.raw, out_file)
 
