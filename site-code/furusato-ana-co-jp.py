@@ -136,10 +136,9 @@ class DataCollector(Webdriver):
 def DataCollectorFunction(data):
     item_url = data[0]
     scrapeURL = DataCollector()
-    scrapeURL.get(item_url)
     logging.info(f"{threading.current_thread().name}) - Fetching...{item_url}")
     time.sleep(3)
-    scrapeURL.dataParser(html = scrapeURL.driver.page_source,
+    scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
                            itemUrl = item_url, 
                            localNameFinder = "as-item_pref_detail",
                            titleFinder = "as-item_name_detail",
