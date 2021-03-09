@@ -86,28 +86,28 @@ class DataCollector(Webdriver):
         logging.info(f"{threading.current_thread().name}) -Getting data now...")
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
-            self.localNameFinder = re.sub(r'\W+', '', self.localNameFinder)
+            # self.localNameFinder = re.sub(r'\W+', '', self.localNameFinder)
         except:
             raise Exception ("Unable to locate the localNameFinder")
         try:
             self.titleFinder = self.html.find(class_=titleFinder).get_text()
             self.titleFinder = self.titleFinder.replace(self.localNameFinder,'')
-            self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
+            # self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
         except:
             raise Exception ("Unable to locate the titleFinder")
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
-            self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
+            # self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
         except:
             raise Exception ("Unable to locate the descriptionFinder")
         try:
             self.priceFinder = self.html.find(class_=priceFinder).get_text()
-            self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
+            # self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
         except:
             raise Exception ("Unable to locate the priceFinder")
         try:
             self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
-            self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
+            # self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
         except:
             raise Exception ("Unable to locate the capacityFinder")
         try:
