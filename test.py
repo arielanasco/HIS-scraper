@@ -9,7 +9,7 @@ site_name = os.path.basename(__file__).split(".")[0]
 
 
 def save_image_to_file(response,category,product_name):
-    dirname= os.path.join(cwd,site_name,category)
+    dirname= os.path.join(cwd,site_name,category,product_name)
     print(dirname)
     print(not os.path.isfile(os.path.join(dirname,product_name)))
     # if not os.path.isfile(os.path.join(dirname,product_name)):
