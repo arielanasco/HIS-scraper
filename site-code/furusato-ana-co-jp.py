@@ -155,7 +155,7 @@ def ItemLinkCollector(data):
                 if scrapeURL.isNotActive:            
                     scrapeURL.isNotActive = False
                     for _ in scrapeURL.itemList:
-                        scrapeURL.data.append([LINK+_,category])
+                        scrapeURL.data.append(["https://furusato.ana.co.jp/"+_,category])
                     scrapeURL.isNotActive = True
                     logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
                     break
