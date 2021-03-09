@@ -150,7 +150,6 @@ def ItemLinkCollector(data):
             url_category = url_category_
             logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
         else:
-            scrapeURL.listParser(html =html, elementContainer = element_container)
             while True:
                 if scrapeURL.isNotActive:            
                     scrapeURL.isNotActive = False
