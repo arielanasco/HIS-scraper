@@ -86,11 +86,12 @@ class DataCollector(Webdriver):
         logging.info(f"{threading.current_thread().name}) -Getting data now...")
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
-            self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
+            self.localNameFinder = re.sub(r'\W+', '', self.localNameFinder)
         except:
             raise Exception ("Unable to locate the localNameFinder")
         try:
             self.titleFinder = self.html.find(class_=titleFinder).get_text()
+            self.titleFinder = self.titleFinder.replace('self.localNameFinder','')
             self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
         except:
             raise Exception ("Unable to locate the titleFinder")
@@ -110,7 +111,7 @@ class DataCollector(Webdriver):
         except:
             raise Exception ("Unable to locate the capacityFinder")
         try:
-            self.imageUrlFinder = self.html.find(id=imageUrlFinder).find(class_="sld__list").find_all("li")
+            self.imageUrlFinder = self.html.find(class_="as-detail_wrap").find(class_=imageUrlFinder).find_all("li")
             self.imageList = []
             for _ in self.imageUrlFinder:
                 self.imageList.append(_.find("img").get("src")) 
@@ -131,6 +132,23 @@ class DataCollector(Webdriver):
                         DataCollector.isNotActive = True
                         break
             break
+
+def DataCollectorFunction(data):
+    item_url = data[0]
+    scrapeURL = DataCollector()
+    scrapeURL.get(item_url)
+    logging.info(f"{threading.current_thread().name}) - Fetching...{item_url}")
+    time.sleep(3)
+    scrapeURL.dataParser(html = scrapeURL.driver.page_source,
+                           itemUrl = item_url, 
+                           localNameFinder = "as-item_pref_detail",
+                           titleFinder = "as-item_name_detail",
+                           descriptionFinder = "as-txarea_m",
+                           priceFinder = "as-pl_m",
+                           capacityFinder = "table01",
+                           imageUrlFinder = "as-main" )
+
+
 
 def ItemLinkCollector(data):
     element_container = "as-flex_left"
