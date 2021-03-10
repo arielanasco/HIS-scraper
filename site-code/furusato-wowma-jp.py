@@ -104,7 +104,7 @@ class DataCollector(WebDriver):
         try:
             # self.titleFinder = self.html.find(class_=titleFinder).find("h1").get_text()
             self.titleFinder = self.html.find(class_=titleFinder).find_all("li")
-            self.titleFinder = self.titleFinder[-1].find("a").get_text()
+            self.titleFinder = self.titleFinder[-1].get_text()
             self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
         except:
             raise Exception ("Unable to locate the titleFinder")
