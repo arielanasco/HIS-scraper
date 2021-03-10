@@ -167,17 +167,14 @@ def ItemLinkCollector(data):
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
     while True:
+        time.sleep(1)
+        itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+        scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
         try:
-            time.sleep(1)
-            itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
-            scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]/ul")
             lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
-            nxtbtn = lenPagination[-1].find_element_by_tag_name("a").get_attribute("href")
-            if nxtbtn != "#":
-                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
-                lenPagination[-1].find_element_by_tag_name("a").send_keys(Keys.ENTER)
-            else:
+            nxtbtn = lenPagination[-1].find_element_by_class_name("pagination-link").get_attribute("href")
+            if nxtbtn == nxtbtn+"#":
                 logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
                 while True:
                     if scrapeURL.isNotActive:            
@@ -188,6 +185,46 @@ def ItemLinkCollector(data):
                         logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
                         break
                 break
+
+            else:
+                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
+                lenPagination[-1].find_element_by_tag_name("a").send_keys(Keys.ENTER)
+        except NoSuchElementException:
+            while True:
+                if scrapeURL.isNotActive:            
+                    scrapeURL.isNotActive = False
+                    for _ in scrapeURL.itemList:
+                        scrapeURL.data.append([_,category])
+                    scrapeURL.isNotActive = True
+                    logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
+                    break
+            break
+
+
+
+
+        # try:
+
+        #     time.sleep(1)
+        #     itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+        #     scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
+        #     lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]/ul")
+        #     lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
+        #     nxtbtn = lenPagination[-1].find_element_by_tag_name("a").get_attribute("href")
+        #     if nxtbtn != "#":
+        #         logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
+        #         lenPagination[-1].find_element_by_tag_name("a").send_keys(Keys.ENTER)
+        #     else:
+        #         logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
+        #         while True:
+        #             if scrapeURL.isNotActive:            
+        #                 scrapeURL.isNotActive = False
+        #                 for _ in scrapeURL.itemList:
+        #                     scrapeURL.data.append([_,category])
+        #                 scrapeURL.isNotActive = True
+        #                 logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
+        #                 break
+        #         break
 
             # try:
             #     lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]/ul")
