@@ -171,16 +171,13 @@ def ItemLinkCollector(data):
             time.sleep(1)
             itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
-            try:
-                lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]")
-                lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
-                if len(lenPagination) == 9:
-                    nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath1)
-                elif len(lenPagination) in [0,7] :
-                    nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath)
-                nextButton.send_keys(Keys.ENTER)
+            lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]/ul")
+            lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
+            nxtbtn = lenPagination[-1].find_element_by_tag_name("a").get_attribute("href")
+            if nxtbtn != "#":
                 logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
-            except NoSuchElementException:
+                lenPagination[-1].find_element_by_tag_name("a").send_keys(Keys.ENTER)
+            else:
                 logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
                 while True:
                     if scrapeURL.isNotActive:            
@@ -191,6 +188,27 @@ def ItemLinkCollector(data):
                         logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
                         break
                 break
+
+            # try:
+            #     lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]/ul")
+            #     lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
+            #     if len(lenPagination) == 9:
+            #         nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath1)
+            #     elif len(lenPagination) in [0,7] :
+            #         nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath)
+            #     nextButton.send_keys(Keys.ENTER)
+            #     logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
+            # except NoSuchElementException:
+            #     logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
+            #     while True:
+            #         if scrapeURL.isNotActive:            
+            #             scrapeURL.isNotActive = False
+            #             for _ in scrapeURL.itemList:
+            #                 scrapeURL.data.append([_,category])
+            #             scrapeURL.isNotActive = True
+            #             logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
+            #             break
+            #     break
         except:
             scrapeURL.driver.quit()
             raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
