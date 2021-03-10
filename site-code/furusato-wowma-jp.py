@@ -180,7 +180,7 @@ def ItemLinkCollector(data):
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
     while True:
-        time.sleep(3)
+        time.sleep(1)
         itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
         scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
         nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
