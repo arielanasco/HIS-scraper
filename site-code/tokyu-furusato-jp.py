@@ -174,7 +174,6 @@ def ItemLinkCollector(data):
             lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]/ul")
             lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
             nxtbtn = lenPagination[-1].find_element_by_class_name("pagination-link").get_attribute("href")
-            print(nxtbtn)
             if nxtbtn[-1] == "#":
                 logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
                 while True:
