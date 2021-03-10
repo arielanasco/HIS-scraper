@@ -203,20 +203,20 @@ if __name__ == '__main__':
     # data = [['https://furusato.ana.co.jp/products/list.php?s4=ANA%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%8A%E3%83%AB&sort=number5%2CNumber1%2CScore','ANAオリジナル']]
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
-    # start = time.perf_counter()
-    # with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
-    #     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
-    #     for future in concurrent.futures.as_completed(futures):
-    #         if future.result():
-    #             logging.info(f"{threading.current_thread().name}) -{future.result()}")
-    # final = time.perf_counter()
-    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataCollector.data)} items URL")
+    start = time.perf_counter()
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Scraper') as executor:
+        futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
+        for future in concurrent.futures.as_completed(futures):
+            if future.result():
+                logging.info(f"{threading.current_thread().name}) -{future.result()}")
+    final = time.perf_counter()
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataCollector.data)} items URL")
 
-    # start = time.perf_counter()
-    # with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
-    #     futures = [executor.submit(DataCollectorFunction, data) for data in DataCollector.data]
-    #     for future in concurrent.futures.as_completed(futures):
-    #         if future.result():
-    #             logging.info(f"{threading.current_thread().name}) -{future.result()}")
-    # final = time.perf_counter()
-    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataCollector.data)} items data")
+    start = time.perf_counter()
+    with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
+        futures = [executor.submit(DataCollectorFunction, data) for data in DataCollector.data]
+        for future in concurrent.futures.as_completed(futures):
+            if future.result():
+                logging.info(f"{threading.current_thread().name}) -{future.result()}")
+    final = time.perf_counter()
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataCollector.data)} items data")
