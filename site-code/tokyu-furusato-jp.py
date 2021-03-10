@@ -34,12 +34,19 @@ class ScraperCategory(WebDriver):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
         self.category_container = self.html.find(class_=self.elementTag)
-        self.category_container = self.category_container.find_all(class_="dropdownlist")
-        for category in self.category_container:
-            self.categoryData = re.sub(r'\([^()]*\)', '', category.find("span").get_text())
-            self.categoryData = re.sub(r'\W+', '', self.categoryData)
-            ScraperCategory.categoryList.append(["https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D="+category.find("input").get("value"),
-                                                  self.categoryData])
+        self.liTag = self.category_container.li
+        while True:
+            self.subcat = self.liTag.find_all("li")
+            for _ in self.subcat:
+                self.categoryData = re.sub(r'\([^()]*\)', '', _.find("span").get_text())
+                self.categoryData = re.sub(r'\W+', '', self.categoryData)
+                self.link = _.find("input").get("value")
+                ScraperCategory.categoryList.append(["https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D="+category.find("input").get("value"),
+                                                    self.categoryData])
+            if self.liTag.find_next_sibling():
+                self.liTag = self.liTag.find_next_sibling()
+            else:
+                break
 
         # self.liTag = self.category.li
         # while True:
