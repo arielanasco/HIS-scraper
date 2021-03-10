@@ -33,17 +33,24 @@ class ScraperCategory(WebDriver):
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_="search-parent-categories")
-        self.category = self.category.find(class_=self.elementTag)
-        self.liTag = self.category.li
-        while True:
-            self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
+        self.category = self.html.find(class_=self.elementTag)
+        self.category = self.category.find_all("ul")
+        for _ in self.category[2:]:
+            self.categoryData = re.sub(r'\([^()]*\)', '', _.find(class_="categories__name").get_text())
             self.categoryData = re.sub(r'\W+', '', self.categoryData)
-            ScraperCategory.categoryList.append(["https://www.furusato-tax.jp"+self.liTag.find("a").get("href"),self.categoryData])
-            if self.liTag.find_next_sibling():
-                self.liTag = self.liTag.find_next_sibling()
-            else:
-                break
+            ScraperCategory.categoryList.append(["https://www.furusato-tax.jp"+_.find("a").get("href"),self.categoryData])
+
+
+
+        # self.liTag = self.category.li
+        # while True:
+        #     self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
+        #     self.categoryData = re.sub(r'\W+', '', self.categoryData)
+        #     ScraperCategory.categoryList.append(["https://www.furusato-tax.jp"+self.liTag.find("a").get("href"),self.categoryData])
+        #     if self.liTag.find_next_sibling():
+        #         self.liTag = self.liTag.find_next_sibling()
+        #     else:
+        #         break
 
 class DataCollector(WebDriver):
 
@@ -189,26 +196,26 @@ if __name__ == '__main__':
     site.driver.get(site.url)
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
-    site.categoryParser(html= site.driver.page_source, elementTag = "search-category-list")
+    site.categoryParser(html= site.driver.page_source, elementTag = "search-child-categories")
     # data=site.categoryList
     data=[['https://www.furusato-tax.jp/search/152?disabled_category_top=1&target=1','test']]
     site.driver.close()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
-    start = time.perf_counter()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
-        futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
-        for future in concurrent.futures.as_completed(futures):
-            if future.result():
-                logging.info(f"{threading.current_thread().name}) -{future.result()}")
-    final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataCollector.data)} items URL")
+    # start = time.perf_counter()
+    # with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
+    #     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
+    #     for future in concurrent.futures.as_completed(futures):
+    #         if future.result():
+    #             logging.info(f"{threading.current_thread().name}) -{future.result()}")
+    # final = time.perf_counter()
+    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataCollector.data)} items URL")
 
-    start = time.perf_counter()
-    with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
-        futures = [executor.submit(DataCollectorFunction, data) for data in DataCollector.data]
-        for future in concurrent.futures.as_completed(futures):
-            if future.result():
-                logging.info(f"{threading.current_thread().name}) -{future.result()}")
-    final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataCollector.data)} items data")
+    # start = time.perf_counter()
+    # with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
+    #     futures = [executor.submit(DataCollectorFunction, data) for data in DataCollector.data]
+    #     for future in concurrent.futures.as_completed(futures):
+    #         if future.result():
+    #             logging.info(f"{threading.current_thread().name}) -{future.result()}")
+    # final = time.perf_counter()
+    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataCollector.data)} items data")
