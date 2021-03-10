@@ -97,7 +97,7 @@ class DataCollector(WebDriver):
         except:
             raise Exception ("Unable to locate the localNameFinder")
         try:
-            self.localNameFinder = self.html.find(class_=localNameFinder).find("h1").get_text()
+            self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder = re.sub(r'\W+', '', self.localNameFinder)
         except:
             raise Exception ("Unable to locate the titleFinder")
@@ -153,10 +153,10 @@ def DataCollectorFunction(data):
     item_url = data[0]
     scrapeURL = DataCollector(item_url)
     scrapeURL.driver.get(scrapeURL.url)
-    logging.info(f"{threading.current_thread().name}) - Fetching...{item_url}")
+    logging.info(f"{threading.current_thread().name}) -Fetching({item_url})")
     try:
         time.sleep(1)
-        item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "detail-header")))
+        item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "breadcrumb")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url,
                            categoryFinder = "breadcrumb", 
@@ -167,10 +167,8 @@ def DataCollectorFunction(data):
                            capacityFinder = "slider-txt",
                            imageUrlFinder = "thumbnail-photo" )
     except:
-        scrapeURL.driver.close()
         scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
-    scrapeURL.driver.close()
     scrapeURL.driver.quit()
 
 def ItemLinkCollector(data):
@@ -213,10 +211,9 @@ def ItemLinkCollector(data):
                         break
                 break
         except:
-            scrapeURL.driver.close()
+            scrapeURL.driver.quit()
             raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
             break
-    scrapeURL.driver.close()
     scrapeURL.driver.quit()
 
 if __name__ == '__main__':
