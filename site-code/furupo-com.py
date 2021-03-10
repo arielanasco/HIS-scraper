@@ -34,15 +34,15 @@ class ScraperCategory(WebDriver):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
         self.category = self.html.find(class_=self.elementTag)
-        self.liTag = self.category.li
+        self.liTag_ = self.category.li
         while True:
-            self.liTag = self.liTag.find_all("li")
+            self.liTag = self.liTag_.find_all("li")
             for _ in self.liTag:
                 self.categoryData = re.sub(r'\([^()]*\)', '', _.find("a").get_text())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 ScraperCategory.categoryList.append([_.find("a").get("href"),self.categoryData])
-            if self.liTag.find_next_sibling():
-                self.liTag = self.liTag.find_next_sibling()
+            if self.liTag_.find_next_sibling():
+                self.liTag_ = self.liTag_.find_next_sibling()
             else:
                 break
             # self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
