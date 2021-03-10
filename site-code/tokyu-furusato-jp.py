@@ -144,7 +144,6 @@ def DataCollectorFunction(data):
         item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "heading_page")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url,
-                           categoryFinder = "c-contents", 
                            localNameFinder = "heading_page",
                            titleFinder = "topicpath",
                            descriptionFinder = "section_block",
@@ -208,7 +207,7 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="dropdownlist")
     data=site.categoryList
-    data=[['https://tokyu-furusato.jp/goods/result?chk_ctg[1]=15', 'Testing']]
+    # data=[['https://tokyu-furusato.jp/goods/result?chk_ctg[1]=15', 'Testing']]
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(data)} categories")
