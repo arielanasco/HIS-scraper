@@ -146,9 +146,8 @@ def DataCollectorFunction(data):
                            capacityFinder = "p-detailAddCart__info",
                            imageUrlFinder = "slick-track" )
     except:
-        scrapeURL.driver.close()
+        scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
-    scrapeURL.driver.close()
     scrapeURL.driver.quit()
 
 def ItemLinkCollector(data):
@@ -180,10 +179,9 @@ def ItemLinkCollector(data):
                         break
                 break
         except:
-            scrapeURL.driver.close()
+            scrapeURL.driver.quit()
             raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
             break
-    scrapeURL.driver.close()
     scrapeURL.driver.quit()
 
 
