@@ -68,9 +68,15 @@ class DataCollector(WebDriver):
             else:
                 break
 
-    def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
+    def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         logging.info(f"{threading.current_thread().name}) - Getting data now...")
+        try:
+            self.categoryFinder = self.html.find(class_=categoryFinder).find_all("li")
+            self.categoryFinder = self.categoryFinder[-2].find("a").get_text()
+            self.categoryFinder =  re.sub(r'\W+', '', self.categoryFinder)
+        except:
+            raise Exception ("Unable to locate the localNameFinder")
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
@@ -111,6 +117,7 @@ class DataCollector(WebDriver):
                 for data in DataCollector.data:
                     if itemUrl in data:
                         index_ = DataCollector.data.index(data)
+                        DataCollector.data[index_].insert(1,self.categoryFinder)
                         DataCollector.data[index_].insert(2,self.localNameFinder)
                         DataCollector.data[index_].insert(3,self.titleFinder)
                         DataCollector.data[index_].insert(4,self.descriptionFinder)
@@ -130,7 +137,8 @@ def DataCollectorFunction(data):
         time.sleep(1)
         item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "p-detailName__municipality")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
-                           itemUrl = item_url, 
+                           itemUrl = item_url,
+                           categoryFinder = "c-contents", 
                            localNameFinder = "p-detailName__municipality",
                            titleFinder = "p-detailName__ttl",
                            descriptionFinder = "p-detailDescription",
@@ -153,15 +161,15 @@ def ItemLinkCollector(data):
     logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
     while True:
         try:
-            time.sleep(3)
+            time.sleep(1)
             itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
                 nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
                 nextButton.send_keys(Keys.ENTER)
-                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
+                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
             except NoSuchElementException:
-                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
+                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
                 while True:
                     if scrapeURL.isNotActive:            
                         scrapeURL.isNotActive = False
@@ -188,8 +196,8 @@ if __name__ == '__main__':
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="p-topCategory__list")
-    # data=site.categoryList
-    data=[['https://furusatohonpo.jp/donate/s/?categories=18','test']]
+    data=site.categoryList
+    # data=[['https://furusatohonpo.jp/donate/s/?categories=18','test']]
     site.driver.close()
     site.driver.quit()
     final = time.perf_counter()
