@@ -17,7 +17,7 @@ import  concurrent.futures
 from bs4 import BeautifulSoup as bs
 import re
 """ This section declares all the variables used """
-LINK = "https://tokyu-furusato.jp/"
+LINK = "https://tokyu-furusato.jp/goods/result"
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
@@ -33,20 +33,26 @@ class ScraperCategory(WebDriver):
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_="section_category")
-        self.category = self.category.find(class_=self.elementTag)
-        self.liTag = self.category.li
-        while True:
-            self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
+        self.category_container = self.html.find(class_=self.elementTag)
+        self.category_container = self.category_container.find_all(class_="dropdownlist")
+        for category in self.category_container:
+            self.categoryData = re.sub(r'\([^()]*\)', '', category.find("span").get_text())
             self.categoryData = re.sub(r'\W+', '', self.categoryData)
-            self.link = self.liTag.find("a").get("href")
-            self.index =  self.link.find("]=")
-            self.link = self.link[:self.index] + "1" +self.link[self.index:]
-            ScraperCategory.categoryList.append([self.link,self.categoryData])
-            if self.liTag.find_next_sibling():
-                self.liTag = self.liTag.find_next_sibling()
-            else:
-                break
+            ScraperCategory.categoryList.append(["https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D="+category.find("input").get("value"),
+                                                  self.categoryData])
+
+        # self.liTag = self.category.li
+        # while True:
+        #     self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
+        #     self.categoryData = re.sub(r'\W+', '', self.categoryData)
+        #     self.link = self.liTag.find("a").get("href")
+        #     self.index =  self.link.find("]=")
+        #     self.link = self.link[:self.index] + "1" +self.link[self.index:]
+        #     ScraperCategory.categoryList.append([self.link,self.categoryData])
+        #     if self.liTag.find_next_sibling():
+        #         self.liTag = self.liTag.find_next_sibling()
+        #     else:
+        #         break
 
 class DataCollector(WebDriver):
 
@@ -131,7 +137,8 @@ def DataCollectorFunction(data):
         time.sleep(1)
         item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "heading_page")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
-                           itemUrl = item_url, 
+                           itemUrl = item_url,
+                           categoryFinder = "c-contents", 
                            localNameFinder = "heading_page",
                            titleFinder = "topicpath",
                            descriptionFinder = "section_block",
@@ -139,9 +146,8 @@ def DataCollectorFunction(data):
                            capacityFinder = "itembox-data",
                            imageUrlFinder = "itembox-mainimage" )
     except:
-        scrapeURL.driver.close()
+        scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
-    scrapeURL.driver.close()
     scrapeURL.driver.quit()
 
 
@@ -157,7 +163,7 @@ def ItemLinkCollector(data):
     logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
     while True:
         try:
-            time.sleep(3)
+            time.sleep(1)
             itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
@@ -168,9 +174,9 @@ def ItemLinkCollector(data):
                 elif len(lenPagination) in [0,7] :
                     nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath)
                 nextButton.send_keys(Keys.ENTER)
-                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
+                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
             except NoSuchElementException:
-                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
+                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
                 while True:
                     if scrapeURL.isNotActive:            
                         scrapeURL.isNotActive = False
@@ -181,10 +187,9 @@ def ItemLinkCollector(data):
                         break
                 break
         except:
-            scrapeURL.driver.close()
+            scrapeURL.driver.quit()
             raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
             break
-    scrapeURL.driver.close()
     scrapeURL.driver.quit()
 
 
@@ -195,27 +200,27 @@ if __name__ == '__main__':
     site.driver.get(site.url)
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
-    site.categoryParser(html= site.driver.page_source, elementTag ="categorylist")
-    # data=site.categoryList
-    data=[['https://tokyu-furusato.jp/goods/result?chk_ctg[1]=15', 'Testing']]
-    site.driver.close()
+    site.categoryParser(html= site.driver.page_source, elementTag ="dropdownlist")
+    data=site.categoryList
+    # data=[['https://tokyu-furusato.jp/goods/result?chk_ctg[1]=15', 'Testing']]
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(data)} categories")
-    start = time.perf_counter()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
-        futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
-        for future in concurrent.futures.as_completed(futures):
-            if future.result():
-                logging.info(f"{threading.current_thread().name}) -{future.result()}")
-    final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataCollector.data)} items URL")
+    print(data)
+    # start = time.perf_counter()
+    # with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
+    #     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
+    #     for future in concurrent.futures.as_completed(futures):
+    #         if future.result():
+    #             logging.info(f"{threading.current_thread().name}) -{future.result()}")
+    # final = time.perf_counter()
+    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataCollector.data)} items URL")
 
-    start = time.perf_counter()
-    with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
-        futures = [executor.submit(DataCollectorFunction, data) for data in DataCollector.data]
-        for future in concurrent.futures.as_completed(futures):
-            if future.result():
-                logging.info(f"{threading.current_thread().name}) -{future.result()}")
-    final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataCollector.data)} items data")
+    # start = time.perf_counter()
+    # with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
+    #     futures = [executor.submit(DataCollectorFunction, data) for data in DataCollector.data]
+    #     for future in concurrent.futures.as_completed(futures):
+    #         if future.result():
+    #             logging.info(f"{threading.current_thread().name}) -{future.result()}")
+    # final = time.perf_counter()
+    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataCollector.data)} items data")
