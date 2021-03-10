@@ -180,41 +180,62 @@ def ItemLinkCollector(data):
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
     while True:
-        try:
-            time.sleep(3)
-            itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
-            scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
-            try:
-                nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
-                nextButton.click()
-                if nextButton.get_attribute("href") == 'javascript:void(0);':
-                    logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
-                    while True:
-                        if scrapeURL.isNotActive:
-                            scrapeURL.isNotActive = False
-                            for _ in scrapeURL.itemList:
-                                scrapeURL.data.append([LINK+_,category])
-                            scrapeURL.isNotActive = True
-                            logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
-                            break
+        time.sleep(3)
+        itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+        scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
+        nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
+        if nextButton.get_attribute("href") == 'javascript:void(0);':
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
+            while True:
+                if scrapeURL.isNotActive:
+                    scrapeURL.isNotActive = False
+                    for _ in scrapeURL.itemList:
+                        scrapeURL.data.append([LINK+_,category])
+                    scrapeURL.isNotActive = True
+                    logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
                     break
-
-                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
-            except NoSuchElementException:
-                while True:
-                    if scrapeURL.isNotActive:            
-                        scrapeURL.isNotActive = False
-                        for _ in scrapeURL.itemList:
-                            scrapeURL.data.append([LINK+_,category])
-                        scrapeURL.isNotActive = True
-                        logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
-                        break
-                break
-        except:
-            scrapeURL.driver.quit()
-            raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
             break
+        else:
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
+            nextButton.click()
     scrapeURL.driver.quit()
+
+        # try:
+        #     time.sleep(3)
+        #     itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+        #     scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
+        #     nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
+        #     try:
+        #         nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
+        #         nextButton.click()
+        #         if nextButton.get_attribute("href") == 'javascript:void(0);':
+        #             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
+        #             while True:
+        #                 if scrapeURL.isNotActive:
+        #                     scrapeURL.isNotActive = False
+        #                     for _ in scrapeURL.itemList:
+        #                         scrapeURL.data.append([LINK+_,category])
+        #                     scrapeURL.isNotActive = True
+        #                     logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
+        #                     break
+        #             break
+
+        #         logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
+        #     except NoSuchElementException:
+        #         while True:
+        #             if scrapeURL.isNotActive:            
+        #                 scrapeURL.isNotActive = False
+        #                 for _ in scrapeURL.itemList:
+        #                     scrapeURL.data.append([LINK+_,category])
+        #                 scrapeURL.isNotActive = True
+        #                 logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
+        #                 break
+        #         break
+        # except:
+        #     scrapeURL.driver.quit()
+        #     raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
+        #     break
+    # scrapeURL.driver.quit()
 
 if __name__ == '__main__':
     start = time.perf_counter()
