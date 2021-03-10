@@ -159,9 +159,9 @@ def ItemLinkCollector(data):
             try:
                 nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn)
                 nextButton.send_keys(Keys.ENTER)
-                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
+                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
             except NoSuchElementException:
-                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
+                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
                 while True:
                     if scrapeURL.isNotActive:            
                         scrapeURL.isNotActive = False
