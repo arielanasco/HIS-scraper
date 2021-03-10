@@ -53,14 +53,11 @@ class ScraperCategory(Webdriver):
             category_ = category.find_all("li")
             print(category_)
             if len(category_) > 2 :
-                ctr = 2
-                while True:
-                    self.categoryData = re.sub(r'\([^()]*\)', '', category_[ctr].find("a").get_text())
+                for _ in category_[2:]:
+                    self.categoryData = re.sub(r'\([^()]*\)', '', _.find("a").get_text())
                     self.categoryData = re.sub(r'\W+', '', self.categoryData)
-                    ScraperCategory.categoryList.append([category_[ctr].find("a").get("href"),self.categoryData])
-                    if ctr == len(category):
-                        break
-                    ctr+=1
+                    ScraperCategory.categoryList.append([_.find("a").get("href"),self.categoryData])
+
             break
 
 
