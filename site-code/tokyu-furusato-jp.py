@@ -169,7 +169,7 @@ def ItemLinkCollector(data):
     while True:
         try:
             time.sleep(1)
-            itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+            itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]/ul")
             lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
