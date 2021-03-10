@@ -37,7 +37,7 @@ class ScraperCategory(WebDriver):
         self.category = self.category.find_all("ul")
         for category in self.category:
             self.holder = category.find_all("li")
-            for holder in self.holder[2:]:
+            for holder in self.holder[3:]:
                 self.categoryData = re.sub(r'\([^()]*\)', '', holder.find(class_="categories__name").get_text())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 ScraperCategory.categoryList.append(["https://www.furusato-tax.jp"+holder.find("a").get("href"),self.categoryData])
@@ -198,7 +198,7 @@ if __name__ == '__main__':
     site.driver.get(site.url)
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
-    site.categoryParser(html= site.driver.page_source, elementTag = "search-grandson-categories")
+    site.categoryParser(html= site.driver.page_source, elementTag = "search-child-categories")
     data=site.categoryList
     # data=[['https://www.furusato-tax.jp/search/152?disabled_category_top=1&target=1','test']]
     site.driver.close()
