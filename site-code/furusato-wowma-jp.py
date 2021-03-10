@@ -87,14 +87,20 @@ class DataCollector(WebDriver):
             self.itemList.append(_.find(class_="item-list").get("href"))
 
 
-    def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
+    def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         logging.info(f"{threading.current_thread().name}) -Getting data now...")
         try:
-            self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
-            self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
+            self.categoryFinder = self.html.find(class_=categoryFinder).find_all("li")
+            self.categoryFinder = self.categoryFinder[-2].find("a").get_text()
+            self.categoryFinder =  re.sub(r'\W+', '', self.categoryFinder)
         except:
             raise Exception ("Unable to locate the localNameFinder")
+        try:
+            self.localNameFinder = self.html.find(class_=localNameFinder).find("h1").get_text()
+            self.localNameFinder = re.sub(r'\W+', '', self.localNameFinder)
+        except:
+            raise Exception ("Unable to locate the titleFinder")
         try:
             self.titleFinder = self.html.find(class_=titleFinder).find("h1").get_text()
             self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
@@ -130,6 +136,7 @@ class DataCollector(WebDriver):
                 for data in DataCollector.data:
                     if itemUrl in data:
                         index_ = DataCollector.data.index(data)
+                        DataCollector.data[index_].insert(1,self.categoryFinder)
                         DataCollector.data[index_].insert(2,self.localNameFinder)
                         DataCollector.data[index_].insert(3,self.titleFinder)
                         DataCollector.data[index_].insert(4,self.descriptionFinder)
@@ -149,7 +156,8 @@ def DataCollectorFunction(data):
         time.sleep(1)
         item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "detail-header")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
-                           itemUrl = item_url, 
+                           itemUrl = item_url,
+                           categoryFinder = "breadcrumb", 
                            localNameFinder = "municipality-name",
                            titleFinder = "detail-header",
                            descriptionFinder = "gift-comment",
