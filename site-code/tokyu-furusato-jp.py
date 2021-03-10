@@ -41,8 +41,7 @@ class ScraperCategory(WebDriver):
                 self.categoryData = re.sub(r'\([^()]*\)', '', _.find("span").get_text())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 self.link = _.find("input").get("value")
-                ScraperCategory.categoryList.append(["https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D="+category.find("input").get("value"),
-                                                    self.categoryData])
+                ScraperCategory.categoryList.append(["https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D="+self.link,self.categoryData])
             if self.liTag.find_next_sibling():
                 self.liTag = self.liTag.find_next_sibling()
             else:
