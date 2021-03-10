@@ -102,7 +102,9 @@ class DataCollector(WebDriver):
         except:
             raise Exception ("Unable to locate the titleFinder")
         try:
-            self.titleFinder = self.html.find(class_=titleFinder).find("h1").get_text()
+            # self.titleFinder = self.html.find(class_=titleFinder).find("h1").get_text()
+            self.titleFinder = self.html.find(class_=titleFinder).find_all("li")
+            self.titleFinder = self.titleFinder[-1].find("a").get_text()
             self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
         except:
             raise Exception ("Unable to locate the titleFinder")
@@ -159,7 +161,7 @@ def DataCollectorFunction(data):
                            itemUrl = item_url,
                            categoryFinder = "breadcrumb", 
                            localNameFinder = "municipality-name",
-                           titleFinder = "detail-header",
+                           titleFinder = "breadcrumb",
                            descriptionFinder = "gift-comment",
                            priceFinder = "gift-money-contents",
                            capacityFinder = "slider-txt",
@@ -188,7 +190,7 @@ def ItemLinkCollector(data):
                 nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
                 nextButton.click()
                 if nextButton.get_attribute("href") == 'javascript:void(0);':
-                    logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Exiting {category} ")
+                    logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
                     while True:
                         if scrapeURL.isNotActive:
                             scrapeURL.isNotActive = False
@@ -199,7 +201,7 @@ def ItemLinkCollector(data):
                             break
                     break
 
-                logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
+                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
             except NoSuchElementException:
                 while True:
                     if scrapeURL.isNotActive:            
