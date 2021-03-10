@@ -48,7 +48,8 @@ class ScraperCategory(Webdriver):
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category_container = self.html.find_all(class_=self.elementTag)
+        self.category_container = self.html.find(class_="gNavContainer1")
+        self.category_container = self.category_container.find_all(class_=self.elementTag)
         for category in  self.category_container:
             category_ = category.find_all("li")
             if len(category_) > 2 :
