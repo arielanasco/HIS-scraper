@@ -178,10 +178,11 @@ def ItemLinkCollector(data):
         nextButton = html_.find(class_="pager_links")
         nextButton = nextButton.find_all(class_="pager_link")
         url_category_ = LINK+nextButton[-1].find("a").get("href")
-        if url_category != url_category_:
+        if url_category != url_category_ and len(nextButton) > 1 :
             url_category = url_category_
-            logging.info(f"{threading.current_thread().name}) -Active_thread : {int(threading.activeCount())-1} Next_Page of {category}")
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
         else:
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) ")
             while True:
                 if scrapeURL.isNotActive:            
                     scrapeURL.isNotActive = False
@@ -199,8 +200,8 @@ if __name__ == '__main__':
     user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{user_agent}")
     site.categoryParser(html= site.get(LINK).text, elementTag = "gnav_detail_contents")
-    data=site.categoryList
-    # data = [['https://furusato.ana.co.jp/products/list.php?s4=ANA%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%8A%E3%83%AB&sort=number5%2CNumber1%2CScore','ANAオリジナル']]
+    # data=site.categoryList
+    data = [['https://furusato.ana.co.jp/products/list.php?limit=30&s4=%E8%82%89_%E8%B1%9A%E8%82%89_%E4%B8%89%E5%85%83%E8%B1%9A&sort=number5%2CNumber1%2CScore','ANAオリジナル']]
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
     start = time.perf_counter()
