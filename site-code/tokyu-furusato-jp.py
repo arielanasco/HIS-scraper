@@ -38,8 +38,8 @@ class ScraperCategory(WebDriver):
         while True:
             self.subcat = self.liTag.find_all("li")
             for _ in self.subcat:
-                self.categoryData = re.sub(r'\([^(0-9)]*\)', '', _.find("span").get_text())
-                self.categoryData = re.sub(r'\W+', '', self.categoryData)
+                self.categoryData = _.find("span").get_text().split("(")
+                self.categoryData = re.sub(r'\W+', '', self.categoryData[0])
                 self.link = _.find("input").get("value")
                 ScraperCategory.categoryList.append(["https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D="+self.link,self.categoryData])
             if self.liTag.find_next_sibling():
