@@ -49,9 +49,10 @@ class ScraperCategory(Webdriver):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
         self.category_container = self.html.find_all(class_=self.elementTag)
-        for category in  self.category_container:
-            category_ = category.find_all("li")
-            print(category_[0])
+        print(len(self.category_container))
+        # for category in  self.category_container:
+        #     category_ = category.find_all("li")
+        #     print(category_[0])
             # if len(category) > 2 :
             #     ctr = 2
             #     while True:
