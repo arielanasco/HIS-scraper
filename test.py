@@ -2,9 +2,9 @@ import requests
 from bs4 import BeautifulSoup as bs
 
 
-res = requests.get("https://furu-po.com/goods_detail.php?id=421344")
+res = requests.get("https://www.furusato-tax.jp/product/detail/03206/729311")
 html = bs(res.text, 'html.parser')
-img = html.find(class_="item_info_slider").find_all("li")
+img = html.find(class_="basicinfo_slider").find(class_="sld__list").find_all("li")
 print(img)
 # for _ in img:
 #     print(_)
