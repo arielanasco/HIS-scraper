@@ -84,7 +84,6 @@ class DataParserClass(web_driver_1.WebDriver):
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        logging.info(f"{threading.current_thread().name}) - Getting data now...")
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).find("em",{"class":"text_area"}).get_text()
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
@@ -119,7 +118,7 @@ class DataParserClass(web_driver_1.WebDriver):
             raise Exception ("Unable to locate the imageUrlFinder")
         while True:
             if DataParserClass.isNotActive: 
-                DataCollector.isNotActive = False
+                DataParserClass.isNotActive = False
                 for data in DataParserClass.data:
                     if itemUrl in data:
                         index_ = DataParserClass.data.index(data)
