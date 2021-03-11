@@ -45,7 +45,7 @@ class ScraperCategory(Webdriver):
 
 
     def __init__(self):
-        ScraperCategory.totalList -=1
+        ScraperCategory.totalList +=1
         super().__init__()
 
     def categoryParser(self,**kwargs):
