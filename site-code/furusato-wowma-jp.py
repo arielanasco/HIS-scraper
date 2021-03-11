@@ -88,9 +88,15 @@ class DataParserClass(web_driver_1.WebDriver):
 
     isNotActive = True
     data = []
+    totalList = 0
+    totalData = 0
+
+
 
     def __init__(self, url):
         self.url = url
+        type(self).totalList +=1
+        type(self).totalData +=1
         super().__init__()
 
     def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
@@ -158,7 +164,7 @@ class DataParserClass(web_driver_1.WebDriver):
 def DataCollectorFunction(data):
     item_url = data[0]
     scrapeURL = DataParserClass(item_url)
-    logging.info(f"{threading.current_thread().name}) -Fetching({item_url})")
+    logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData - 1 }/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
         time.sleep(1)
         scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
@@ -180,14 +186,14 @@ def ItemLinkCollector(data):
     category=data[1]
     scrapeURL = ListParserClass(url_category)
     scrapeURL.driver.get(scrapeURL.url)
-    logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
+    logging.info(f"{threading.current_thread().name}) -Scraping([{category}]{url_category})")
     while True:
         time.sleep(1)
         itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
         scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
         nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
         if nextButton.get_attribute("href") == 'javascript:void(0);':
-            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({DataParserClass.totalList -1}/{len(ScraperCategory.categoryList)})")
             while True:
                 if DataParserClass.isNotActive:
                     DataParserClass.isNotActive = False
@@ -198,7 +204,7 @@ def ItemLinkCollector(data):
                     break
             break
         else:
-            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({DataParserClass.totalList -1}/{len(ScraperCategory.categoryList)})")
             nextButton.click()
     scrapeURL.driver.quit()
 

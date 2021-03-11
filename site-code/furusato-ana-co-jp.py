@@ -42,7 +42,7 @@ class ScraperCategory(web_driver1.WebDriver):
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 ScraperCategory.categoryList.append([category_[-1].find("a").get("href"),self.categoryData])                
 
-class DataCollector(web_driver1.WebDriver):
+class DataParserClass(web_driver1.WebDriver):
     isNotActive = True
     data = []
     totalData = 0
@@ -121,7 +121,7 @@ class DataCollector(web_driver1.WebDriver):
 
 def DataCollectorFunction(data):
     item_url = data[0]
-    scrapeURL = DataCollector()
+    scrapeURL = DataParserClass()
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataCollector.totalData - 1 }/{len(DataCollector.data)}) -Fetching({item_url})")
     time.sleep(3)
     scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
@@ -139,7 +139,7 @@ def ItemLinkCollector(data):
     element_container = "as-flex_left"
     url_category=data[0]
     category=data[1]
-    scrapeURL = DataCollector()
+    scrapeURL = DataParserClass()
     logging.info(f"{threading.current_thread().name}) -Scraping([{category}]{url_category})")
     while True:
         html =scrapeURL.get(url_category).text
