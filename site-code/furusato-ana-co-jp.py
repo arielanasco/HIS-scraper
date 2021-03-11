@@ -41,7 +41,7 @@ class Webdriver:
 
 class ScraperCategory(Webdriver):
     categoryList = []
-    totalList = len(categoryList)
+    totalList = 0
 
 
     def __init__(self):
@@ -161,7 +161,7 @@ def ItemLinkCollector(data):
     url_category=data[0]
     category=data[1]
     scrapeURL = DataCollector()
-    logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
+    logging.info(f"{threading.current_thread().name}) -Scraping([{category}]{url_category})")
     while True:
         html =scrapeURL.get(url_category).text
         time.sleep(1)
@@ -172,9 +172,9 @@ def ItemLinkCollector(data):
         url_category_ = LINK+nextButton[-1].find("a").get("href")
         if url_category != url_category_ and len(nextButton) > 1 :
             url_category = LINK+url_category_
-            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({DataCollector.data})")
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ScraperCategory.totalList -1 / len(ScraperCategory.categoryList)})")
         else:
-            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({DataCollector.data})")
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({ScraperCategory.totalList -1 / len(ScraperCategory.categoryList)})")
             while True:
                 if scrapeURL.isNotActive:            
                     scrapeURL.isNotActive = False
@@ -192,8 +192,8 @@ if __name__ == '__main__':
     user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{user_agent}")
     site.categoryParser(html= site.get(LINK).text, elementTag = "gnav_detail_contents")
-    # data=site.categoryList
-    data = [['https://furusato.ana.co.jp/products/list.php?limit=30&s4=%E8%82%89_%E8%B1%9A%E8%82%89_%E4%B8%89%E5%85%83%E8%B1%9A&sort=number5%2CNumber1%2CScore','ANAオリジナル']]
+    data=site.categoryList
+    # data = [['https://furusato.ana.co.jp/products/list.php?limit=30&s4=%E8%82%89_%E8%B1%9A%E8%82%89_%E4%B8%89%E5%85%83%E8%B1%9A&sort=number5%2CNumber1%2CScore','ANAオリジナル']]
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
     start = time.perf_counter()
