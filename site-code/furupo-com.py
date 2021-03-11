@@ -108,7 +108,9 @@ class DataParserClass(web_driver_1.WebDriver):
         except:
             raise Exception ("Unable to locate the capacityFinder")
         try:
-            self.imageUrlFinder = self.html.find(id=imageUrlFinder).find(class_="slick-track").find_all("li")
+            self.imageUrlFinder = self.html.find(id=imageUrlFinder)
+            self.imageUrlFinder = self.imageUrlFinder.find(class_="slick-track")
+            self.imageUrlFinder = self.imageUrlFinder.find_all("li")
             self.imageList = []
             for _ in self.imageUrlFinder:
                 self.imageList.append(_.find("img").get("src")) 
