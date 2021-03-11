@@ -69,11 +69,11 @@ class ScraperCategory(Webdriver):
 class DataCollector(Webdriver):
     isNotActive = True
     data = []
-    totalData = len(data)
+    totalData = 0
 
     def __init__(self):
         self.itemList = []
-        DataCollector.totalData -=1
+        type(self).totalData +=1
         super().__init__()
 
     def listParser(self,html,elementContainer):
@@ -91,7 +91,7 @@ class DataCollector(Webdriver):
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        logging.info(f"{threading.current_thread().name}) -Scraping({DataCollector.totalData})")
+        logging.info(f"{threading.current_thread().name}) -Scraped_items({DataCollector.totalData}/{len(DataCollector.data)})")
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder = re.sub(r'\s+', '', self.localNameFinder)
