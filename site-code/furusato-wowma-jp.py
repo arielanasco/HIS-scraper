@@ -140,7 +140,7 @@ class DataParserClass(web_driver_1.WebDriver):
             raise Exception ("Unable to locate the imageUrlFinder")
         while True:
             if DataParserClass.isNotActive: 
-                DataparserClass.isNotActive = False
+                DataParserClass.isNotActive = False
                 for data in DataParserClass.data:
                     if itemUrl in data:
                         index_ = DataParserClass.data.index(data)
