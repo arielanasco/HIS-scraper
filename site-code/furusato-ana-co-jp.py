@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 
-class ScraperCategory(web_driver1.WebDriver):
+class ScraperCategory(web_driver_1.WebDriver):
     categoryList = []
 
     def __init__(self):
