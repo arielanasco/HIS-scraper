@@ -170,8 +170,8 @@ def ItemLinkCollector(data):
         nextButton = html_.find(class_="pager_links")
         nextButton = nextButton.find_all(class_="pager_link")
         url_category_ = LINK+nextButton[-1].find("a").get("href")
-        if url_category != LINK+url_category_ and len(nextButton) > 1 :
-            url_category = LINK+url_category_
+        if url_category != url_category_ and len(nextButton) > 1 :
+            url_category = url_category_
             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({DataCollector.totalList -1}/{len(ScraperCategory.categoryList)})")
         else:
             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({DataCollector.totalList -1}/{len(ScraperCategory.categoryList)})")
