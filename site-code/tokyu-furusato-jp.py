@@ -163,7 +163,7 @@ def ItemLinkCollector(data):
     category=data[1]
     scrapeURL = ListParserClass(url_category)
     scrapeURL.driver.get(scrapeURL.url)
-    logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
+    logging.info(f"{threading.current_thread().name}) -Scraping([{category}]{url_category})")
     while True:
         time.sleep(1)
         itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
@@ -175,15 +175,14 @@ def ItemLinkCollector(data):
             if nxtbtn[-1] == "#":
                 logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
                 while True:
-                    if scrapeURL.isNotActive:            
-                        scrapeURL.isNotActive = False
+                    if DataParserClass.isNotActive:            
+                        DataParserClass.isNotActive = False
                         for _ in scrapeURL.itemList:
-                            scrapeURL.data.append([_,category])
-                        scrapeURL.isNotActive = True
+                            DataParserClass.data.append([_,category])
+                        DataParserClass.isNotActive = True
                         logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items | Total item {len(DataParserClass.data)}")
                         break
                 break
-
             else:
                 logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
                 lenPagination[-1].find_element_by_tag_name("a").send_keys(Keys.ENTER)
