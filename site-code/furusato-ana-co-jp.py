@@ -41,8 +41,11 @@ class Webdriver:
 
 class ScraperCategory(Webdriver):
     categoryList = []
+    totalList = len(ScraperCategory.categoryList)
+
 
     def __init__(self):
+        ScraperCategory.totalList -=1
         super().__init__()
 
     def categoryParser(self,**kwargs):
@@ -64,14 +67,13 @@ class ScraperCategory(Webdriver):
 
 
 class DataCollector(Webdriver):
-
     isNotActive = True
-    totalList = len(ScraperCategory.categoryList)
     data = []
+    totalData = len(DataCollector.data)
 
     def __init__(self):
         self.itemList = []
-        DataCollector.totalList -=1
+        DataCollector.totalData -=1
         super().__init__()
 
     def listParser(self,html,elementContainer):
@@ -89,7 +91,7 @@ class DataCollector(Webdriver):
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        logging.info(f"{threading.current_thread().name}) -Scraped{DataCollector.totalList} out of {len(ScraperCategory.categoryList)}")
+        logging.info(f"{threading.current_thread().name}) -Scraped{int(len(ScraperCategory.categoryList)) - int(DataCollector.totalData)} out of {len(ScraperCategory.categoryList)}")
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder = re.sub(r'\s+', '', self.localNameFinder)
@@ -172,9 +174,9 @@ def ItemLinkCollector(data):
         url_category_ = LINK+nextButton[-1].find("a").get("href")
         if url_category != url_category_ and len(nextButton) > 1 :
             url_category = LINK+url_category_
-            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({DataCollector.totalList})")
         else:
-            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) ")
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({DataCollector.totalList})")
             while True:
                 if scrapeURL.isNotActive:            
                     scrapeURL.isNotActive = False
