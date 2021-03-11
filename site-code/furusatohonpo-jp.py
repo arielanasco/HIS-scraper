@@ -155,7 +155,9 @@ def DataCollectorFunction(data):
                            capacityFinder = "p-detailAddCart__info",
                            imageUrlFinder = "slick-track" )
     except:
+        scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
+    scrapeURL.driver.quit()
 
 def ItemLinkCollector(data):
     nxt_btn ="c-pagination__next"
