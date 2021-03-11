@@ -196,10 +196,6 @@ def ItemLinkCollector(data):
                     logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items | Total item {len(DataParserClass.data)}")
                     break
             break
-        # except:
-        #     scrapeURL.driver.quit()
-        #     raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
-        #     break
     scrapeURL.driver.quit()
 
 
@@ -211,8 +207,8 @@ if __name__ == '__main__':
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="dropdownlist")
-    data=site.categoryList
-    # data=[['https://tokyu-furusato.jp/goods/result?chk_ctg[1]=15', 'Testing']]
+    # data=site.categoryList
+    data=[['https://tokyu-furusato.jp/goods/result?chk_ctg[1]=15', 'Testing']]
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(data)} categories")
