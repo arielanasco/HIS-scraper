@@ -4,7 +4,7 @@ Site : ANA's hometown tax payment
 Link : https://furusato.ana.co.jp/	
 
 """
-from web_driver_1 import Webdriver as web_driver1
+import web_driver_1
 import time
 import threading 
 import logging
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 
-class ScraperCategory(web_driver1):
+class ScraperCategory(web_driver1.WebDriver):
     categoryList = []
 
     def __init__(self):
@@ -42,7 +42,7 @@ class ScraperCategory(web_driver1):
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 ScraperCategory.categoryList.append([category_[-1].find("a").get("href"),self.categoryData])                
 
-class DataCollector(web_driver1):
+class DataCollector(web_driver1.WebDriver):
     isNotActive = True
     data = []
     totalData = 0

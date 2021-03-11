@@ -5,7 +5,7 @@ Link : https://furusato.wowma.jp/
 
 """
 from web_driver import WebDriver
-from web_driver_1 import WebDriver as web_driver1
+import  web_driver_1
 import time
 import threading
 from selenium.webdriver.common.by import By
@@ -84,7 +84,7 @@ class ListParserClass(WebDriver):
         for _ in self.ChildElement:
             self.itemList.append(_.find(class_="item-list").get("href"))
 
-class DataParserClass(web_driver1):
+class DataParserClass(web_driver1.WebDriver):
 
     isNotActive = True
     data = []
