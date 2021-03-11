@@ -5,7 +5,6 @@ Link : https://furu-po.com/
 
 """
 from web_driver import WebDriver
-import  web_driver_1
 import time
 import threading
 from selenium.webdriver.common.by import By
@@ -68,7 +67,7 @@ class ListParserClass(WebDriver):
             else:
                 break
 
-class DataParserClass(web_driver_1.WebDriver):
+class DataParserClass(WebDriver):
 
     isNotActive = True
     data = []
@@ -77,7 +76,7 @@ class DataParserClass(web_driver_1.WebDriver):
     def __init__(self, url):
         self.url = url
         type(self).totalData +=1
-        super().__init__()
+        super().__init__(url)
 
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
@@ -108,7 +107,7 @@ class DataParserClass(web_driver_1.WebDriver):
         except:
             raise Exception ("Unable to locate the capacityFinder")
         try:
-            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all(class_="slide-item")
+            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("li")
             self.imageList = []
             for _ in self.imageUrlFinder:
                 if _.find("img").get("data-lazy"):
@@ -136,23 +135,23 @@ class DataParserClass(web_driver_1.WebDriver):
 def DataCollectorFunction(data):
     item_url = data[0]
     scrapeURL = DataParserClass(item_url)
-    # scrapeURL.driver.get(scrapeURL.url)
+    scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
-        time.sleep(5)
-        # item_info = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
-        scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
+        time.sleep(1)
+        item_info = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
+        scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url, 
                            localNameFinder = "lg-info",
                            titleFinder = "item_detail",
                            descriptionFinder = "item-description",
                            priceFinder = "price",
                            capacityFinder = "info",
-                           imageUrlFinder = "item_info_slider" )
+                           imageUrlFinder = "slick-track" )
     except:
-        # scrapeURL.driver.quit()
+        scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
-    # scrapeURL.driver.quit()
+    scrapeURL.driver.quit()
 
 def ItemLinkCollector(data):
     nxt_btn ="//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a"
