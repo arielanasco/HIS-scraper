@@ -132,7 +132,6 @@ class DataParserClass(web_driver_1.WebDriver):
 def DataCollectorFunction(data):
     item_url = data[0]
     scrapeURL = DataParserClass(item_url)
-    scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
         time.sleep(1)
