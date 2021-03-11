@@ -108,7 +108,7 @@ class DataParserClass(web_driver_1.WebDriver):
         except:
             raise Exception ("Unable to locate the capacityFinder")
         try:
-            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("li")
+            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all(class_="slide-item")
             self.imageList = []
             for _ in self.imageUrlFinder:
                 if _.find("img").get("data-lazy"):
