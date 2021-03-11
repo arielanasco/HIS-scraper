@@ -5,7 +5,6 @@ Link : https://furu-po.com/
 
 """
 from web_driver import WebDriver
-import  web_driver_1
 import time
 import threading
 from selenium.webdriver.common.by import By
@@ -108,9 +107,7 @@ class DataParserClass(WebDriver):
         except:
             raise Exception ("Unable to locate the capacityFinder")
         try:
-            self.imageUrlFinder = self.html.find(id=imageUrlFinder)
-            self.imageUrlFinder = self.imageUrlFinder.find(class_="slick-track")
-            self.imageUrlFinder = self.imageUrlFinder.find_all("li")
+            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("li")
             self.imageList = []
             for _ in self.imageUrlFinder:
                 self.imageList.append(_.find("img").get("src")) 
@@ -147,7 +144,7 @@ def DataCollectorFunction(data):
                            descriptionFinder = "item-description",
                            priceFinder = "price",
                            capacityFinder = "info",
-                           imageUrlFinder = "slider" )
+                           imageUrlFinder = "slick-track" )
     except:
         scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
@@ -164,7 +161,7 @@ def ItemLinkCollector(data):
     while True:
         try:
             time.sleep(1)
-            itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+            itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
                 nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn)
