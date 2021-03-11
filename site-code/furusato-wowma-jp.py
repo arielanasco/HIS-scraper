@@ -156,7 +156,7 @@ def DataCollectorFunction(data):
     logging.info(f"{threading.current_thread().name}) -Fetching({item_url})")
     try:
         time.sleep(1)
-        item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "breadcrumb")))
+        item_info = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, "breadcrumb")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url,
                            categoryFinder = "breadcrumb", 
@@ -181,7 +181,7 @@ def ItemLinkCollector(data):
     logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
     while True:
         time.sleep(1)
-        itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+        itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
         scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
         nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
         if nextButton.get_attribute("href") == 'javascript:void(0);':

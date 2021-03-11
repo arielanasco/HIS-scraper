@@ -66,10 +66,12 @@ class ScraperCategory(Webdriver):
 class DataCollector(Webdriver):
 
     isNotActive = True
+    totalList = len(ScraperCategory.categoryList)
     data = []
 
     def __init__(self):
         self.itemList = []
+        DataCollector.totalList -=1
         super().__init__()
 
     def listParser(self,html,elementContainer):
@@ -87,7 +89,7 @@ class DataCollector(Webdriver):
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        logging.info(f"{threading.current_thread().name}) -Getting data now...")
+        logging.info(f"{threading.current_thread().name}) -Scraped{DataCollector.totalList} out of {len(ScraperCategory.categoryList)}")
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder = re.sub(r'\s+', '', self.localNameFinder)
@@ -150,6 +152,7 @@ def DataCollectorFunction(data):
                            priceFinder = "as-pl_m",
                            capacityFinder = "table01",
                            imageUrlFinder = "as-main" )
+    scrapeURL.driver.quit()
 
 
 
@@ -161,14 +164,14 @@ def ItemLinkCollector(data):
     logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
     while True:
         html =scrapeURL.get(url_category).text
-        time.sleep(3)
+        time.sleep(1)
         scrapeURL.listParser(html =html, elementContainer = element_container)
         html_ = bs(html, 'html.parser')
         nextButton = html_.find(class_="pager_links")
         nextButton = nextButton.find_all(class_="pager_link")
         url_category_ = LINK+nextButton[-1].find("a").get("href")
         if url_category != url_category_ and len(nextButton) > 1 :
-            url_category = url_category_
+            url_category = LINK+url_category_
             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
         else:
             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) ")
@@ -181,6 +184,7 @@ def ItemLinkCollector(data):
                     logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
                     break
             break
+    scrapeURL.driver.quit()
 
 if __name__ == '__main__':
     start = time.perf_counter()
