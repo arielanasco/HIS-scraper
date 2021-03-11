@@ -174,13 +174,14 @@ def ItemLinkCollector(data):
     while True:
         try:
             time.sleep(3)
-            itemlist = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+            itemlist = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
-                try:
-                    nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn)
-                except:    
-                    nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn1)
+                # try:
+                #     nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn)
+                # except:    
+                #     nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn1)
+                nextButton = scrapeURL.driver.find_element_by_class_name("nv-pager__next").find_element_by_tag_name("a")
                 nextButton.send_keys(Keys.ENTER)
                 logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
             except NoSuchElementException:
