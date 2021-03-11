@@ -93,7 +93,7 @@ class DataParserClass(web_driver_1.WebDriver):
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         try:
-            self.localNameFinder = self.html.find(class_="inner").find(class_=localNameFinder).get_text()
+            self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
         except:
             raise Exception ("Unable to locate the localNameFinder")
@@ -146,7 +146,7 @@ def DataCollectorFunction(data):
     # scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
-        time.sleep(2)
+        time.sleep(3)
         # item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "city-title")))
         scrapeURL.dataParser(html =  scrapeURL.get(item_url).text,
                            itemUrl = item_url, 
