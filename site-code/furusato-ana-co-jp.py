@@ -41,7 +41,7 @@ class Webdriver:
 
 class ScraperCategory(Webdriver):
     categoryList = []
-    totalList = len(ScraperCategory.categoryList)
+    totalList = len(categoryList)
 
 
     def __init__(self):
@@ -69,7 +69,7 @@ class ScraperCategory(Webdriver):
 class DataCollector(Webdriver):
     isNotActive = True
     data = []
-    totalData = len(DataCollector.data)
+    totalData = len(data)
 
     def __init__(self):
         self.itemList = []
