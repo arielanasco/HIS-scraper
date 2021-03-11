@@ -84,7 +84,7 @@ class ListParserClass(WebDriver):
         for _ in self.ChildElement:
             self.itemList.append(_.find(class_="item-list").get("href"))
 
-class DataParserClass(web_driver1.WebDriver):
+class DataParserClass(web_driver_1.WebDriver):
 
     isNotActive = True
     data = []
