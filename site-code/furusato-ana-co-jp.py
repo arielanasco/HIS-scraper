@@ -91,7 +91,6 @@ class DataCollector(Webdriver):
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        logging.info(f"{threading.current_thread().name}) -Scraped_items({DataCollector.totalData - 1 }/{len(DataCollector.data)})")
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder = re.sub(r'\s+', '', self.localNameFinder)
@@ -144,7 +143,7 @@ class DataCollector(Webdriver):
 def DataCollectorFunction(data):
     item_url = data[0]
     scrapeURL = DataCollector()
-    logging.info(f"{threading.current_thread().name}) -Fetching({item_url})")
+    logging.info(f"{threading.current_thread().name}) -Scraped_items({DataCollector.totalData - 1 }/{len(DataCollector.data)}) -Fetching({item_url})")
     time.sleep(3)
     scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
                            itemUrl = item_url, 
