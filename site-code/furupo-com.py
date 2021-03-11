@@ -52,6 +52,7 @@ class ListParserClass(WebDriver):
 
     def __init__(self, url):
         self.url = url
+        type(self).totalList +=1
         self.itemList = []
         super().__init__(url)
 
