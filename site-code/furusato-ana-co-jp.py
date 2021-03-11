@@ -91,7 +91,7 @@ class DataCollector(Webdriver):
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        logging.info(f"{threading.current_thread().name}) -Scraping({int(DataCollector.totalData))")
+        logging.info(f"{threading.current_thread().name}) -Scraping({DataCollector.totalData})")
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder = re.sub(r'\s+', '', self.localNameFinder)
