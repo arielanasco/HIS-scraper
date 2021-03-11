@@ -101,7 +101,6 @@ class DataParserClass(web_driver_1.WebDriver):
 
     def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        logging.info(f"{threading.current_thread().name}) -Getting data now...")
         try:
             self.categoryFinder = self.html.find(class_=categoryFinder).find_all("li")
             self.categoryFinder = self.categoryFinder[-2].find("a").get_text()
@@ -164,7 +163,7 @@ class DataParserClass(web_driver_1.WebDriver):
 def DataCollectorFunction(data):
     item_url = data[0]
     scrapeURL = DataParserClass(item_url)
-    logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData - 1 }/{len(DataParserClass.data)}) -Fetching({item_url})")
+    logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
         time.sleep(1)
         scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
