@@ -110,7 +110,10 @@ class DataParserClass(WebDriver):
             self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("li")
             self.imageList = []
             for _ in self.imageUrlFinder:
-                self.imageList.append(_.find("img").get("src")) 
+                if _.find("img").get("data-lazy"):
+                    self.imageList.append(_.find("img").get("data-lazy"))
+                else:
+                    self.imageList.append(_.find("img").get("src")) 
         except:
             raise Exception ("Unable to locate the imageUrlFinder")
         while True:
