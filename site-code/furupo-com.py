@@ -67,7 +67,7 @@ class ListParserClass(WebDriver):
             else:
                 break
 
-class DataParserClass(WebDriver):
+class DataParserClass(web_driver_1.WebDriver):
 
     isNotActive = True
     data = []
@@ -135,12 +135,12 @@ class DataParserClass(WebDriver):
 def DataCollectorFunction(data):
     item_url = data[0]
     scrapeURL = DataParserClass(item_url)
-    scrapeURL.driver.get(scrapeURL.url)
+    # scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
-        time.sleep(1)
+        time.sleep(3)
         item_info = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
-        scrapeURL.dataParser(html = scrapeURL.driver.page_source,
+        scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
                            itemUrl = item_url, 
                            localNameFinder = "lg-info",
                            titleFinder = "item_detail",
@@ -149,9 +149,9 @@ def DataCollectorFunction(data):
                            capacityFinder = "info",
                            imageUrlFinder = "slick-track" )
     except:
-        scrapeURL.driver.quit()
+        # scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
-    scrapeURL.driver.quit()
+    # scrapeURL.driver.quit()
 
 def ItemLinkCollector(data):
     nxt_btn ="//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a"
