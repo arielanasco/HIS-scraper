@@ -144,7 +144,7 @@ def DataCollectorFunction(data):
                            descriptionFinder = "item-description",
                            priceFinder = "price",
                            capacityFinder = "info",
-                           imageUrlFinder = "slider" )
+                           imageUrlFinder = "item_info_slider" )
     except:
         # scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
