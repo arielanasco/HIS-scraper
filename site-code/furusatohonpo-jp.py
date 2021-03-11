@@ -113,7 +113,7 @@ class DataParserClass(WebDriver):
         except:
             raise Exception ("Unable to locate the capacityFinder")
         try:
-            self.imageUrlFinder = imageUrlFinder.find_all("div", {"class":"p-detailMv__mainItem"})
+            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("div", {"class":"p-detailMv__mainItem"})
             self.imageList = []
             for _ in self.imageUrlFinder:
                 self.holder = _.find("div").get("style")
