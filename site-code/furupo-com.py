@@ -136,7 +136,7 @@ def DataCollectorFunction(data):
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
         time.sleep(1)
-        item_info = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
+        item_info = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url, 
                            localNameFinder = "lg-info",
@@ -161,7 +161,7 @@ def ItemLinkCollector(data):
     while True:
         try:
             time.sleep(1)
-            itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+            itemlist = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
                 nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn)
