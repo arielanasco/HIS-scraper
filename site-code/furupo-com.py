@@ -127,7 +127,7 @@ def DataCollectorFunction(data):
     logging.info(f"{threading.current_thread().name}) -Fetching...{item_url}")
     try:
         time.sleep(1)
-        item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
+        item_info = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url, 
                            localNameFinder = "lg-info",
@@ -137,10 +137,8 @@ def DataCollectorFunction(data):
                            capacityFinder = "info",
                            imageUrlFinder = "slick-track" )
     except:
-        scrapeURL.driver.close()
         scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
-    scrapeURL.driver.close()
     scrapeURL.driver.quit()
 
 def ItemLinkCollector(data):
@@ -172,10 +170,10 @@ def ItemLinkCollector(data):
                         break
                 break
         except:
-            scrapeURL.driver.close()
+            scrapeURL.driver.quit()
             raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
             break
-    scrapeURL.driver.close()
+    scrapeURL.driver.quit()
 
 if __name__ == '__main__':
     start = time.perf_counter()
