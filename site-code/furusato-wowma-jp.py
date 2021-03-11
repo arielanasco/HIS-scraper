@@ -91,7 +91,7 @@ class DataParserClass(web_driver_1.WebDriver):
 
     def __init__(self, url):
         self.url = url
-        super().__init__(url)
+        super().__init__()
 
     def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
