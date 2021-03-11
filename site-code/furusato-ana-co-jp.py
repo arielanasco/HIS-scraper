@@ -4,11 +4,9 @@ Site : ANA's hometown tax payment
 Link : https://furusato.ana.co.jp/	
 
 """
-
+from web_driver_1 import Webdriver as web_driver1
 import time
-import threading
-import requests
-from random import sample 
+import threading 
 import logging
 import  concurrent.futures
 from bs4 import BeautifulSoup as bs
@@ -19,27 +17,9 @@ LINK = "https://furusato.ana.co.jp/products/list.php"
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 
-class Webdriver:
-    def __init__(self):
-        self.userAgentList = [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393",
-        "Mozilla/5.0 CK={} (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko",
-        "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:24.0) Gecko/20100101 Firefox/24.0"
-        ]
-        self.requests = requests
-        self.headers = {"User-Agent": f"{sample(self.userAgentList,1)[0]}"}
-    
-    def get(self,url):
-        with requests.session() as s:
-            self.html = s.get(url, headers = self.headers)
-        return self.html             
 
-    def displaySiteInfo(self):
-        return f"User-Agent: {self.headers}"
 
-class ScraperCategory(Webdriver):
+class ScraperCategory(web_driver1):
     categoryList = []
 
     def __init__(self):
@@ -62,8 +42,7 @@ class ScraperCategory(Webdriver):
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 ScraperCategory.categoryList.append([category_[-1].find("a").get("href"),self.categoryData])                
 
-
-class DataCollector(Webdriver):
+class DataCollector(web_driver1):
     isNotActive = True
     data = []
     totalData = 0

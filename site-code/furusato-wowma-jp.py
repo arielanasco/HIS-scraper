@@ -5,6 +5,7 @@ Link : https://furusato.wowma.jp/
 
 """
 from web_driver import WebDriver
+from web_driver1 import WebDriver as web_driver1
 import time
 import threading
 from selenium.webdriver.common.by import By
@@ -45,32 +46,29 @@ class ScraperCategory(WebDriver):
             else:
                 break
 
-class ScraperList(WebDriver):
+# class ScraperList(WebDriver):
 
-    isNotActive = True
-    data = []
+#     isNotActive = True
+#     data = []
 
-    def __init__(self, url):
-        self.url = url
-        self.itemList = []
-        super().__init__()
+#     def __init__(self, url):
+#         self.url = url
+#         self.itemList = []
+#         super().__init__()
 
-    def listParser(self,html,elementContainer):
-        self.elementContainer = elementContainer
-        self.html = bs(html, 'html.parser')
-        self.container = self.html.find(class_=self.elementContainer)
-        self.ChildElement = self.container.find_next()
-        while True:
-            self.itemList.append(self.ChildElement.find("a").get("href"))
-            if self.ChildElement.find_next_sibling():
-                self.ChildElement = self.ChildElement.find_next_sibling()
-            else:
+#     def listParser(self,html,elementContainer):
+#         self.elementContainer = elementContainer
+#         self.html = bs(html, 'html.parser')
+#         self.container = self.html.find(class_=self.elementContainer)
+#         self.ChildElement = self.container.find_next()
+#         while True:
+#             self.itemList.append(self.ChildElement.find("a").get("href"))
+#             if self.ChildElement.find_next_sibling():
+#                 self.ChildElement = self.ChildElement.find_next_sibling()
+#             else:
                 break
 
-class DataCollector(WebDriver):
-
-    isNotActive = True
-    data = []
+class ListParserClass(WebDriver):
 
     def __init__(self, url):
         self.url = url
@@ -86,6 +84,14 @@ class DataCollector(WebDriver):
         for _ in self.ChildElement:
             self.itemList.append(_.find(class_="item-list").get("href"))
 
+class DataParserClass(web_driver1):
+
+    isNotActive = True
+    data = []
+
+    def __init__(self, url):
+        self.url = url
+        super().__init__(url)
 
     def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
@@ -133,31 +139,29 @@ class DataCollector(WebDriver):
         except:
             raise Exception ("Unable to locate the imageUrlFinder")
         while True:
-            if DataCollector.isNotActive: 
-                DataCollector.isNotActive = False
-                for data in DataCollector.data:
+            if DataparserClass.isNotActive: 
+                DataparserClass.isNotActive = False
+                for data in DataparserClass.data:
                     if itemUrl in data:
-                        index_ = DataCollector.data.index(data)
-                        DataCollector.data[index_].insert(1,self.categoryFinder)
-                        DataCollector.data[index_].insert(2,self.localNameFinder)
-                        DataCollector.data[index_].insert(3,self.titleFinder)
-                        DataCollector.data[index_].insert(4,self.descriptionFinder)
-                        DataCollector.data[index_].insert(5,self.priceFinder)
-                        DataCollector.data[index_].insert(6,self.capacityFinder)
-                        DataCollector.data[index_].insert(7,self.imageList)
-                        DataCollector.isNotActive = True
+                        index_ = DataparserClass.data.index(data)
+                        DataparserClass.data[index_].insert(1,self.categoryFinder)
+                        DataparserClass.data[index_].insert(2,self.localNameFinder)
+                        DataparserClass.data[index_].insert(3,self.titleFinder)
+                        DataparserClass.data[index_].insert(4,self.descriptionFinder)
+                        DataparserClass.data[index_].insert(5,self.priceFinder)
+                        DataparserClass.data[index_].insert(6,self.capacityFinder)
+                        DataparserClass.data[index_].insert(7,self.imageList)
+                        DataparserClass.isNotActive = True
                         break
             break
 
 def DataCollectorFunction(data):
     item_url = data[0]
-    scrapeURL = DataCollector(item_url)
-    scrapeURL.driver.get(scrapeURL.url)
+    scrapeURL = DataParserClass(item_url)
     logging.info(f"{threading.current_thread().name}) -Fetching({item_url})")
     try:
         time.sleep(1)
-        item_info = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, "breadcrumb")))
-        scrapeURL.dataParser(html = scrapeURL.driver.page_source,
+        scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
                            itemUrl = item_url,
                            categoryFinder = "breadcrumb", 
                            localNameFinder = "municipality-name",
@@ -167,16 +171,14 @@ def DataCollectorFunction(data):
                            capacityFinder = "slider-txt",
                            imageUrlFinder = "thumbnail-photo" )
     except:
-        scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
-    scrapeURL.driver.quit()
 
 def ItemLinkCollector(data):
     nxt_btn ="next"
     element_container = "list-column2"
     url_category=data[0]
     category=data[1]
-    scrapeURL = DataCollector(url_category)
+    scrapeURL = ListParserClass(url_category)
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
     while True:
