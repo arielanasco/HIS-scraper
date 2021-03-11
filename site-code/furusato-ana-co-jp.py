@@ -33,7 +33,7 @@ class Webdriver:
     
     def get(self,url):
         self.html = self.requests.get(url, headers = self.headers)
-        self.html.close()
+        self.html.session().close()
         return self.html             
 
     def displaySiteInfo(self):
