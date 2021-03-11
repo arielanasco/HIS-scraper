@@ -181,7 +181,7 @@ def ItemLinkCollector(data):
                     for _ in scrapeURL.itemList:
                         scrapeURL.data.append(["https://furusato.ana.co.jp"+_,category])
                     scrapeURL.isNotActive = True
-                    logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
+                    logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items | Total item {len(scrapeURL.data)}")
                     break
             break
 
