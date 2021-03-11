@@ -5,7 +5,7 @@ Link : https://furusato.wowma.jp/
 
 """
 from web_driver import WebDriver
-from web_driver1 import WebDriver as web_driver1
+from web_driver_1 import WebDriver as web_driver1
 import time
 import threading
 from selenium.webdriver.common.by import By
