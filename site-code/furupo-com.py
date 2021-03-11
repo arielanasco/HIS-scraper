@@ -68,7 +68,7 @@ class ListParserClass(WebDriver):
             else:
                 break
 
-class DataParserClass(web_driver_1.WebDriver):
+class DataParserClass(WebDriver):
 
     isNotActive = True
     data = []
@@ -77,7 +77,7 @@ class DataParserClass(web_driver_1.WebDriver):
     def __init__(self, url):
         self.url = url
         type(self).totalData +=1
-        super().__init__()
+        super().__init__(url)
 
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
@@ -135,11 +135,12 @@ class DataParserClass(web_driver_1.WebDriver):
 def DataCollectorFunction(data):
     item_url = data[0]
     scrapeURL = DataParserClass(item_url)
+    scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
         time.sleep(1)
-        # item_info = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
-        scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
+        item_info = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
+        scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url, 
                            localNameFinder = "lg-info",
                            titleFinder = "item_detail",
@@ -148,9 +149,9 @@ def DataCollectorFunction(data):
                            capacityFinder = "info",
                            imageUrlFinder = "slider" )
     except:
-        # scrapeURL.driver.quit()
+        scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
-    # scrapeURL.driver.quit()
+    scrapeURL.driver.quit()
 
 def ItemLinkCollector(data):
     nxt_btn ="//*[@id='form_events']/section/div[2]/div[1]/div/div[2]/div[3]/ul/li[3]/a"
