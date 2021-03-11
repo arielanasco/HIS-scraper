@@ -5,6 +5,7 @@ Link : https://tokyu-furusato.jp/
 
 """
 from web_driver import WebDriver
+import  web_driver_1
 import time
 import threading
 from selenium.webdriver.common.by import By
@@ -47,26 +48,12 @@ class ScraperCategory(WebDriver):
             else:
                 break
 
-        # self.liTag = self.category.li
-        # while True:
-        #     self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
-        #     self.categoryData = re.sub(r'\W+', '', self.categoryData)
-        #     self.link = self.liTag.find("a").get("href")
-        #     self.index =  self.link.find("]=")
-        #     self.link = self.link[:self.index] + "1" +self.link[self.index:]
-        #     ScraperCategory.categoryList.append([self.link,self.categoryData])
-        #     if self.liTag.find_next_sibling():
-        #         self.liTag = self.liTag.find_next_sibling()
-        #     else:
-        #         break
-
-class DataCollector(WebDriver):
-
-    isNotActive = True
-    data = []
+class ListParserClass(WebDriver):
+    totalList = 0
 
     def __init__(self, url):
         self.url = url
+        type(self).totalList +=1
         self.itemList = []
         super().__init__(url)
 
@@ -82,6 +69,18 @@ class DataCollector(WebDriver):
                 self.ChildElement = self.ChildElement.find_next_sibling()
             else:
                 break
+
+class DataParserClass(web_driver_1.WebDriver):
+
+    isNotActive = True
+    data = []
+    totalData = 0
+
+    def __init__(self, url):
+        self.url = url
+        type(self).totalData +=1
+        self.itemList = []
+        super().__init__(url)
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
@@ -119,30 +118,29 @@ class DataCollector(WebDriver):
         except:
             raise Exception ("Unable to locate the imageUrlFinder")
         while True:
-            if DataCollector.isNotActive: 
+            if DataParserClass.isNotActive: 
                 DataCollector.isNotActive = False
-                for data in DataCollector.data:
+                for data in DataParserClass.data:
                     if itemUrl in data:
-                        index_ = DataCollector.data.index(data)
-                        DataCollector.data[index_].insert(2,self.localNameFinder)
-                        DataCollector.data[index_].insert(3,self.titleFinder)
-                        DataCollector.data[index_].insert(4,self.descriptionFinder)
-                        DataCollector.data[index_].insert(5,self.priceFinder)
-                        DataCollector.data[index_].insert(6,self.capacityFinder)
-                        DataCollector.data[index_].insert(7,self.imageList)
-                        DataCollector.isNotActive = True
+                        index_ = DataParserClass.data.index(data)
+                        DataParserClass.data[index_].insert(2,self.localNameFinder)
+                        DataParserClass.data[index_].insert(3,self.titleFinder)
+                        DataParserClass.data[index_].insert(4,self.descriptionFinder)
+                        DataParserClass.data[index_].insert(5,self.priceFinder)
+                        DataParserClass.data[index_].insert(6,self.capacityFinder)
+                        DataParserClass.data[index_].insert(7,self.imageList)
+                        DataParserClass.isNotActive = True
                         break
             break
 
 def DataCollectorFunction(data):
     item_url = data[0]
-    scrapeURL = DataCollector(item_url)
-    scrapeURL.driver.get(scrapeURL.url)
-    logging.info(f"{threading.current_thread().name}) - Fetching...{item_url}")
+    scrapeURL = DataParserClass(item_url)
+    logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
         time.sleep(1)
-        item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "heading_page")))
-        scrapeURL.dataParser(html = scrapeURL.driver.page_source,
+        # item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "heading_page")))
+        scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
                            itemUrl = item_url,
                            localNameFinder = "heading_page",
                            titleFinder = "topicpath",
@@ -151,9 +149,9 @@ def DataCollectorFunction(data):
                            capacityFinder = "itembox-data",
                            imageUrlFinder = "itembox-mainimage" )
     except:
-        scrapeURL.driver.quit()
+        # scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
-    scrapeURL.driver.quit()
+    # scrapeURL.driver.quit()
 
 
 
@@ -163,7 +161,7 @@ def ItemLinkCollector(data):
     element_container = "cards"
     url_category=data[0]
     category=data[1]
-    scrapeURL = DataCollector(url_category)
+    scrapeURL = ListParserClass(url_category)
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraping...{category}:{url_category}")
     while True:
@@ -175,19 +173,19 @@ def ItemLinkCollector(data):
             lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
             nxtbtn = lenPagination[-1].find_element_by_class_name("pagination-link").get_attribute("href")
             if nxtbtn[-1] == "#":
-                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
+                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
                 while True:
                     if scrapeURL.isNotActive:            
                         scrapeURL.isNotActive = False
                         for _ in scrapeURL.itemList:
                             scrapeURL.data.append([_,category])
                         scrapeURL.isNotActive = True
-                        logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
+                        logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items | Total item {len(DataParserClass.data)}")
                         break
                 break
 
             else:
-                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
+                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
                 lenPagination[-1].find_element_by_tag_name("a").send_keys(Keys.ENTER)
         except NoSuchElementException:
             while True:
@@ -196,60 +194,13 @@ def ItemLinkCollector(data):
                     for _ in scrapeURL.itemList:
                         scrapeURL.data.append([_,category])
                     scrapeURL.isNotActive = True
-                    logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
+                    logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items | Total item {len(DataParserClass.data)}")
                     break
             break
-
-
-
-
-        # try:
-
-        #     time.sleep(1)
-        #     itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
-        #     scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
-        #     lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]/ul")
-        #     lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
-        #     nxtbtn = lenPagination[-1].find_element_by_tag_name("a").get_attribute("href")
-        #     if nxtbtn != "#":
-        #         logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
-        #         lenPagination[-1].find_element_by_tag_name("a").send_keys(Keys.ENTER)
-        #     else:
-        #         logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
-        #         while True:
-        #             if scrapeURL.isNotActive:            
-        #                 scrapeURL.isNotActive = False
-        #                 for _ in scrapeURL.itemList:
-        #                     scrapeURL.data.append([_,category])
-        #                 scrapeURL.isNotActive = True
-        #                 logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
-        #                 break
-        #         break
-
-            # try:
-            #     lenPagination = scrapeURL.driver.find_element_by_xpath("//*[@id='top']/main/div[1]/ul")
-            #     lenPagination = lenPagination.find_elements_by_class_name("pagination-item")
-            #     if len(lenPagination) == 9:
-            #         nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath1)
-            #     elif len(lenPagination) in [0,7] :
-            #         nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn_xpath)
-            #     nextButton.send_keys(Keys.ENTER)
-            #     logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
-            # except NoSuchElementException:
-            #     logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
-            #     while True:
-            #         if scrapeURL.isNotActive:            
-            #             scrapeURL.isNotActive = False
-            #             for _ in scrapeURL.itemList:
-            #                 scrapeURL.data.append([_,category])
-            #             scrapeURL.isNotActive = True
-            #             logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
-            #             break
-            #     break
-        except:
-            scrapeURL.driver.quit()
-            raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
-            break
+        # except:
+        #     scrapeURL.driver.quit()
+        #     raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
+        #     break
     scrapeURL.driver.quit()
 
 
@@ -273,13 +224,13 @@ if __name__ == '__main__':
             if future.result():
                 logging.info(f"{threading.current_thread().name}) -{future.result()}")
     final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataCollector.data)} items URL")
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
     start = time.perf_counter()
     with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
-        futures = [executor.submit(DataCollectorFunction, data) for data in DataCollector.data]
+        futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
         for future in concurrent.futures.as_completed(futures):
             if future.result():
                 logging.info(f"{threading.current_thread().name}) -{future.result()}")
     final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataCollector.data)} items data")
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")

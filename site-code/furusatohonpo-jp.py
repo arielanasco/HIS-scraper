@@ -153,7 +153,7 @@ def DataCollectorFunction(data):
                            descriptionFinder = "p-detailDescription",
                            priceFinder = "p-detailName__price",
                            capacityFinder = "p-detailAddCart__info",
-                           imageUrlFinder = scrapeURL.driver.find_element_by_class_name("slick-track"))
+                           imageUrlFinder = "slick-track")
     except:
         scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
