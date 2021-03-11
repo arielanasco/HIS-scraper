@@ -32,8 +32,8 @@ class Webdriver:
         self.headers = {"User-Agent": f"{sample(self.userAgentList,1)[0]}"}
     
     def get(self,url):
-        self.html = self.requests.get(url, headers = self.headers)
-        self.html.session().close()
+        with requests.session() as s:
+            self.html = s.get(url, headers = self.headers)
         return self.html             
 
     def displaySiteInfo(self):
