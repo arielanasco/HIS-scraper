@@ -108,9 +108,9 @@ class DataParserClass(web_driver_1.WebDriver):
         except:
             raise Exception ("Unable to locate the capacityFinder")
         try:
-            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("li")
+            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find(class_="slick-track").find_all("li")
             self.imageList = []
-            for _ in self.imageUrlFinder:
+            for _ in self.imageUrlFinder[1:]:
                 self.imageList.append(_.find("img").get("src")) 
         except:
             raise Exception ("Unable to locate the imageUrlFinder")
@@ -144,7 +144,7 @@ def DataCollectorFunction(data):
                            descriptionFinder = "item-description",
                            priceFinder = "price",
                            capacityFinder = "info",
-                           imageUrlFinder = "slick-track" )
+                           imageUrlFinder = "slider" )
     except:
         # scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
