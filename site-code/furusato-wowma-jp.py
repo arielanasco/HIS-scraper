@@ -69,9 +69,11 @@ class ScraperCategory(WebDriver):
                 break
 
 class ListParserClass(WebDriver):
+    totalList = 0
 
     def __init__(self, url):
         self.url = url
+        type(self).totalList +=1
         self.itemList = []
         super().__init__(url)
 
@@ -88,14 +90,12 @@ class DataParserClass(web_driver_1.WebDriver):
 
     isNotActive = True
     data = []
-    totalList = 0
     totalData = 0
 
 
 
     def __init__(self, url):
         self.url = url
-        type(self).totalList +=1
         type(self).totalData +=1
         super().__init__()
 
@@ -192,7 +192,7 @@ def ItemLinkCollector(data):
         scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
         nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
         if nextButton.get_attribute("href") == 'javascript:void(0);':
-            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({DataParserClass.totalList -1}/{len(ScraperCategory.categoryList)})")
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
             while True:
                 if DataParserClass.isNotActive:
                     DataParserClass.isNotActive = False
@@ -203,7 +203,7 @@ def ItemLinkCollector(data):
                     break
             break
         else:
-            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({DataParserClass.totalList -1}/{len(ScraperCategory.categoryList)})")
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
             nextButton.click()
     scrapeURL.driver.quit()
 
