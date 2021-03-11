@@ -188,11 +188,11 @@ def ItemLinkCollector(data):
                 lenPagination[-1].find_element_by_tag_name("a").send_keys(Keys.ENTER)
         except NoSuchElementException:
             while True:
-                if scrapeURL.isNotActive:            
-                    scrapeURL.isNotActive = False
+                if DataParserClass.isNotActive:            
+                    DataParserClass.isNotActive = False
                     for _ in scrapeURL.itemList:
-                        scrapeURL.data.append([_,category])
-                    scrapeURL.isNotActive = True
+                        DataParserClass.data.append([_,category])
+                    DataParserClass.isNotActive = True
                     logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items | Total item {len(DataParserClass.data)}")
                     break
             break
