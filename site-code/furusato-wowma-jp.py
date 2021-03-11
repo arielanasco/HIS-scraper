@@ -46,28 +46,6 @@ class ScraperCategory(WebDriver):
             else:
                 break
 
-# class ScraperList(WebDriver):
-
-#     isNotActive = True
-#     data = []
-
-#     def __init__(self, url):
-#         self.url = url
-#         self.itemList = []
-#         super().__init__()
-
-#     def listParser(self,html,elementContainer):
-#         self.elementContainer = elementContainer
-#         self.html = bs(html, 'html.parser')
-#         self.container = self.html.find(class_=self.elementContainer)
-#         self.ChildElement = self.container.find_next()
-#         while True:
-#             self.itemList.append(self.ChildElement.find("a").get("href"))
-#             if self.ChildElement.find_next_sibling():
-#                 self.ChildElement = self.ChildElement.find_next_sibling()
-#             else:
-                break
-
 class ListParserClass(WebDriver):
     totalList = 0
 
@@ -91,8 +69,6 @@ class DataParserClass(web_driver_1.WebDriver):
     isNotActive = True
     data = []
     totalData = 0
-
-
 
     def __init__(self, url):
         self.url = url
