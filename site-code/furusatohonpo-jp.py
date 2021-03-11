@@ -127,7 +127,8 @@ class DataParserClass(WebDriver):
                 for data in DataParserClass.data:
                     if itemUrl in data:
                         index_ = DataParserClass.data.index(data)
-                        DataParserClass.data[index_].insert(1,self.categoryFinder)
+                        # DataParserClass.data[index_].insert(1,self.categoryFinder)
+                        DataParserClass.data[index_][1] =self.categoryFinder
                         DataParserClass.data[index_].insert(2,self.localNameFinder)
                         DataParserClass.data[index_].insert(3,self.titleFinder)
                         DataParserClass.data[index_].insert(4,self.descriptionFinder)
