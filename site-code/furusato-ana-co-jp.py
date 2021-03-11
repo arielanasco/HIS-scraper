@@ -104,25 +104,25 @@ class DataParserClass(web_driver1.WebDriver):
         except:
             raise Exception ("Unable to locate the imageUrlFinder")
         while True:
-            if DataCollector.isNotActive: 
-                DataCollector.isNotActive = False
-                for data in DataCollector.data:
+            if DataParserClass.isNotActive: 
+                DataParserClass.isNotActive = False
+                for data in DataParserClass.data:
                     if itemUrl in data:
-                        index_ = DataCollector.data.index(data)
-                        DataCollector.data[index_].insert(2,self.localNameFinder)
-                        DataCollector.data[index_].insert(3,self.titleFinder)
-                        DataCollector.data[index_].insert(4,self.descriptionFinder)
-                        DataCollector.data[index_].insert(5,self.priceFinder)
-                        DataCollector.data[index_].insert(6,self.capacityFinder)
-                        DataCollector.data[index_].insert(7,self.imageList)
-                        DataCollector.isNotActive = True
+                        index_ = DataParserClass.data.index(data)
+                        DataParserClass.data[index_].insert(2,self.localNameFinder)
+                        DataParserClass.data[index_].insert(3,self.titleFinder)
+                        DataParserClass.data[index_].insert(4,self.descriptionFinder)
+                        DataParserClass.data[index_].insert(5,self.priceFinder)
+                        DataParserClass.data[index_].insert(6,self.capacityFinder)
+                        DataParserClass.data[index_].insert(7,self.imageList)
+                        DataParserClass.isNotActive = True
                         break
             break
 
 def DataCollectorFunction(data):
     item_url = data[0]
     scrapeURL = DataParserClass()
-    logging.info(f"{threading.current_thread().name}) -Scraped_items({DataCollector.totalData - 1 }/{len(DataCollector.data)}) -Fetching({item_url})")
+    logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     time.sleep(3)
     scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
                            itemUrl = item_url, 
@@ -151,9 +151,9 @@ def ItemLinkCollector(data):
         url_category_ = LINK+nextButton[-1].find("a").get("href")
         if url_category != url_category_ and len(nextButton) > 1 :
             url_category = url_category_
-            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({DataCollector.totalList -1}/{len(ScraperCategory.categoryList)})")
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({DataParserClass.totalList -1}/{len(ScraperCategory.categoryList)})")
         else:
-            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({DataCollector.totalList -1}/{len(ScraperCategory.categoryList)})")
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({DataParserClass.totalList -1}/{len(ScraperCategory.categoryList)})")
             while True:
                 if scrapeURL.isNotActive:            
                     scrapeURL.isNotActive = False
@@ -182,13 +182,13 @@ if __name__ == '__main__':
             if future.result():
                 logging.info(f"{threading.current_thread().name}) -{future.result()}")
     final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataCollector.data)} items URL")
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
     start = time.perf_counter()
     with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
-        futures = [executor.submit(DataCollectorFunction, data) for data in DataCollector.data]
+        futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
         for future in concurrent.futures.as_completed(futures):
             if future.result():
                 logging.info(f"{threading.current_thread().name}) -{future.result()}")
     final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataCollector.data)} items data")
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
