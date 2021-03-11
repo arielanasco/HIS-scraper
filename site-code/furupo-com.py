@@ -192,8 +192,8 @@ if __name__ == '__main__':
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag = "popover")
-    data=site.categoryList
-    # data=[['https://furu-po.com/goods_list/152','test']]
+    # data=site.categoryList
+    data=[['https://furu-po.com/goods_list/152','test']]
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
