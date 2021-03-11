@@ -154,7 +154,6 @@ def DataCollectorFunction(data):
                            priceFinder = "as-pl_m",
                            capacityFinder = "table01",
                            imageUrlFinder = "as-main" )
-    scrapeURL.driver.quit()
 
 
 
@@ -186,7 +185,6 @@ def ItemLinkCollector(data):
                     logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
                     break
             break
-    scrapeURL.driver.quit()
 
 if __name__ == '__main__':
     start = time.perf_counter()
