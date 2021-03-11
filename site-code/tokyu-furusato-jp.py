@@ -137,7 +137,7 @@ def DataCollectorFunction(data):
     scrapeURL = DataParserClass(item_url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
-        time.sleep(1)
+        time.sleep(3)
         # item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "heading_page")))
         scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
                            itemUrl = item_url,
