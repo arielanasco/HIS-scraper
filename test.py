@@ -1,18 +1,19 @@
 import requests
 from bs4 import BeautifulSoup as bs
+import shutil
+import os 
+from PIL import Image
 
 
-res = requests.get("https://furu-po.com/goods_detail.php?id=664459")
-html = bs(res.text, 'html.parser')
-img = html.find(class_="item_info_slider").find_all(class_="slide-item")
-# img = html.find(class_="slick-track")
-print(img)
+# res = requests.get("https://furu-po.com/goods_detail.php?id=664459")
+# html = bs(res.text, 'html.parser')
+# img = html.find(class_="item_info_slider").find_all(class_="slide-item")
+# # img = html.find(class_="slick-track")
+# print(img)
 # for _ in img:
 #     print(_)
 
-# import shutil
-# import os 
-# from PIL import Image
+
 
 
 # cwd = os.getcwd()
@@ -37,9 +38,9 @@ print(img)
 #     del response
 
 # download_images("https://img.furusato-tax.jp/cdn-cgi/image/width=520,height=323/img/x/product/details/20200713/sd1_0e40bfca39974cbbf35002453f8d4e91e7ed22a0.jpg","fruits","img_1.jpg")
-# # print(site_name)
+# print(site_name)
 
-# # site-name/category/item-data/imgaes_list
+# site-name/category/item-data/imgaes_list
 
 
-# # filename = os.path.join('test\testing1\img_1.jpg')
+# filename = os.path.join('test\testing1\img_1.jpg')
