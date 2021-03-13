@@ -23,7 +23,7 @@ for _ in DataParserClass.data:
     if len(_) > 8:
         print("Detected bug")
     else:
-        print(f"{_["URL"]}    {_{"category"}}")
+        print(f"{_['URL']}    {_['category']}   {_['title']}  {_['local_name']} ")
 
 # cwd = os.getcwd()
 # site_name = os.path.basename(__file__).split(".")[0]

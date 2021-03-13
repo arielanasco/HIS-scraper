@@ -182,7 +182,8 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag = "search-child-categories")
     data=site.categoryList
-    # data=[['https://www.furusato-tax.jp/search/152?disabled_category_top=1&target=1','test']]
+    data=[{'URL':'https://www.furusato-tax.jp/search/152?disabled_category_top=1&target=1','category':'test'},
+    {'URL':'https://www.furusato-tax.jp/search/153?disabled_category_top=1&target=1','category':'test2'}]
     site.driver.close()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
