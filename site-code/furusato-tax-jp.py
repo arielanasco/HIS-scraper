@@ -128,8 +128,9 @@ def DataCollectorFunction(data):
     scrapeURL = DataParserClass(item_url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
+        html = scrapeURL.get(item_url).text
         time.sleep(3)
-        scrapeURL.dataParser(html =  scrapeURL.get(item_url).text,
+        scrapeURL.dataParser(html = html,
                            itemUrl = item_url, 
                            localNameFinder = "city-title",
                            titleFinder = "ttl-h1__text",
