@@ -164,7 +164,7 @@ def ItemLinkCollector(data):
     nxt_btn ="c-pagination__next"
     element_container = "c-itemList"
     url_category=data["URL"]
-    category=data[1]
+    category=data["category"]
     scrapeURL = ListParserClass(url_category)
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraping([{category}]{url_category})")
