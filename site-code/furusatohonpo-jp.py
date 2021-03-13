@@ -126,17 +126,15 @@ class DataParserClass(WebDriver):
             raise Exception ("Unable to locate the imageUrlFinder")
         with data_lock:
                 for data in DataParserClass.data:
-                    if itemUrl in data:
+                    if itemUrl in data["URL"]:
                         index_ = DataParserClass.data.index(data)
-                        # DataParserClass.data[index_].insert(1,self.categoryFinder)
-                        DataParserClass.data[index_][1] =self.categoryFinder
-                        DataParserClass.data[index_].insert(2,self.localNameFinder)
-                        DataParserClass.data[index_].insert(3,self.titleFinder)
-                        DataParserClass.data[index_].insert(4,self.descriptionFinder)
-                        DataParserClass.data[index_].insert(5,self.priceFinder)
-                        DataParserClass.data[index_].insert(6,self.capacityFinder)
-                        DataParserClass.data[index_].insert(7,self.imageList)
-                        DataParserClass.isNotActive = True
+                        DataParserClass.data[index_]["category"] =self.categoryFinder
+                        DataParserClass.data[index_]["local_name"] =self.localNameFinder
+                        DataParserClass.data[index_]["title"] =self.titleFinder
+                        DataParserClass.data[index_]["description"] =self.descriptionFinder
+                        DataParserClass.data[index_]["price"] =self.priceFinder
+                        DataParserClass.data[index_]["capacity"] =self.capacityFinder
+                        DataParserClass.data[index_]["images"] =self.imageList
                         break
 
 def DataCollectorFunction(data):
@@ -200,8 +198,8 @@ if __name__ == '__main__':
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="p-topCategory__list")
-    # data=site.categoryList
-    data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}]
+    data=site.categoryList
+    # data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}]
     print(data)
     site.driver.quit()
     final = time.perf_counter()
