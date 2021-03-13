@@ -10,8 +10,7 @@ class WebDriver:
         "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:24.0) Gecko/20100101 Firefox/24.0"
         ]
         self.requests = requests
-        self.headers = {"User-Agent": f"{sample(self.userAgentList,1)[0]}"}
-        self.headers = {"Content-Type": "text/html"}
+        self.headers = {"User-Agent": f"{sample(self.userAgentList,1)[0]}","Content-Type": "text/html"}
     
     def get(self,url):
         with requests.session() as s:
