@@ -40,7 +40,7 @@ class ScraperCategory(web_driver_1.WebDriver):
             else:
                 self.categoryData = re.sub(r'\([^()]*\)', '', category_[-1].find("a").get_text())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
-                ScraperCategory.categoryList.append([category_[-1].find("a").get("href"),self.categoryData])                
+                ScraperCategory.categoryList.append({"URL":category_[-1].find("a").get("href"),"category":self.categoryData})                
 
 class DataParserClass(web_driver_1.WebDriver):
     isNotActive = True
