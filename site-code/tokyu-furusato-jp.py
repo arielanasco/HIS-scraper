@@ -195,7 +195,9 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="dropdownlist")
     data=site.categoryList
-    # data=[['https://tokyu-furusato.jp/goods/result?chk_ctg[1]=15', 'Testing']]
+    data=[{'URL':'https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D=82', 'category':'Testing'},
+    {'URL':'https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D=76', 'category':'toiletries'}
+    ]
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(data)} categories")
