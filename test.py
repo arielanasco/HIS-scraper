@@ -17,7 +17,7 @@ import logging
 logging.basicConfig(format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 logging.debug("This will get logged")
-
+DataParserClass.data[165]
 
 for _ in DataParserClass.data:
     if len(_) == 8:
