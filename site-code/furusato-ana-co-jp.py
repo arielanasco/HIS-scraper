@@ -17,7 +17,7 @@ LINK = "https://furusato.ana.co.jp/products/list.php"
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 
-
+data_lock = threading.Lock()
 
 class ScraperCategory(web_driver_1.WebDriver):
     categoryList = []
@@ -74,53 +74,49 @@ class DataParserClass(web_driver_1.WebDriver):
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder = re.sub(r'\s+', '', self.localNameFinder)
         except:
-            raise Exception ("Unable to locate the localNameFinder")
+            self.localNameFinder = None
         try:
             self.titleFinder = self.html.find(class_=titleFinder).get_text()
             self.titleFinder = self.titleFinder.replace(self.localNameFinder,'')
             self.titleFinder = re.sub(r'\s+', '', self.titleFinder)
         except:
-            raise Exception ("Unable to locate the titleFinder")
+            self.titleFinder = None
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
             self.descriptionFinder = re.sub(r'\s+', '', self.descriptionFinder)
         except:
-            raise Exception ("Unable to locate the descriptionFinder")
+            self.descriptionFinder = None
         try:
             self.priceFinder = self.html.find(class_=priceFinder).get_text()
             self.priceFinder = re.sub(r'\s+', '', self.priceFinder)
         except:
-            raise Exception ("Unable to locate the priceFinder")
+            self.priceFinder = None
         try:
             self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
             self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
         except:
-            raise Exception ("Unable to locate the capacityFinder")
+            self.capacityFinder = None
         try:
             self.imageUrlFinder = self.html.find(class_="as-detail_wrap").find(class_=imageUrlFinder).find_all("li")
             self.imageList = []
             for _ in self.imageUrlFinder:
                 self.imageList.append("https://furusato.ana.co.jp"+_.find("img").get("src")) 
         except:
-            raise Exception ("Unable to locate the imageUrlFinder")
-        while True:
-            if DataParserClass.isNotActive: 
-                DataParserClass.isNotActive = False
-                for data in DataParserClass.data:
-                    if itemUrl in data:
+            self.imageList = []
+        with data_lock:
+                for data in  DataParserClass.data:
+                    if itemUrl == data["URL"]:
                         index_ = DataParserClass.data.index(data)
-                        DataParserClass.data[index_].insert(2,self.localNameFinder)
-                        DataParserClass.data[index_].insert(3,self.titleFinder)
-                        DataParserClass.data[index_].insert(4,self.descriptionFinder)
-                        DataParserClass.data[index_].insert(5,self.priceFinder)
-                        DataParserClass.data[index_].insert(6,self.capacityFinder)
-                        DataParserClass.data[index_].insert(7,self.imageList)
-                        DataParserClass.isNotActive = True
+                        DataParserClass.data[index_]["local_name"] =self.localNameFinder
+                        DataParserClass.data[index_]["title"] =self.titleFinder
+                        DataParserClass.data[index_]["description"] =self.descriptionFinder
+                        DataParserClass.data[index_]["price"] =self.priceFinder
+                        DataParserClass.data[index_]["capacity"] =self.capacityFinder
+                        DataParserClass.data[index_]["images"] =self.imageList
                         break
-            break
 
 def DataCollectorFunction(data):
-    item_url = data[0]
+    item_url = data["URL"]
     scrapeURL = DataParserClass()
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData -1 }/{len(DataParserClass.data)}) -Fetching({item_url})")
     time.sleep(3)
@@ -137,8 +133,8 @@ def DataCollectorFunction(data):
 
 def ItemLinkCollector(data):
     element_container = "as-flex_left"
-    url_category=data[0]
-    category=data[1]
+    url_category=data["URL"]
+    category=data["category"]
     scrapeURL = DataParserClass()
     logging.info(f"{threading.current_thread().name}) -Scraping([{category}]{url_category})")
     while True:
@@ -154,15 +150,12 @@ def ItemLinkCollector(data):
             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({DataParserClass.totalList}/{len(ScraperCategory.categoryList)})")
         else:
             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({DataParserClass.totalList}/{len(ScraperCategory.categoryList)})")
-            while True:
-                if scrapeURL.isNotActive:            
-                    scrapeURL.isNotActive = False
-                    for _ in scrapeURL.itemList:
-                        scrapeURL.data.append(["https://furusato.ana.co.jp"+_,category])
-                    scrapeURL.isNotActive = True
-                    logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items | Total item {len(scrapeURL.data)}")
-                    break
+            with data_lock:
+                for _ in scrapeURL.itemList:
+                    DataParserClass.data.append({"URL":"https://furusato.ana.co.jp"+_,"category":category})
+                logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
             break
+
 
 if __name__ == '__main__':
     start = time.perf_counter()
@@ -172,8 +165,8 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -{user_agent}")
     site.categoryParser(html= site.get(LINK).text, elementTag = "gnav_detail_contents")
     data=site.categoryList
-    data = [['https://furusato.ana.co.jp/products/list.php?limit=30&s4=%E8%82%89_%E7%89%9B%E8%82%89_%E5%B1%B1%E5%BD%A2%E7%89%9B&sort=number5%2CNumber1%2CScore',
-    'Meat']]
+    # data = [['https://furusato.ana.co.jp/products/list.php?limit=30&s4=%E8%82%89_%E7%89%9B%E8%82%89_%E5%B1%B1%E5%BD%A2%E7%89%9B&sort=number5%2CNumber1%2CScore',
+    # 'Meat']]
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
     start = time.perf_counter()

@@ -5,7 +5,6 @@ Link : https://furusatohonpo.jp/
 
 """
 from web_driver import WebDriver
-from threading import Lock
 import time
 import threading
 from selenium.webdriver.common.by import By
@@ -17,7 +16,6 @@ import logging
 import  concurrent.futures
 from bs4 import BeautifulSoup as bs
 import re
-from threading import Lock
 
 """ This section declares all the variables used """
 LINK = "https://furusatohonpo.jp"
@@ -25,7 +23,7 @@ LINK = "https://furusatohonpo.jp"
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 
-data_lock = Lock()
+data_lock = threading.Lock()
 
 class ScraperCategory(WebDriver):
     categoryList = []
@@ -126,7 +124,7 @@ class DataParserClass(WebDriver):
             self.imageList = []
         with data_lock:
                 for data in DataParserClass.data:
-                    if itemUrl in data["URL"]:
+                    if itemUrl ==  data["URL"]:
                         index_ = DataParserClass.data.index(data)
                         DataParserClass.data[index_]["category"] =self.categoryFinder
                         DataParserClass.data[index_]["local_name"] =self.localNameFinder
@@ -180,7 +178,7 @@ def ItemLinkCollector(data):
                 with data_lock:
                     for _ in scrapeURL.itemList:
                         DataParserClass.data.append({"URL":LINK+_,"category":category})
-                    logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
+                    logging.info(f"{threading.current_thread().name}) -Adding({len(scrapeURL.itemList)} items)")
                 break
         except:
             scrapeURL.driver.quit()
