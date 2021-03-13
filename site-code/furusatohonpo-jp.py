@@ -138,7 +138,7 @@ class DataParserClass(WebDriver):
                         break
 
 def DataCollectorFunction(data):
-    item_url = data["url"]
+    item_url = data["URL"]
     scrapeURL = DataParserClass(item_url)
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
