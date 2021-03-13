@@ -89,22 +89,22 @@ class DataParserClass(WebDriver):
             self.categoryFinder = self.categoryFinder[-2].find("a").get_text()
             self.categoryFinder =  re.sub(r'\W+', '', self.categoryFinder)
         except:
-            raise Exception ("Unable to locate the localNameFinder")
+             self.categoryFinder = None
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
         except:
-            raise Exception ("Unable to locate the localNameFinder")
+            self.localNameFinder =  None
         try:
             self.titleFinder = self.html.find(class_=titleFinder).get_text()
             self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
         except:
-            raise Exception ("Unable to locate the titleFinder")
+            self.titleFinder = None
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
             self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
         except:
-            raise Exception ("Unable to locate the descriptionFinder")
+            self.descriptionFinder = None
         try:
             self.priceFinder = self.html.find(class_=priceFinder).find("span").get_text()
             self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
@@ -114,7 +114,7 @@ class DataParserClass(WebDriver):
             self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
             self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
         except:
-            raise Exception ("Unable to locate the capacityFinder")
+            self.capacityFinder = None
         try:
             self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("div", {"class":"p-detailMv__mainItem"})
             self.imageList = []
@@ -123,7 +123,7 @@ class DataParserClass(WebDriver):
                 self.holder = self.holder.split('"')
                 self.imageList.append(self.holder[1])      
         except:
-            raise Exception ("Unable to locate the imageUrlFinder")
+            self.imageList = []
         with data_lock:
                 for data in DataParserClass.data:
                     if itemUrl in data["URL"]:
