@@ -189,7 +189,7 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag = "popover")
     data=site.categoryList
-    data=[['https://furu-po.com/goods_list/152','test']]
+    data=[{"URL":"https://furu-po.com/goods_list/152","category":"test:"},{"URL":"https://furu-po.com/goods_list/166/168","category":"test2"}]
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
