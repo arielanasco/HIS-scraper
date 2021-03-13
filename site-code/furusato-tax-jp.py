@@ -42,7 +42,7 @@ class ScraperCategory(WebDriver):
             for holder in self.holder[2:]:
                 self.categoryData = re.sub(r'\([^()]*\)', '', holder.find(class_="categories__name").get_text())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
-                ScraperCategory.categoryList.append({"URL":"https://www.furusato-tax.jp"+holder.find("a").get("href"),"category":self.categoryData])
+                ScraperCategory.categoryList.append({"URL":"https://www.furusato-tax.jp"+holder.find("a").get("href"),"category":self.categoryData})
 
 class ListParserClass(WebDriver):
     totalList = 0
