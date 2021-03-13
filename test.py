@@ -19,6 +19,12 @@ logger = logging.getLogger(__name__)
 logging.debug("This will get logged")
 
 
+for _ in DataParserClass.data:
+    if len(_) > 8:
+        print("Detected bug")
+    else:
+        print(f"{_["URL"]}    {_{"category"}}")
+
 # cwd = os.getcwd()
 # site_name = os.path.basename(__file__).split(".")[0]
 

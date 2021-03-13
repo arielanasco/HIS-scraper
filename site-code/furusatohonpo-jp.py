@@ -86,7 +86,7 @@ class DataParserClass(WebDriver):
             self.categoryFinder = self.html.find(class_=categoryFinder).find_all("li")
             self.categoryFinder = self.categoryFinder[-2].find("a").get_text()
             self.categoryFinder =  re.sub(r'\W+', '', self.categoryFinder)
-            self.categoryFinder =  self.categoryFinder.split(" ")[2]
+            self.categoryFinder =  re.sub(r'のふるさと納税一覧', '', self.categoryFinder)
         except:
              self.categoryFinder = None
         try:
