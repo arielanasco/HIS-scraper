@@ -119,8 +119,9 @@ def DataCollectorFunction(data):
     item_url = data["URL"]
     scrapeURL = DataParserClass()
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData -1 }/{len(DataParserClass.data)}) -Fetching({item_url})")
-    time.sleep(3)
-    scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
+    try:
+        time.sleep(3)
+        scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
                            itemUrl = item_url, 
                            localNameFinder = "as-item_pref_detail",
                            titleFinder = "as-item_name_detail",
@@ -128,7 +129,8 @@ def DataCollectorFunction(data):
                            priceFinder = "as-pl_m",
                            capacityFinder = "table01",
                            imageUrlFinder = "as-main" )
-
+    except:
+        raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
 
 
 def ItemLinkCollector(data):

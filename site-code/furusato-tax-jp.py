@@ -23,6 +23,7 @@ LINK = "https://www.furusato-tax.jp/search"
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 
+data_lock = threading.Lock()
 
 class ScraperCategory(WebDriver):
     categoryList = []
@@ -41,19 +42,7 @@ class ScraperCategory(WebDriver):
             for holder in self.holder[2:]:
                 self.categoryData = re.sub(r'\([^()]*\)', '', holder.find(class_="categories__name").get_text())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
-                ScraperCategory.categoryList.append(["https://www.furusato-tax.jp"+holder.find("a").get("href"),self.categoryData])
-
-
-
-        # self.liTag = self.category.li
-        # while True:
-        #     self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
-        #     self.categoryData = re.sub(r'\W+', '', self.categoryData)
-        #     ScraperCategory.categoryList.append(["https://www.furusato-tax.jp"+self.liTag.find("a").get("href"),self.categoryData])
-        #     if self.liTag.find_next_sibling():
-        #         self.liTag = self.liTag.find_next_sibling()
-        #     else:
-        #         break
+                ScraperCategory.categoryList.append({"URL":"https://www.furusato-tax.jp"+holder.find("a").get("href"),"category":self.categoryData])
 
 class ListParserClass(WebDriver):
     totalList = 0
@@ -88,66 +77,58 @@ class DataParserClass(web_driver_1.WebDriver):
         type(self).totalData +=1
         super().__init__()
 
-
-
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
         except:
-            raise Exception ("Unable to locate the localNameFinder")
+            self.localNameFinder =  None
         try:
             self.titleFinder = self.html.find(class_=titleFinder).get_text()
             self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
         except:
-            raise Exception ("Unable to locate the titleFinder")
+            self.titleFinder = None
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
             self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
         except:
-            raise Exception ("Unable to locate the descriptionFinder")
+            self.descriptionFinder = None
         try:
             self.priceFinder = self.html.find(class_=priceFinder).get_text()
             self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
         except:
-            raise Exception ("Unable to locate the priceFinder")
+            self.priceFinder = None
         try:
             self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
             self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
         except:
-            raise Exception ("Unable to locate the capacityFinder")
+            self.capacityFinder = None
         try:
             self.imageUrlFinder = self.html.find(id=imageUrlFinder).find(class_="sld__list").find_all("li")
             self.imageList = []
             for _ in self.imageUrlFinder:
                 self.imageList.append(_.find("img").get("src")) 
         except:
-            raise Exception ("Unable to locate the imageUrlFinder")
-        while True:
-            if DataParserClass.isNotActive: 
-                DataParserClass.isNotActive = False
-                for data in DataParserClass.data:
-                    if itemUrl in data:
+            self.imageList = []
+        with data_lock:
+                for data in  DataParserClass.data:
+                    if itemUrl == data["URL"]:
                         index_ = DataParserClass.data.index(data)
-                        DataParserClass.data[index_].insert(2,self.localNameFinder)
-                        DataParserClass.data[index_].insert(3,self.titleFinder)
-                        DataParserClass.data[index_].insert(4,self.descriptionFinder)
-                        DataParserClass.data[index_].insert(5,self.priceFinder)
-                        DataParserClass.data[index_].insert(6,self.capacityFinder)
-                        DataParserClass.data[index_].insert(7,self.imageList)
-                        DataParserClass.isNotActive = True
+                        DataParserClass.data[index_]["local_name"] =self.localNameFinder
+                        DataParserClass.data[index_]["title"] =self.titleFinder
+                        DataParserClass.data[index_]["description"] =self.descriptionFinder
+                        DataParserClass.data[index_]["price"] =self.priceFinder
+                        DataParserClass.data[index_]["capacity"] =self.capacityFinder
+                        DataParserClass.data[index_]["images"] =self.imageList
                         break
-            break
 
 def DataCollectorFunction(data):
-    item_url = data[0]
+    item_url = data["URL"]
     scrapeURL = DataParserClass(item_url)
-    # scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
         time.sleep(3)
-        # item_info = WebDriverWait(scrapeURL.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "city-title")))
         scrapeURL.dataParser(html =  scrapeURL.get(item_url).text,
                            itemUrl = item_url, 
                            localNameFinder = "city-title",
@@ -157,17 +138,15 @@ def DataCollectorFunction(data):
                            capacityFinder = "basicinfo_pay",
                            imageUrlFinder = "basicinfo_slider" )
     except:
-        # scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
-    # scrapeURL.driver.quit()
 
 
 def ItemLinkCollector(data):
     nxt_btn =  "//*[@id='main']/div[3]/div[2]/div[1]/div[4]/div[3]/div/div[2]/a"
     nxt_btn1 = "//*[@id='main']/div[2]/div[2]/div[1]/div[4]/div[3]/div/div[3]/a"
     element_container = "grid"
-    url_category=data[0]
-    category=data[1]
+    url_category=data["URL"]
+    category=data["category"]
     scrapeURL = ListParserClass(url_category)
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraping([{category}]{url_category})")
@@ -177,23 +156,15 @@ def ItemLinkCollector(data):
             itemlist = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
-                # try:
-                #     nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn)
-                # except:    
-                #     nextButton = scrapeURL.driver.find_element_by_xpath(nxt_btn1)
                 nextButton = scrapeURL.driver.find_element_by_class_name("nv-pager__next").find_element_by_tag_name("a")
                 nextButton.send_keys(Keys.ENTER)
                 logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
             except NoSuchElementException:
                 logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
-                while True:
-                    if DataParserClass.isNotActive:            
-                        DataParserClass.isNotActive = False
-                        for _ in scrapeURL.itemList:
-                            DataParserClass.data.append(["https://www.furusato-tax.jp"+_,category])
-                        DataParserClass.isNotActive = True
-                        logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items | Total item {len(DataParserClass.data)}")
-                        break
+                with data_lock:
+                    for _ in scrapeURL.itemList:
+                        DataParserClass.data.append({"URL":"https://www.furusato-tax.jp"+_,"category":category})
+                    logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
                 break
         except:
             scrapeURL.driver.quit()

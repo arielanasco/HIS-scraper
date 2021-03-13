@@ -178,7 +178,7 @@ def ItemLinkCollector(data):
                 with data_lock:
                     for _ in scrapeURL.itemList:
                         DataParserClass.data.append({"URL":LINK+_,"category":category})
-                    logging.info(f"{threading.current_thread().name}) -Adding({len(scrapeURL.itemList)} items)")
+                    logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
                 break
         except:
             scrapeURL.driver.quit()
