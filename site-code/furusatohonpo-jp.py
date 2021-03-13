@@ -198,7 +198,7 @@ if __name__ == '__main__':
     site.categoryParser(html= site.driver.page_source, elementTag ="p-topCategory__list")
     data=site.categoryList
     data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"},
-          {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601&offset=120","category":"test2"}
+          {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}
     ]
     site.driver.quit()
     final = time.perf_counter()
