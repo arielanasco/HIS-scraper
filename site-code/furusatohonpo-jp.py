@@ -138,7 +138,6 @@ class DataParserClass(WebDriver):
                         DataParserClass.data[index_].insert(7,self.imageList)
                         DataParserClass.isNotActive = True
                         break
-            break
 
 def DataCollectorFunction(data):
     item_url = data[0]
