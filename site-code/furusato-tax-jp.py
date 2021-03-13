@@ -66,7 +66,7 @@ class ListParserClass(WebDriver):
             else:
                 break
 
-class DataParserClass(web_driver_1.WebDriver):
+class DataParserClass(WebDriver):
 
     isNotActive = True
     data = []
@@ -75,7 +75,7 @@ class DataParserClass(web_driver_1.WebDriver):
     def __init__(self, url):
         self.url = url
         type(self).totalData +=1
-        super().__init__()
+        super().__init__(url)
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
@@ -126,11 +126,12 @@ class DataParserClass(web_driver_1.WebDriver):
 def DataCollectorFunction(data):
     item_url = data["URL"]
     scrapeURL = DataParserClass(item_url)
+    scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
-        html = scrapeURL.get(item_url).text
-        time.sleep(5)
-        scrapeURL.dataParser(html = html,
+        time.sleep(1)
+        item_info = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
+        scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url, 
                            localNameFinder = "city-title",
                            titleFinder = "ttl-h1__text",
@@ -139,7 +140,9 @@ def DataCollectorFunction(data):
                            capacityFinder = "basicinfo_pay",
                            imageUrlFinder = "basicinfo_slider" )
     except:
+        scrapeURL.driver.quit()
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
+    scrapeURL.driver.quit()
 
 
 def ItemLinkCollector(data):
