@@ -5,7 +5,7 @@ Link : https://furusatohonpo.jp/
 
 """
 from web_driver import WebDriver
-import  web_driver_1
+from threading import Lock
 import time
 import threading
 from selenium.webdriver.common.by import By
@@ -17,12 +17,15 @@ import logging
 import  concurrent.futures
 from bs4 import BeautifulSoup as bs
 import re
+from threading import Lock
+
 """ This section declares all the variables used """
 LINK = "https://furusatohonpo.jp"
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 
+data_lock = Lock()
 
 class ScraperCategory(WebDriver):
     categoryList = []
@@ -121,9 +124,7 @@ class DataParserClass(WebDriver):
                 self.imageList.append(self.holder[1])      
         except:
             raise Exception ("Unable to locate the imageUrlFinder")
-        while True:
-            if DataParserClass.isNotActive: 
-                DataParserClass.isNotActive = False
+        with data_lock:
                 for data in DataParserClass.data:
                     if itemUrl in data:
                         index_ = DataParserClass.data.index(data)
@@ -179,15 +180,10 @@ def ItemLinkCollector(data):
                 logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
             except NoSuchElementException:
                 logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
-                while True:
-                    if DataParserClass.isNotActive:            
-                        DataParserClass.isNotActive = False
-                        for _ in scrapeURL.itemList:
-                            DataParserClass.data.append([LINK+_,category])
-                        DataParserClass.isNotActive = True
-                        logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
-                        break
-                break
+                with data_lock:
+                    for _ in scrapeURL.itemList:
+                        DataParserClass.data.append([LINK+_,category])
+                    logging.info(f"{threading.current_thread().name}) -Adding {len(scrapeURL.itemList)} items")
         except:
             scrapeURL.driver.quit()
             raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
