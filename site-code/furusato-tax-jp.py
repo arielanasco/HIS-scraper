@@ -78,8 +78,8 @@ class DataParserClass(WebDriver):
         type(self).totalData +=1
         super().__init__(url)
 
-    def dataParser(self,html,itemUrl,stockStatus="NA",localNameFinder="NA",managementNumber="NA",titleFinder="NA",descriptionFinder="NA",priceFinder="NA",
-                   shipMethod="NA",capacityFinder="NA",compName="NA",imageUrlFinder=[]):
+    def dataParser(self,html,itemUrl,stockStatus,localNameFinder,managementNumber,titleFinder,descriptionFinder,priceFinder,
+                   shipMethod,capacityFinder,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         self.about = self.html.find(class_="basicinfo_pay")
         self.about = self.about.find_all("tr")
@@ -106,6 +106,7 @@ class DataParserClass(WebDriver):
                 except:
                     self.compName = "NA"
 
+
         self.aboutShipment = self.html.find(class_="product-tbl-info")
         self.aboutShipment = self.aboutShipment.find_all("tr")
 
@@ -117,6 +118,17 @@ class DataParserClass(WebDriver):
                     self.shipMethod = re.sub(r'\W+', '', self.shipMethod)
                 except:
                     self.shipMethod = "NA"
+                    
+        if self.managementNumber == None:
+            self.managementNumber =  "NA"        
+        if self.compName == None:
+            self.compName =  "NA"        
+        if self.capacityFinder == None:
+            self.capacityFinder =  "NA"
+        if self.shipMethod == None:
+            self.shipMethod =  "NA"
+
+
         try:
             self.stockStatus = self.html.find(class_=stockStatus).find("span").get_text()
             self.stockStatus =  re.sub(r'\W+', '', self.stockStatus)
