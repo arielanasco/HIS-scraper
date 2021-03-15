@@ -169,10 +169,7 @@ if __name__ == '__main__':
     site.categoryParser(html= site.get(LINK).text, elementTag = "gnav_detail_contents")
     data=site.categoryList
     data = [{'URL':'https://furusato.ana.co.jp/products/list.php?limit=30&s4=%E8%82%89_%E7%89%9B%E8%82%89_%E5%B1%B1%E5%BD%A2%E7%89%9B&sort=number5%2CNumber1%2CScore',
-    'category':'Test'},
-    {'URL':'https://furusato.ana.co.jp/products/list.php?limit=30&s4=%E8%82%89_%E3%82%B8%E3%83%93%E3%82%A8_%E7%BE%8A%E8%82%89%E3%83%BB%E3%83%A9%E3%83%A0%E8%82%89&sort=number5%2CNumber1%2CScore',
-    'category':'Test2'},
-    ]
+    'category':'Test'}]
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
     start = time.perf_counter()
