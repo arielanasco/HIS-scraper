@@ -37,7 +37,7 @@ class ScraperCategory(WebDriver):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
         self.category = self.html.find(class_=self.elementTag)
-        self.category = self.category.find_all("div",{"class":"lst-categories"})
+        self.category = self.category.find_all("ul")
         for category in self.category:
             self.holder = category.find_all("li")
             for holder in self.holder[1:]:
@@ -230,7 +230,7 @@ def ItemLinkCollector(data):
 if __name__ == '__main__':
     start = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
-    site=ScraperCategory(LINK)
+    site=ScraperCategory("https://www.furusato-tax.jp/product?header")
     site.driver.get(site.url)
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
