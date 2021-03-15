@@ -87,6 +87,7 @@ class DataParserClass(WebDriver):
         self.descriptionFinder = "NA"
         self.priceFinder = "NA"
         self.imageList = "NA"
+        
 
     def dataParser(self,html,itemUrl,stockStatus,localNameFinder,managementNumber,titleFinder,descriptionFinder,priceFinder,
                    shipMethod,capacityFinder,compName,imageUrlFinder):
@@ -97,14 +98,25 @@ class DataParserClass(WebDriver):
             self.th = _.find(class_ = "product-tbl-info__label").get_text()
             self.th = re.sub(r'\W+', '', self.th)
             if re.match("容量",self.th):
-                self.capacityFinder = _.find(class_=capacityFinder).get_text()
-                self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
+                try:
+                    self.capacityFinder = _.find(class_=capacityFinder).get_text()
+                    self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
+                except:
+                    self.capacityFinder = "NA"
             if re.match("自治体での管理番号",self.th):                 
-                self.managementNumber = _.find(class_=managementNumber).get_text()
-                self.managementNumber =  re.sub(r'\W+', '', self.managementNumber)
+                try:
+                    self.managementNumber = _.find(class_=managementNumber).get_text()
+                    self.managementNumber =  re.sub(r'\W+', '', self.managementNumber)
+                except:
+                    self.managementNumber =  "NA"
+            
             if re.match("事業者",self.th): 
-                self.compName = _.find(class_=compName).get_text()
-                self.compName = re.sub(r'\W+', '', self.compName)
+                try:
+                    self.compName = _.find(class_=compName).get_text()
+                    self.compName = re.sub(r'\W+', '', self.compName)
+                except:
+                    self.compName = "NA"
+
 
         self.aboutShipment = self.html.find(class_="product-tbl-info")
         self.aboutShipment = self.aboutShipment.find_all("tr")
@@ -120,28 +132,36 @@ class DataParserClass(WebDriver):
         try:
             self.stockStatus = self.html.find(class_=stockStatus).find("span").get_text()
             self.stockStatus =  re.sub(r'\W+', '', self.stockStatus)
-
+        except:
+            self.stockStatus =  "NA"
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
-
+        except:
+            self.localNameFinder =  "NA"
+          
         try:
             self.titleFinder = self.html.find(class_=titleFinder).get_text()
             self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
+        except:
+            self.titleFinder = "NA"
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
             self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
-
+        except:
+            self.descriptionFinder = "NA"
         try:
             self.priceFinder = self.html.find(class_=priceFinder).text.strip()
             self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
-
+        except:
+            self.priceFinder = "NA"
         try:
             self.imageUrlFinder = self.html.find(id=imageUrlFinder).find(class_="sld__list").find_all("li")
             self.imageList = []
             for _ in self.imageUrlFinder:
                 self.imageList.append(_.find("img").get("src")) 
-
+        except:
+            self.imageList = "NA"
         with data_lock:
                 for data in  DataParserClass.data:
                     if itemUrl == data["URL"]:
