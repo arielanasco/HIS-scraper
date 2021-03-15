@@ -107,6 +107,7 @@ class DataParserClass(WebDriver):
 
         self.aboutShipment = self.html.find(class_="product-tbl-info")
         self.aboutShipment = self.aboutShipment.find_all("tr")
+
         for _ in self.aboutShipment:
             self.th = _.find(class_ = "product-tbl-info__label").get_text()
             if self.th in "配送":
@@ -180,7 +181,7 @@ def DataCollectorFunction(data):
                            titleFinder = "ttl-h1__text",
                            descriptionFinder = "overview",
                            priceFinder = "basicinfo_price",
-                           shipMethod = "lst-icon",
+                           shipMethod = "product-tbl-info__wrap",
                            capacityFinder = "product-tbl-info__wrap",
                            compName = "product-tbl-info__wrap",
                            imageUrlFinder = "basicinfo_slider" )
