@@ -190,7 +190,7 @@ def ItemLinkCollector(data):
         scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
         nextButton = scrapeURL.driver.find_element_by_class_name("nv-pager")
         nextButton = nextButton.find_element_by_class_name("nv-pager__next").find_element_by_class_name("nv-pager__link")
-        nxt = nextButton.get_attribute('href')
+        nxt = nextButton.get_attribute('href')[-1]
         print(nxt)
         if nxt != "#":
             nextButton.send_keys(Keys.ENTER)
