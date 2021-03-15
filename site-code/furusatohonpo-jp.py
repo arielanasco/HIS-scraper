@@ -222,9 +222,7 @@ if __name__ == '__main__':
                 logging.info(f"{threading.current_thread().name}) -{future.result()}")
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
-
+    save_image = SaveData()
     for data_dict in DataParserClass.data:
-        save_image = SaveData()
-        for data in data_dict["images"]:
-            for image_link in data:
-                save_image.save_img(image_link)
+        for image_link in data_dict["images"]:
+            save_image.save_img(image_link)
