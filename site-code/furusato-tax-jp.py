@@ -190,9 +190,10 @@ def ItemLinkCollector(data):
         scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
         nextButton = scrapeURL.driver.find_element_by_class_name("nv-pager")
         nextButton = nextButton.find_element_by_class_name("nv-pager__next").find_element_by_class_name("nv-pager__link")
+        nextButton = nextButton.find_element_by_class_name("nv-pager__link")
         nxt = nextButton.get_attribute('href')
         if nxt != "#":
-            nextButton.click()
+            nextButton.send_keys(Keys.ENTER)
             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
         else:
             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
