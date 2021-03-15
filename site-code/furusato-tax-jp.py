@@ -78,7 +78,8 @@ class DataParserClass(WebDriver):
         type(self).totalData +=1
         super().__init__(url)
 
-    def dataParser(self,html,itemUrl,stockStatus,localNameFinder,managementNumber,titleFinder,descriptionFinder,priceFinder,shipMethod,capacityFinder,compName,imageUrlFinder):
+    def dataParser(self,html,itemUrl,stockStatus="NA",localNameFinder="NA",managementNumber="NA",titleFinder="NA",descriptionFinder="NA",priceFinder="NA",
+                   shipMethod="NA",capacityFinder="NA",compName="NA",imageUrlFinder=[]):
         self.html = bs(html, 'html.parser')
         self.about = self.html.find(class_="basicinfo_pay")
         self.about = self.about.find_all("tr")
