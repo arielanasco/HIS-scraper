@@ -27,7 +27,8 @@ data_lock = threading.Lock()
 
 class ScraperCategory(WebDriver):
     categoryList = []
-
+    #https://www.furusato-tax.jp/product?header
+    #nv-select-categories
     def __init__(self, url):
         self.url = url
         super().__init__(url)
@@ -39,8 +40,8 @@ class ScraperCategory(WebDriver):
         self.category = self.category.find_all("ul")
         for category in self.category:
             self.holder = category.find_all("li")
-            for holder in self.holder[2:]:
-                self.categoryData = re.sub(r'\([^()]*\)', '', holder.find(class_="categories__name").get_text())
+            for holder in self.holder[1:]:
+                self.categoryData = re.sub(r'\([^()]*\)', '', holder.find(class_="lst-subcategories__link").text.strip())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 ScraperCategory.categoryList.append({"URL":"https://www.furusato-tax.jp"+holder.find("a").get("href"),"category":self.categoryData})
 
@@ -177,10 +178,6 @@ def DataCollectorFunction(data):
 
 
 def ItemLinkCollector(data):
-    #https://www.furusato-tax.jp/product?header
-    #nv-select-categories
-    nxt_btn =  "//*[@id='main']/div[3]/div[2]/div[1]/div[4]/div[3]/div/div[2]/a"
-    nxt_btn1 = "//*[@id='main']/div[2]/div[2]/div[1]/div[4]/div[3]/div/div[3]/a"
     element_container = "grid"
     url_category=data["URL"]
     category=data["category"]
@@ -188,25 +185,45 @@ def ItemLinkCollector(data):
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraping([{category}]{url_category})")
     while True:
-        try:
-            time.sleep(1)
-            itemlist = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
-            scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
-            try:
-                nextButton = scrapeURL.driver.find_element_by_class_name("nv-pager__next").find_element_by_tag_name("a")
-                nextButton.send_keys(Keys.ENTER)
-                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
-            except NoSuchElementException:
-                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
-                with data_lock:
-                    for _ in scrapeURL.itemList:
-                        DataParserClass.data.append({"URL":"https://www.furusato-tax.jp"+_,"category":category})
-                    logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
-                break
-        except:
+        time.sleep(1)
+        itemlist = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+        scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
+        nextButton = scrapeURL.driver.find_element_by_class_name("nv-pager")
+        nextButton = nextButton.find_element_by_class_name("nv-pager__next").find_element_by_class_name("nv-pager__link")
+        if nextButton.get_attribute('href') != "#":
+            nextButton.send_keys(Keys.ENTER)
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
+        else:
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
+            with data_lock:
+                for _ in scrapeURL.itemList:
+                    DataParserClass.data.append({"URL":"https://www.furusato-tax.jp"+_,"category":category})
+                logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
             scrapeURL.driver.quit()
-            raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
             break
+    scrapeURL.driver.quit()
+
+        # try:
+        #     time.sleep(1)
+        #     itemlist = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+        #     scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
+        #     try:
+        #         nextButton = scrapeURL.driver.find_element_by_class_name("nv-pager")
+        #         nextButton = nextButton.find_element_by_class_name("nv-pager__next").find_element_by_class_name("nv-pager__link")
+        #         nextButton = 
+        #         nextButton.send_keys(Keys.ENTER)
+        #         logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
+        #     except NoSuchElementException:
+        #         logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
+        #         with data_lock:
+        #             for _ in scrapeURL.itemList:
+        #                 DataParserClass.data.append({"URL":"https://www.furusato-tax.jp"+_,"category":category})
+        #             logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
+        #         break
+        # except:
+        #     scrapeURL.driver.quit()
+        #     raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
+        #     break
     scrapeURL.driver.quit()
 
 
@@ -217,27 +234,27 @@ if __name__ == '__main__':
     site.driver.get(site.url)
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
-    site.categoryParser(html= site.driver.page_source, elementTag = "search-child-categories")
+    site.categoryParser(html= site.driver.page_source, elementTag = "nv-select-categories")
     data=site.categoryList
     data=[{'URL':'https://www.furusato-tax.jp/search/154?disabled_category_top=1&target=1','category':'test'}]
     # {'URL':'https://www.furusato-tax.jp/search/153?disabled_category_top=1&target=1','category':'test2'}]
-    site.driver.close()
+    data = site.driver.close()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
-    start = time.perf_counter()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
-        futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
-        for future in concurrent.futures.as_completed(futures):
-            if future.result():
-                logging.info(f"{threading.current_thread().name}) -{future.result()}")
-    final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
+    # start = time.perf_counter()
+    # with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
+    #     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
+    #     for future in concurrent.futures.as_completed(futures):
+    #         if future.result():
+    #             logging.info(f"{threading.current_thread().name}) -{future.result()}")
+    # final = time.perf_counter()
+    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
-    start = time.perf_counter()
-    with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
-        futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
-        for future in concurrent.futures.as_completed(futures):
-            if future.result():
-                logging.info(f"{threading.current_thread().name}) -{future.result()}")
-    final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
+    # start = time.perf_counter()
+    # with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
+    #     futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
+    #     for future in concurrent.futures.as_completed(futures):
+    #         if future.result():
+    #             logging.info(f"{threading.current_thread().name}) -{future.result()}")
+    # final = time.perf_counter()
+    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
