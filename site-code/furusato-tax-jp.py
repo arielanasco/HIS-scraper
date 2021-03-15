@@ -86,13 +86,13 @@ class DataParserClass(WebDriver):
             self.th = _.find(class_ = "product-tbl-info__label").get_text()
             self.th = re.sub(r'\W+', '', self.th)
             print(self.th)
-            if self.th in "容量":
+            if self.th == "容量":
                 try:
                     self.capacityFinder = _.find(class_=capacityFinder).get_text()
                     self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
                 except:
                     self.capacityFinder = "NA"
-            if self.th in "自治体での":                 
+            if self.th in "自治体での管理番号":                 
                 try:
                     self.managementNumber = _.find(class_=managementNumber).get_text()
                     self.managementNumber =  re.sub(r'\W+', '', self.managementNumber)
