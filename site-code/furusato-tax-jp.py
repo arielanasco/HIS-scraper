@@ -77,49 +77,76 @@ class DataParserClass(WebDriver):
         type(self).totalData +=1
         super().__init__(url)
 
-    def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
+    def dataParser(self,html,itemUrl,stockStatus,localNameFinder,managementNumber,titleFinder,descriptionFinder,priceFinder,shipMethod,capacityFinder,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
+        self.about = self.html.find(class_="basicinfo_pay")
+        self.about = self.about.find_all("tr")
+        self.aboutShipment = self.html.find(class_="product-tbl-info")
+        try:
+            self.stockStatus = self.html.find(class_=stockStatus).find("span").get_text()
+            self.stockStatus =  re.sub(r'\W+', '', self.stockStatus)
+        except:
+            self.stockStatus =  "NA"
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
         except:
-            self.localNameFinder =  None
+            self.localNameFinder =  "NA"
+        try:
+            self.managementNumber = self.about[4].find(class_=managementNumber).get_text()
+            self.managementNumber =  re.sub(r'\W+', '', self.managementNumber)
+        except:
+            self.managementNumber =  "NA"            
         try:
             self.titleFinder = self.html.find(class_=titleFinder).get_text()
             self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
         except:
-            self.titleFinder = None
+            self.titleFinder = "NA"
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
             self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
         except:
-            self.descriptionFinder = None
+            self.descriptionFinder = "NA"
         try:
-            self.priceFinder = self.html.find(class_=priceFinder).get_text()
+            self.priceFinder = self.html.find(class_=priceFinder).text.strip()
             self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
         except:
-            self.priceFinder = None
+            self.priceFinder = "NA"
         try:
-            self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
+            self.shipMethod = self.aboutShipment.find(class_=shipMethod).get_text()
+            self.shipMethod = re.sub(r'\W+', '', self.shipMethod)
+        except:
+            self.shipMethod = "NA"
+        try:
+            self.capacityFinder = self.about[0].find(class_=capacityFinder).get_text()
             self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
         except:
-            self.capacityFinder = None
+            self.capacityFinder = "NA"
+        try:
+            self.compName = self.about[2].find(class_=compName).get_text()
+            self.compName = re.sub(r'\W+', '', self.compName)
+        except:
+            self.compName = "NA"
         try:
             self.imageUrlFinder = self.html.find(id=imageUrlFinder).find(class_="sld__list").find_all("li")
             self.imageList = []
             for _ in self.imageUrlFinder:
                 self.imageList.append(_.find("img").get("src")) 
         except:
-            self.imageList = []
+            self.imageList = "NA"
         with data_lock:
                 for data in  DataParserClass.data:
                     if itemUrl == data["URL"]:
                         index_ = DataParserClass.data.index(data)
+                        DataParserClass.data[index_]["stock_status"] =self.stockStatus
                         DataParserClass.data[index_]["local_name"] =self.localNameFinder
+                        DataParserClass.data[index_]["management_number"] =self.managementNumber
                         DataParserClass.data[index_]["title"] =self.titleFinder
                         DataParserClass.data[index_]["description"] =self.descriptionFinder
                         DataParserClass.data[index_]["price"] =self.priceFinder
+                        DataParserClass.data[index_]["ship_method"] =self.shipMethod
                         DataParserClass.data[index_]["capacity"] =self.capacityFinder
+                        DataParserClass.data[index_]["comp_name"] =self.compName
                         DataParserClass.data[index_]["images"] =self.imageList
                         break
 
@@ -132,12 +159,16 @@ def DataCollectorFunction(data):
         time.sleep(1)
         item_info = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, "city-title")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
-                           itemUrl = item_url, 
+                           itemUrl = item_url,
+                           stockStatus = "stock", 
                            localNameFinder = "city-title",
+                           managementNumber = "product-tbl-info__wrap",
                            titleFinder = "ttl-h1__text",
                            descriptionFinder = "overview",
                            priceFinder = "basicinfo_price",
-                           capacityFinder = "basicinfo_pay",
+                           shipMethod = "lst-icon",
+                           capacityFinder = "product-tbl-info__wrap",
+                           compName = "product-tbl-info__wrap",
                            imageUrlFinder = "basicinfo_slider" )
     except:
         scrapeURL.driver.quit()
@@ -146,6 +177,8 @@ def DataCollectorFunction(data):
 
 
 def ItemLinkCollector(data):
+    #https://www.furusato-tax.jp/product?header
+    #nv-select-categories
     nxt_btn =  "//*[@id='main']/div[3]/div[2]/div[1]/div[4]/div[3]/div/div[2]/a"
     nxt_btn1 = "//*[@id='main']/div[2]/div[2]/div[1]/div[4]/div[3]/div/div[3]/a"
     element_container = "grid"
