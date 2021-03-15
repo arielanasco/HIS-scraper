@@ -9,6 +9,13 @@ from random import sample
 from selenium.common.exceptions import TimeoutException
 import time
 
+import requests
+from bs4 import BeautifulSoup as bs
+import shutil
+import os 
+from PIL import Image
+
+
 
 class WebDriver:
     warnings.filterwarnings('ignore')
@@ -41,3 +48,24 @@ class WebDriver:
 
     def displaySiteInfo(self):
         return f"Target URL: {self.driver.current_url}" , f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}"
+
+class SaveData:
+    DB_NAME = ""
+    DB_HOST = ""
+    DB_USER = ""
+    DB_PASSWORD = ""
+    DB_PORT = ""
+
+    cwd = os.getcwd()
+    site_name = os.path.basename(__file__).split(".")[0]
+
+    def save_img(self,image):
+        self.response = requests.get(image, stream=True)
+        self.dir_name= os.path.join(self.cwd,"scraper",self.site_name)
+        if not os.path.exists(self.dir_name):
+            os.makedirs(self.dir_name)
+        self.image = image.split("/")
+        self.dir_file = os.path.join(self.dir_name,self.image[-1])
+        with open(dir_file, 'wb') as out_file:
+            shutil.copyfileobj(self.response.raw, out_file)
+        del self.response
