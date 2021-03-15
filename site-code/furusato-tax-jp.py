@@ -85,20 +85,20 @@ class DataParserClass(WebDriver):
         for _ in self.about:
             self.th = _.find(class_ = "product-tbl-info__label").get_text()
             self.th = re.sub(r'\W+', '', self.th)
-            if self.th == "容量":
+            if re.match("容量",self.th):
                 try:
                     self.capacityFinder = _.find(class_=capacityFinder).get_text()
                     self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
                 except:
                     self.capacityFinder = "NA"
-            if self.th == "自治体での管理番号":                 
+            if re.match("自治体での管理番号",self.th):                 
                 try:
                     self.managementNumber = _.find(class_=managementNumber).get_text()
                     self.managementNumber =  re.sub(r'\W+', '', self.managementNumber)
                 except:
                     self.managementNumber =  "NA"
             
-            if self.th == "事業者":
+            if re.match("事業者",self.th): 
                 try:
                     self.compName = _.find(class_=compName).get_text()
                     self.compName = re.sub(r'\W+', '', self.compName)
@@ -110,7 +110,7 @@ class DataParserClass(WebDriver):
 
         for _ in self.aboutShipment:
             self.th = _.find(class_ = "product-tbl-info__label").get_text()
-            if self.th == "配送":
+            if re.match("配送",self.th): 
                 try:
                     self.shipMethod = self.aboutShipment.find(class_=shipMethod).get_text()
                     self.shipMethod = re.sub(r'\W+', '', self.shipMethod)
