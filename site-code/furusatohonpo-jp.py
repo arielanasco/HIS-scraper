@@ -16,6 +16,7 @@ import logging
 import  concurrent.futures
 from bs4 import BeautifulSoup as bs
 import re
+import os
 
 """ This section declares all the variables used """
 LINK = "https://furusatohonpo.jp"
@@ -222,7 +223,15 @@ if __name__ == '__main__':
                 logging.info(f"{threading.current_thread().name}) -{future.result()}")
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
-    save_image = SaveData()
+
+    start = time.perf_counter()
+    site_name = os.path.basename(__file__).split(".")[0]
+    cwd = os.getcwd()
+    save_data = SaveData()
     for data_dict in DataParserClass.data:
         for image_link in data_dict["images"]:
-            save_image.save_img(image_link)
+            save_data.save_img(cwd,site_name,data_dict["category"],data_dict["title"],image_link)
+        save_data.query_db(data_dict)
+    final = time.perf_counter()
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items images")
+

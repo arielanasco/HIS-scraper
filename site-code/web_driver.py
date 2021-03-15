@@ -15,6 +15,7 @@ import shutil
 import os 
 from PIL import Image
 
+import mysql.connector as connect
 
 
 class WebDriver:
@@ -50,22 +51,24 @@ class WebDriver:
         return f"Target URL: {self.driver.current_url}" , f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}"
 
 class SaveData:
-    DB_NAME = ""
-    DB_HOST = ""
-    DB_USER = ""
-    DB_PASSWORD = ""
-    DB_PORT = ""
-
-    cwd = os.getcwd()
-    site_name = os.path.basename(__file__).split(".")[0]
-
-    def save_img(self,image):
+    mydb = connect.connect(host="localhost",user="django",password="django1234",database="dat")
+    mycursor = mydb.cursor()
+    img_dir_list = []
+    def save_img(self,cwd,site_name,category,title,image):
         self.response = requests.get(image, stream=True)
-        self.dir_name= os.path.join(self.cwd,"scraper",self.site_name)
+        self.dir_name= os.path.join(cwd,"scraper",site_name,category,title)
         if not os.path.exists(self.dir_name):
             os.makedirs(self.dir_name)
         self.image = image.split("/")
         self.dir_file = os.path.join(self.dir_name,self.image[-1])
-        with open(dir_file, 'wb') as out_file:
+        with open(self.dir_file, 'wb') as out_file:
             shutil.copyfileobj(self.response.raw, out_file)
         del self.response
+        self.img_dir_list.append(self.dir_file)
+
+    def query_db(self,data_dict):
+        self.mycursor.execute("INSERT INTO table_name (url,category,local_name,title,description,price,capacity,images)VALUES (%s,%s,%s,%s,%s,%s,%s)",
+            (data_dict["URL"],data_dict["category"],data_dict["local_name"],data_dict["title"],data_dict["description"],data_dict["price"],data_dict["capacity"],self.img_dir_list))
+        self.mycursor.commit()
+        self.img_dir_list = []
+
