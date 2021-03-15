@@ -192,7 +192,7 @@ def ItemLinkCollector(data):
         nextButton = nextButton.find_element_by_class_name("nv-pager__next").find_element_by_class_name("nv-pager__link")
         nxt = nextButton.get_attribute('href')
         if nxt != "#":
-            nextButton.send_keys(Keys.ENTER)
+            nextButton.click()
             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
         else:
             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
@@ -203,7 +203,6 @@ def ItemLinkCollector(data):
             scrapeURL.driver.quit()
             break
     scrapeURL.driver.quit()
-
         # try:
         #     time.sleep(1)
         #     itemlist = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
@@ -225,7 +224,6 @@ def ItemLinkCollector(data):
         #     scrapeURL.driver.quit()
         #     raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
         #     break
-    scrapeURL.driver.quit()
 
 
 if __name__ == '__main__':
@@ -237,6 +235,7 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag = "nv-select-categories")
     data=site.categoryList
+    site.driver.quit()
     data=[{'URL':'https://www.furusato-tax.jp/search/154?disabled_category_top=1&target=1','category':'test'}]
     # {'URL':'https://www.furusato-tax.jp/search/153?disabled_category_top=1&target=1','category':'test2'}]
     final = time.perf_counter()
