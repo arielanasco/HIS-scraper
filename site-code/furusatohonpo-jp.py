@@ -198,16 +198,10 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="p-topCategory__list")
     data=site.categoryList
-<<<<<<< HEAD
-    #data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"},
-    #      {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}
-    #]
-=======
     data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}]
     # data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}
     #     #   {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}
     # ]
->>>>>>> a59a3a0c46eb26230d1c0989a9d0bb8233537e0c
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} for fetching {len(data)} categories")
@@ -228,12 +222,9 @@ if __name__ == '__main__':
                 logging.info(f"{threading.current_thread().name}) -{future.result()}")
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
-<<<<<<< HEAD
-=======
 
     for data_dict in DataParserClass.data:
         save_image = SaveData()
         for data in data_dict["images"]:
             for image_link in data:
                 save_image.save_img(image_link)
->>>>>>> a59a3a0c46eb26230d1c0989a9d0bb8233537e0c
