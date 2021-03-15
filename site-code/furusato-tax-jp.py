@@ -85,6 +85,7 @@ class DataParserClass(WebDriver):
         for _ in self.about:
             self.th = _.find(class_ = "product-tbl-info__label").get_text()
             self.th = re.sub(r'\W+', '', self.th)
+            print(self.th)
             if self.th in "容量":
                 try:
                     self.capacityFinder = _.find(class_=capacityFinder).get_text()
