@@ -214,7 +214,6 @@ def ItemLinkCollector(data):
                 for _ in scrapeURL.itemList:
                     DataParserClass.data.append({"URL":"https://www.furusato-tax.jp"+_,"category":category})
                 logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
-            scrapeURL.driver.quit()
             break
     scrapeURL.driver.quit()
         # try:
