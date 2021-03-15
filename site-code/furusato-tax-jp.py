@@ -153,6 +153,7 @@ class DataParserClass(WebDriver):
         try:
             self.priceFinder = self.html.find(class_=priceFinder).text.strip()
             self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
+            self.priceFinder = re.findall('\d+', self.priceFinder )[0]
         except:
             self.priceFinder = "NA"
         try:
