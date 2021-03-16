@@ -109,13 +109,13 @@ class DataParserClass(WebDriver):
             self.th = re.sub(r'\W+', '', self.th)
             if re.match("配送方法",self.th):
                 try:
-                    self.shipMethod = _.find(class_=shipMethod).get_text()
+                    self.shipMethod = _.find(shipMethod).get_text()
                     self.shipMethod = re.sub(r'\W+', '', self.shipMethod)
                 except:
                     self.shipMethod = "NA"
             if re.match("事業者名",self.th):
                 try:
-                    self.compName = _.find(class_=compName).get_text()
+                    self.compName = _.find(compName).get_text()
                     self.compName = re.sub(r'\W+', '', self.compName)
                 except:
                     self.compName = "NA"
