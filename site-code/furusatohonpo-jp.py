@@ -171,8 +171,12 @@ def ItemLinkCollector(data):
         itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
         scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
         nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
-        nextButton = nextButton.find_element_by_class_name("c-pagination__next")
-        nxt = nextButton.get_attribute('href')[-1]
+        try:
+            nextButton = nextButton.find_element_by_class_name("c-pagination__next")
+            nxt = nextButton.get_attribute('href')[-1]
+        except  NoSuchElementException:
+            nxt = "#"
+            
         if nxt != "#":
             nextButton.send_keys(Keys.ENTER)
             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
