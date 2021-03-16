@@ -248,8 +248,6 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
     site=ScraperCategory(LINK)
     site.driver.get(site.url)
-    current_url, user_agent = site.displaySiteInfo()
-    logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag = "nv-select-categories")
     data=site.categoryList
     site.driver.quit()

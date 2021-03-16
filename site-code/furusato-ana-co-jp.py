@@ -64,6 +64,7 @@ class DataParserClass(web_driver_1.WebDriver):
         self.descriptionFinder = "NA"
         self.priceFinder = "NA"
         self.imageList = "NA"
+        self.consumption = "NA"
 
     def listParser(self,html,elementContainer):
         self.elementContainer = elementContainer
@@ -216,8 +217,6 @@ if __name__ == '__main__':
     start = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
     site=ScraperCategory()
-    user_agent = site.displaySiteInfo()
-    logging.info(f"{threading.current_thread().name}) -{user_agent}")
     site.categoryParser(html= site.get(LINK).text, elementTag = "gnav_detail_contents")
     data=site.categoryList
     data = [{'URL':'https://furusato.ana.co.jp/products/list.php?limit=30&s4=%E8%82%89_%E7%89%9B%E8%82%89_%E5%B1%B1%E5%BD%A2%E7%89%9B&sort=number5%2CNumber1%2CScore',
