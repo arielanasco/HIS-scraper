@@ -92,7 +92,7 @@ class DataParserClass(WebDriver):
         self.imageList = "NA"
         self.categoryFinder = "NA"
 
-    def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
+    def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,shipMethod,capacityFinder,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         try:
             self.categoryFinder = self.html.find(class_=categoryFinder).find_all("li")
