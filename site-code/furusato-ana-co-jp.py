@@ -82,7 +82,7 @@ class DataParserClass(web_driver_1.WebDriver):
     def dataParser(self,html,itemUrl,stockStatus,localNameFinder,managementNumber,titleFinder,descriptionFinder,priceFinder,
                    shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        self.about = self.html.find(class_="table01")
+        self.about = self.html.find(class_="as-tbset")
         self.about = self.about.find_all("tr")
         for _ in self.about:
             self.th = _.find("th").get_text()
