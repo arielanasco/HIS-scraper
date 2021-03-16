@@ -235,8 +235,8 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="p-topCategory__list")
     data=site.categoryList
-    data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"},
-    {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}]
+    data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}]
+    # {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}]
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} for fetching {len(data)} categories")
