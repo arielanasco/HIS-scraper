@@ -94,8 +94,7 @@ class DataParserClass(WebDriver):
     def dataParser(self,html,itemUrl,stockStatus,localNameFinder,managementNumber,titleFinder,descriptionFinder,priceFinder,
                    shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        self.about = self.html.find(class_="info")
-        self.about = self.about.find_all(class_="cell")
+        self.about = self.html.find_all(class_="cell")
         for _ in self.about:
             self.th = _.find(class_="l-cell").get_text()
             self.th = re.sub(r'\W+', '', self.th)
@@ -123,11 +122,6 @@ class DataParserClass(WebDriver):
                     self.managementNumber =  re.sub(r'\W+', '', self.managementNumber)
                 except:
                     self.managementNumber =  "NA"
-        self.aboutShipment = self.html.find(class_="company-info")
-        self.aboutShipment = self.aboutShipment.find_all(class_="cell")
-        for _ in self.aboutShipment:
-            self.th = _.find(class_ = "l-cell").get_text()
-            self.th = re.sub(r'\W+', '', self.th)
             if re.match("事業者名",self.th): 
                 try:
                     self.compName = self.aboutShipment.find(class_=compName).get_text()
