@@ -97,60 +97,60 @@ class DataParserClass(WebDriver):
         self.about = self.html.find_all(class_="cell")
         for _ in self.about:
             self.th = _.find(class_="l-cell").get_text()
-            self.th = re.sub(r'\W+', '', self.th)
+            self.th =re.sub(r'\s+', '', self.th)
             if re.match("配送方法",self.th): 
                 try:
                     self.shipMethod = self.aboutShipment.find(class_=shipMethod).get_text()
-                    self.shipMethod = re.sub(r'\W+', '', self.shipMethod)
+                    self.shipMethod =re.sub(r'\s+', '', self.shipMethod)
                 except:
                     self.shipMethod = "NA"
             if re.match("容量",self.th):
                 try:
                     self.capacityFinder = _.find(class_ = capacityFinder).get_text()
-                    self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
+                    self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
                 except:
                     self.capacityFinder = "NA"  
             if re.match("賞味期限",self.th):
                 try:
                     self.consumption = _.find(class_ = consumption).get_text()
-                    self.consumption = re.sub(r'\W+', '', self.consumption)
+                    self.consumption = re.sub(r'\s+', '', self.consumption)
                 except:
                     self.consumption = "NA"
             if re.match("管理番号",self.th):                 
                 try:
                     self.managementNumber = _.find(class_= managementNumber).get_text()
-                    self.managementNumber =  re.sub(r'\W+', '', self.managementNumber)
+                    self.managementNumber =  re.sub(r'\s+', '', self.managementNumber)
                 except:
                     self.managementNumber =  "NA"
             if re.match("事業者名",self.th): 
                 try:
                     self.compName = self.aboutShipment.find(class_=compName).get_text()
-                    self.compName = re.sub(r'\W+', '', self.compName)
+                    self.compName = re.sub(r'\s+', '', self.compName)
                 except:
                     self.compName = "NA"
         try:
             self.stockStatus = self.html.find(class_=stockStatus).find("span").get_text()
-            self.stockStatus =  re.sub(r'\W+', '', self.stockStatus)
+            self.stockStatus =  re.sub(r'\s+', '', self.stockStatus)
         except:
             self.stockStatus =  "NA"
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
-            self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
+            self.localNameFinder =  re.sub(r'\s+', '', self.localNameFinder)
         except:
             self.localNameFinder =  "NA"
         try:
             self.titleFinder = self.html.find(class_=titleFinder).find("h1").get_text()
-            self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
+            self.titleFinder = re.sub(r'\s+', '', self.titleFinder)
         except:
             self.titleFinder = None
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
-            self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
+            self.descriptionFinder = re.sub(r'\s+', '', self.descriptionFinder)
         except:
             self.descriptionFinder = None
         try:
             self.priceFinder = self.html.find(class_=priceFinder).get_text()
-            self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
+            self.priceFinder = re.sub(r'\s+', '', self.priceFinder)
         except:
             self.priceFinder = None
         try:
