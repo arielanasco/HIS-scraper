@@ -218,17 +218,17 @@ def ItemLinkCollector(data):
 if __name__ == '__main__':
     start = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
-    site=ScraperCategory(LINK)
+    site=ScraperCategory("https://furusatohonpo.jp/donate/s/?")
     site.driver.get(site.url)
     cat_container = site.driver.find_elements_by_css_selector("ul.p-sortNavPCCategory__listLv2")
     for cat in cat_container:
         print(cat)
-        # cat_container_ = cat.find_elements_by_class_name("p-sortNavPCCategory__itemLv2")
-        # for cat_ in cat_container_:
-        #     cat_.find_element_by_tag_name("input").click()
-        #     catt  = cat_.find_element_by_css_selector("a.js-sortAccBtn").text
-        #     site.categoryParser(html= site.driver.current_url, elementCat =catt)
-        #     cat_.find_element_by_tag_name("input").click()
+        cat_container_ = cat.find_elements_by_class_name("p-sortNavPCCategory__itemLv2")
+        for cat_ in cat_container_:
+            cat_.find_element_by_tag_name("input").click()
+            catt  = cat_.find_element_by_css_selector("a.js-sortAccBtn").text
+            site.categoryParser(html= site.driver.current_url, elementCat =catt)
+            cat_.find_element_by_tag_name("input").click()
     data=site.categoryList
     # data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}]
     # {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}]
