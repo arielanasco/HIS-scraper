@@ -149,6 +149,7 @@ class DataParserClass(web_driver_1.WebDriver):
             self.imageList = []
         with data_lock:
                 for data in  DataParserClass.data:
+                    if itemUrl == data["URL"]:
                         index_ = DataParserClass.data.index(data)
                         DataParserClass.data[index_]["stock_status"] =self.stockStatus
                         DataParserClass.data[index_]["local_name"] =self.localNameFinder
