@@ -124,7 +124,7 @@ class DataParserClass(WebDriver):
                 except:
                     self.managementNumber =  "NA"
         self.aboutShipment = self.html.find(class_="company-info")
-        self.aboutShipment = self.aboutShipment.find_all("cell")
+        self.aboutShipment = self.aboutShipment.find_all(class_="cell")
         for _ in self.aboutShipment:
             self.th = _.find(class_ = "l-cell").get_text()
             self.th = re.sub(r'\W+', '', self.th)
@@ -251,8 +251,7 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag = "popover")
     data=site.categoryList
-    data=[{"URL":"https://furu-po.com/goods_list/152","category":"test:"}]
-    #{"URL":"https://furu-po.com/goods_list/166/168","category":"test2"}]
+    data=[{"URL":"https://furu-po.com/goods_list/152","category":"test:"},{"URL":"https://furu-po.com/goods_list/166/168","category":"test2"}]
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
