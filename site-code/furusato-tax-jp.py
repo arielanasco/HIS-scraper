@@ -90,10 +90,11 @@ class DataParserClass(WebDriver):
         self.descriptionFinder = "NA"
         self.priceFinder = "NA"
         self.imageList = "NA"
+        self.consumption ="NA"
         
 
     def dataParser(self,html,itemUrl,stockStatus,localNameFinder,managementNumber,titleFinder,descriptionFinder,priceFinder,
-                   shipMethod,capacityFinder,compName,imageUrlFinder):
+                   shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         self.about = self.html.find(class_="basicinfo_pay")
         self.about = self.about.find_all("tr")
@@ -119,6 +120,12 @@ class DataParserClass(WebDriver):
                     self.compName = re.sub(r'\W+', '', self.compName)
                 except:
                     self.compName = "NA"
+            if re.match("消費期限",self.th): 
+                try:
+                    self.consumption = _.find(class_=consumption).get_text()
+                    self.consumption = re.sub(r'\W+', '', self.coconsumptionmpName)
+                except:
+                    self.compconsumptionName = "NA"
 
         self.aboutShipment = self.html.find(class_="product-tbl-info")
         self.aboutShipment = self.aboutShipment.find_all("tr")
@@ -144,7 +151,7 @@ class DataParserClass(WebDriver):
           
         try:
             self.titleFinder = self.html.find(class_=titleFinder).get_text()
-            self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
+            # self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
         except:
             self.titleFinder = "NA"
         try:
@@ -177,6 +184,7 @@ class DataParserClass(WebDriver):
                         DataParserClass.data[index_]["price"] =self.priceFinder
                         DataParserClass.data[index_]["ship_method"] =self.shipMethod
                         DataParserClass.data[index_]["capacity"] =self.capacityFinder
+                        DataParserClass.data[index_]["consumption"] =self.consumption
                         DataParserClass.data[index_]["comp_name"] =self.compName
                         DataParserClass.data[index_]["images"] =self.imageList
                         break
@@ -199,6 +207,7 @@ def DataCollectorFunction(data):
                            priceFinder = "basicinfo_price",
                            shipMethod = "product-tbl-info__wrap",
                            capacityFinder = "product-tbl-info__wrap",
+                           consumption = "product-tbl-info__wrap",
                            compName = "product-tbl-info__wrap",
                            imageUrlFinder = "basicinfo_slider" )
     except:

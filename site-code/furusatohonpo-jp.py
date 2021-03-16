@@ -80,6 +80,8 @@ class DataParserClass(WebDriver):
         self.priceFinder = "NA"
         self.imageList = "NA"
         self.categoryFinder = "NA"
+        self.stockStatus =  "NA"
+
 
     def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,shipMethod,capacityFinder,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
@@ -108,6 +110,12 @@ class DataParserClass(WebDriver):
                     self.compName = re.sub(r'\W+', '', self.compName)
                 except:
                     self.compName = "NA"
+        try:
+            self.stockStatus = self.html.find(class_=stockStatus).find("span").get_text()
+            self.stockStatus =  re.sub(r'\W+', '', self.stockStatus)
+        except:
+            self.stockStatus =  "NA"
+            
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
