@@ -176,7 +176,8 @@ def ItemLinkCollector(data):
             nxt = nextButton.get_attribute('href')[-1]
         except  NoSuchElementException:
             nxt = "#"
-            
+        print(nxt)
+
         if nxt != "#":
             nextButton.send_keys(Keys.ENTER)
             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
@@ -255,7 +256,7 @@ if __name__ == '__main__':
     for data_dict in DataParserClass.data:
         for image_link in data_dict["images"]:
             save_data.save_img(cwd,site_name,data_dict["category"],data_dict["title"],image_link)
-        save_data.query_db(data_dict)
+        # save_data.query_db(data_dict)
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items images")
 
