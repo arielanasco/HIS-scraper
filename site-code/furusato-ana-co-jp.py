@@ -89,20 +89,20 @@ class DataParserClass(web_driver_1.WebDriver):
             self.th = re.sub(r'\W+', '', self.th)
             if re.match("内容量",self.th):
                 try:
-                    self.capacityFinder = _.find(class_=capacityFinder).get_text()
+                    self.capacityFinder = _.find(capacityFinder).get_text()
                     self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
                 except:
                     self.capacityFinder = "NA"            
             if re.match("賞味期限",self.th):
                 try:
-                    self.consumption = _.find(class_=consumption).get_text()
+                    self.consumption = _.find(consumption).get_text()
                     self.consumption = re.sub(r'\W+', '', self.consumption)
                 except:
                     self.consumption = "NA"
 
             if re.match("事業者名",self.th): 
                 try:
-                    self.compName = _.find(class_=compName).get_text()
+                    self.compName = _.find(compName).get_text()
                     self.compName = re.sub(r'\W+', '', self.compName)
                 except:
                     self.compName = "NA"
