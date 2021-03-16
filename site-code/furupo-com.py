@@ -99,6 +99,12 @@ class DataParserClass(WebDriver):
         for _ in self.about:
             self.th = _.find("l-cell").get_text()
             self.th = re.sub(r'\W+', '', self.th)
+            if re.match("配送方法",self.th): 
+                try:
+                    self.shipMethod = self.aboutShipment.find(class_=shipMethod).get_text()
+                    self.shipMethod = re.sub(r'\W+', '', self.shipMethod)
+                except:
+                    self.shipMethod = "NA"
             if re.match("容量",self.th):
                 try:
                     self.capacityFinder = _.find(class_ = capacityFinder).get_text()
@@ -121,6 +127,7 @@ class DataParserClass(WebDriver):
         self.aboutShipment = self.aboutShipment.find_all("cell")
         for _ in self.aboutShipment:
             self.th = _.find(class_ = "l-cell").get_text()
+            self.th = re.sub(r'\W+', '', self.th)
             if re.match("事業者名",self.th): 
                 try:
                     self.compName = self.aboutShipment.find(class_=compName).get_text()
@@ -152,11 +159,6 @@ class DataParserClass(WebDriver):
             self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
         except:
             self.priceFinder = None
-        try:
-            self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
-            self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
-        except:
-            self.capacityFinder = None
         try:
             self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("li")
             self.imageList = []
