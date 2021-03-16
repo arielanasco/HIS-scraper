@@ -95,7 +95,7 @@ class DataParserClass(WebDriver):
                    shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         self.about = self.html.find(class_="info")
-        self.about = self.about.find_all("cell")
+        self.about = self.about.find_all(class_="cell")
         for _ in self.about:
             self.th = _.find("l-cell").get_text()
             self.th = re.sub(r'\W+', '', self.th)
