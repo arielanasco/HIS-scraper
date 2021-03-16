@@ -222,6 +222,7 @@ if __name__ == '__main__':
     site.driver.get(site.url)
     cat_container = site.driver.find_elements_by_class_name("p-sortNavPCCategory__listLv2")
     for cat in cat_container:
+        print(cat)
         cat_container_ = cat.find_elements_by_class_name("p-sortNavPCCategory__itemLv2")
         for cat_ in cat_container_:
             cat_.find_element_by_tag_name("input").click()
