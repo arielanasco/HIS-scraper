@@ -220,9 +220,8 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
     site=ScraperCategory("https://furusatohonpo.jp/donate/s/?")
     site.driver.get(site.url)
-    cat_container = site.driver.find_elements_by_css_selector("p-sortNavPCCategory__itemLv2")
+    cat_container = site.driver.find_elements_by_class_name("p-sortNavPCCategory__itemLv2")
     for cat in cat_container:
-        print(cat)
         cat.find_element_by_tag_name("input").click()
         catt  = cat.find_element_by_css_selector("a.js-sortAccBtn").text
         site.categoryParser(html= site.driver.current_url, elementCat =catt)
