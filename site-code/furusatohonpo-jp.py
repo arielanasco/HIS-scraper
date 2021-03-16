@@ -34,19 +34,9 @@ class ScraperCategory(WebDriver):
         super().__init__(url)
 
     def categoryParser(self,**kwargs):
-        self.elementTag = kwargs.get("elementTag")
-        self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_="vue-lv1-category-links")
-        self.category = self.category.find(class_=self.elementTag)
-        self.liTag = self.category.li
-        while True:
-            self.categoryData = re.sub(r'\([^()]*\)', '', self.liTag.find("a").get_text())
-            self.categoryData = re.sub(r'\W+', '', self.categoryData)
-            ScraperCategory.categoryList.append({"URL":"https://furusatohonpo.jp"+self.liTag.find("a").get("href"),"category":self.categoryData})
-            if self.liTag.find_next_sibling():
-                self.liTag = self.liTag.find_next_sibling()
-            else:
-                break
+        self.elementCat = kwargs.get("elementCat")
+        self.html = kwargs.get("html")
+        ScraperCategory.categoryList.append({"URL":self.html,"category":self.elementCat})
 
 class ListParserClass(WebDriver):
     totalList = 0
@@ -80,7 +70,6 @@ class DataParserClass(WebDriver):
         self.url = url
         type(self).totalData +=1
         super().__init__(url)
-        self.managementNumber =  "NA"        
         self.compName =  "NA"        
         self.capacityFinder =  "NA"
         self.shipMethod =  "NA"
@@ -127,7 +116,6 @@ class DataParserClass(WebDriver):
         try:
             self.titleFinder = self.html.find(class_=titleFinder).get_text()
             self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
-        except:
             self.titleFinder = "NA"
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
@@ -141,6 +129,7 @@ class DataParserClass(WebDriver):
             raise Exception ("Unable to locate the priceFinder")
         try:
             self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
+            self.capacityFinder = self.html.find(class_=capacityFinder).find("span").get_text()
             self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
         except:
             self.capacityFinder = "NA"
@@ -159,7 +148,6 @@ class DataParserClass(WebDriver):
                         index_ = DataParserClass.data.index(data)
                         DataParserClass.data[index_]["category"] =self.categoryFinder
                         DataParserClass.data[index_]["local_name"] =self.localNameFinder
-                        DataParserClass.data[index_]["management_number"] =self.managementNumber
                         DataParserClass.data[index_]["title"] =self.titleFinder
                         DataParserClass.data[index_]["description"] =self.descriptionFinder
                         DataParserClass.data[index_]["price"] =self.priceFinder
@@ -231,41 +219,45 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
     site=ScraperCategory(LINK)
     site.driver.get(site.url)
-    current_url, user_agent = site.displaySiteInfo()
-    logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
-    site.categoryParser(html= site.driver.page_source, elementTag ="p-topCategory__list")
+    cat_container = site.driver.find_elements_by_css_selector("ul.p-sortNavPCCategory__listLv2")
+    for cat in cat_container:
+        cat_container_ = cat.find_elements_by_css_selector("li.p-sortNavPCCategory__itemLv2")
+        for cat_ in cat_container_:
+            cat_.find_element_by_css_selector("a.js-sortAccBtn").send_keys(Keys.ENTER)
+            catt  = cat_.find_element_by_css_selector("a.js-sortAccBtn").text
+            site.categoryParser(html= site.driver.current_url, elementCat =catt)
     data=site.categoryList
-    data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}]
+    # data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}]
     # {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}]
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} for fetching {len(data)} categories")
-    start = time.perf_counter()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
-        futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
-        for future in concurrent.futures.as_completed(futures):
-            if future.result():
-                logging.info(f"{threading.current_thread().name}) -{future.result()}")
-    final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
+    # start = time.perf_counter()
+    # with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
+    #     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
+    #     for future in concurrent.futures.as_completed(futures):
+    #         if future.result():
+    #             logging.info(f"{threading.current_thread().name}) -{future.result()}")
+    # final = time.perf_counter()
+    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
-    start = time.perf_counter()
-    with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
-        futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
-        for future in concurrent.futures.as_completed(futures):
-            if future.result():
-                logging.info(f"{threading.current_thread().name}) -{future.result()}")
-    final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
+    # start = time.perf_counter()
+    # with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
+    #     futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
+    #     for future in concurrent.futures.as_completed(futures):
+    #         if future.result():
+    #             logging.info(f"{threading.current_thread().name}) -{future.result()}")
+    # final = time.perf_counter()
+    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
 
-    start = time.perf_counter()
-    site_name = os.path.basename(__file__).split(".")[0]
-    cwd = os.getcwd()
-    save_data = SaveData()
-    for data_dict in DataParserClass.data:
-        for image_link in data_dict["images"]:
-            save_data.save_img(cwd,site_name,data_dict["category"],data_dict["title"],image_link)
-        # save_data.query_db(data_dict)
-    final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items images")
+    # start = time.perf_counter()
+    # site_name = os.path.basename(__file__).split(".")[0]
+    # cwd = os.getcwd()
+    # save_data = SaveData()
+    # for data_dict in DataParserClass.data:
+    #     for image_link in data_dict["images"]:
+    #         save_data.save_img(cwd,site_name,data_dict["category"],data_dict["title"],image_link)
+    #     # save_data.query_db(data_dict)
+    # final = time.perf_counter()
+    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items images")
 
