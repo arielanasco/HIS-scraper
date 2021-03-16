@@ -244,7 +244,7 @@ if __name__ == '__main__':
     site.categoryParser(html= site.driver.page_source, elementTag = "nv-select-categories")
     data=site.categoryList
     site.driver.quit()
-    data=[{'URL':'https://www.furusato-tax.jp/search/154?disabled_category_top=1&target=1','category':'test'}]
+    data=[{'URL':'https://www.furusato-tax.jp/search/154?disabled_category_top=1&target=1','category':'test'},
     {'URL':'https://www.furusato-tax.jp/search/153?disabled_category_top=1&target=1','category':'test2'}]
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
