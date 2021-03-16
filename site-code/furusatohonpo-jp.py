@@ -224,9 +224,10 @@ if __name__ == '__main__':
     for cat in cat_container:
         cat_container_ = cat.find_elements_by_css_selector("li.p-sortNavPCCategory__itemLv2")
         for cat_ in cat_container_:
-            cat_.find_element_by_css_selector("a.js-sortAccBtn").send_keys(Keys.ENTER)
+            cat_.find_element_by_css_selector("input").click()
             catt  = cat_.find_element_by_css_selector("a.js-sortAccBtn").text
             site.categoryParser(html= site.driver.current_url, elementCat =catt)
+            cat_.find_element_by_css_selector("input").click()
     data=site.categoryList
     # data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}]
     # {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}]
