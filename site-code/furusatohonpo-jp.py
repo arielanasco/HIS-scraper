@@ -222,10 +222,11 @@ if __name__ == '__main__':
     site.driver.get(site.url)
     cat_container = site.driver.find_elements_by_css_selector("p-sortNavPCCategory__itemLv2")
     for cat in cat_container:
-        cat.find_element_by_css_selector("input").send_keys(Keys.ENTER)
+        print(cat)
+        cat.find_element_by_tag_name("input").click()
         catt  = cat.find_element_by_css_selector("a.js-sortAccBtn").text
         site.categoryParser(html= site.driver.current_url, elementCat =catt)
-        cat.find_element_by_css_selector("input").send_keys(Keys.ENTER)
+        cat.find_element_by_tag_name("input").click()
     data=site.categoryList
     # data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}]
     # {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}]
