@@ -159,7 +159,7 @@ def DataCollectorFunction(data):
     scrapeURL.driver.quit()
 
 def ItemLinkCollector(data):
-    nxt_btn ="c-pagination__next"
+    nxt_btn ="c-pagination"
     element_container = "c-itemList"
     url_category=data["URL"]
     category=data["category"]
@@ -167,26 +167,46 @@ def ItemLinkCollector(data):
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraping([{category}]{url_category})")
     while True:
-        try:
-            time.sleep(1)
-            itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
-            scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
-            try:
-                nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
-                nextButton.send_keys(Keys.ENTER)
-                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
-            except NoSuchElementException:
-                logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
-                with data_lock:
-                    for _ in scrapeURL.itemList:
-                        DataParserClass.data.append({"URL":LINK+_,"category":category})
-                    logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
-                break
-        except:
-            scrapeURL.driver.quit()
-            raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
+        time.sleep(1)
+        itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+        scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
+        nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
+        nextButton = nextButton.find_element_by_class_name("c-pagination__next")
+        nextButton.send_keys(Keys.ENTER)
+        if nextButton.get_attribute('href')[-1] != "#":
+            nextButton.send_keys(Keys.ENTER)
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
+        else:
+            logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
+            with data_lock:
+                for _ in scrapeURL.itemList:
+                    DataParserClass.data.append({"URL":LINK+_,"category":category})
+                logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
             break
     scrapeURL.driver.quit()
+    # while True:
+    #     try:
+    #         time.sleep(1)
+    #         itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+    #         scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
+    #         try:
+    #             nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
+    #             nextButton = nextButton.find_element_by_class_name("c-pagination__next")
+    #             nextButton.send_keys(Keys.ENTER)
+
+    #             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category})")
+    #         except NoSuchElementException:
+    #             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category})")
+    #             with data_lock:
+    #                 for _ in scrapeURL.itemList:
+    #                     DataParserClass.data.append({"URL":LINK+_,"category":category})
+    #                 logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
+    #             break
+    #     except:
+    #         scrapeURL.driver.quit()
+    #         raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
+    #         break
+    # scrapeURL.driver.quit()
 
 
 

@@ -70,39 +70,39 @@ class DataParserClass(web_driver_1.WebDriver):
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        try:
-            self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
-            self.localNameFinder = re.sub(r'\s+', '', self.localNameFinder)
-        except:
-            self.localNameFinder = None
-        try:
-            self.titleFinder = self.html.find(class_=titleFinder).get_text()
-            self.titleFinder = self.titleFinder.replace(self.localNameFinder,'')
-            self.titleFinder = re.sub(r'\s+', '', self.titleFinder)
-        except:
-            self.titleFinder = None
-        try:
-            self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
-            self.descriptionFinder = re.sub(r'\s+', '', self.descriptionFinder)
-        except:
-            self.descriptionFinder = None
-        try:
-            self.priceFinder = self.html.find(class_=priceFinder).get_text()
-            self.priceFinder = re.sub(r'\s+', '', self.priceFinder)
-        except:
-            self.priceFinder = None
-        try:
-            self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
-            self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
-        except:
-            self.capacityFinder = None
-        try:
-            self.imageUrlFinder = self.html.find(class_="as-detail_wrap").find(class_=imageUrlFinder).find_all("li")
-            self.imageList = []
-            for _ in self.imageUrlFinder:
-                self.imageList.append("https://furusato.ana.co.jp"+_.find("img").get("src")) 
-        except:
-            self.imageList = []
+        # try:
+        #     self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
+        #     self.localNameFinder = re.sub(r'\s+', '', self.localNameFinder)
+        # except:
+        #     self.localNameFinder = None
+        # try:
+        #     self.titleFinder = self.html.find(class_=titleFinder).get_text()
+        #     self.titleFinder = self.titleFinder.replace(self.localNameFinder,'')
+        #     self.titleFinder = re.sub(r'\s+', '', self.titleFinder)
+        # except:
+        #     self.titleFinder = None
+        # try:
+        #     self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
+        #     self.descriptionFinder = re.sub(r'\s+', '', self.descriptionFinder)
+        # except:
+        #     self.descriptionFinder = None
+        # try:
+        #     self.priceFinder = self.html.find(class_=priceFinder).get_text()
+        #     self.priceFinder = re.sub(r'\s+', '', self.priceFinder)
+        # except:
+        #     self.priceFinder = None
+        # try:
+        #     self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
+        #     self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+        # except:
+        #     self.capacityFinder = None
+        # try:
+        #     self.imageUrlFinder = self.html.find(class_="as-detail_wrap").find(class_=imageUrlFinder).find_all("li")
+        #     self.imageList = []
+        #     for _ in self.imageUrlFinder:
+        #         self.imageList.append("https://furusato.ana.co.jp"+_.find("img").get("src")) 
+        # except:
+        #     self.imageList = []
         with data_lock:
                 for data in  DataParserClass.data:
                     if itemUrl == data["URL"]:

@@ -4,7 +4,7 @@ Site : Hometown Choice
 Link : https://www.furusato-tax.jp/
 
 """
-from web_driver import WebDriver
+from web_driver import WebDriver,SaveData
 import  web_driver_1
 import time
 import threading
@@ -17,6 +17,9 @@ import logging
 import  concurrent.futures
 from bs4 import BeautifulSoup as bs
 import re
+
+import os
+
 """ This section declares all the variables used """
 LINK = "https://www.furusato-tax.jp/product?header"
 
@@ -116,7 +119,6 @@ class DataParserClass(WebDriver):
                     self.compName = re.sub(r'\W+', '', self.compName)
                 except:
                     self.compName = "NA"
-
 
         self.aboutShipment = self.html.find(class_="product-tbl-info")
         self.aboutShipment = self.aboutShipment.find_all("tr")
@@ -230,27 +232,6 @@ def ItemLinkCollector(data):
                 logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
             break
     scrapeURL.driver.quit()
-        # try:
-        #     time.sleep(1)
-        #     itemlist = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
-        #     scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
-        #     try:
-        #         nextButton = scrapeURL.driver.find_element_by_class_name("nv-pager")
-        #         nextButton = nextButton.find_element_by_class_name("nv-pager__next").find_element_by_class_name("nv-pager__link")
-        #         nextButton = 
-        #         nextButton.send_keys(Keys.ENTER)
-        #         logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Next_Page({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
-        #     except NoSuchElementException:
-        #         logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
-        #         with data_lock:
-        #             for _ in scrapeURL.itemList:
-        #                 DataParserClass.data.append({"URL":"https://www.furusato-tax.jp"+_,"category":category})
-        #             logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
-        #         break
-        # except:
-        #     scrapeURL.driver.quit()
-        #     raise Exception (f"{threading.current_thread().name}) -Unable to load the element")
-        #     break
 
 
 if __name__ == '__main__':
@@ -284,3 +265,14 @@ if __name__ == '__main__':
                 logging.info(f"{threading.current_thread().name}) -{future.result()}")
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
+
+    start = time.perf_counter()
+    site_name = os.path.basename(__file__).split(".")[0]
+    cwd = os.getcwd()
+    save_data = SaveData()
+    for data_dict in DataParserClass.data:
+        for image_link in data_dict["images"]:
+            save_data.save_img(cwd,site_name,data_dict["category"],data_dict["title"],image_link)
+        save_data.query_db(data_dict)
+    final = time.perf_counter()
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items images")
