@@ -15,9 +15,9 @@ import shutil
 import os 
 from PIL import Image
 
-import mysql.connector as connect
-mydb = connect.connect(host="localhost",user="django",password="django1234",database="dat")
-mycursor = mydb.cursor()
+# import mysql.connector as connect
+# mydb = connect.connect(host="localhost",user="django",password="django1234",database="dat")
+# mycursor = mydb.cursor()
 
 class WebDriver:
     warnings.filterwarnings('ignore')
