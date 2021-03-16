@@ -80,6 +80,17 @@ class DataParserClass(WebDriver):
         self.url = url
         type(self).totalData +=1
         super().__init__(url)
+        self.managementNumber =  "NA"        
+        self.compName =  "NA"        
+        self.capacityFinder =  "NA"
+        self.shipMethod =  "NA"
+        self.stockStatus =  "NA"
+        self.localNameFinder =  "NA"
+        self.titleFinder = "NA"
+        self.descriptionFinder = "NA"
+        self.priceFinder = "NA"
+        self.imageList = "NA"
+        self.categoryFinder = "NA"
 
     def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
@@ -89,22 +100,40 @@ class DataParserClass(WebDriver):
             self.categoryFinder =  re.sub(r'\W+', '', self.categoryFinder)
             self.categoryFinder =  re.sub(r'のふるさと納税一覧', '', self.categoryFinder)
         except:
-             self.categoryFinder = None
+             self.categoryFinder = "NA"
+
+        self.about = self.html.find(class_="p-detailInfo")
+        self.about = self.about.find_all("tr")
+        for _ in self.about:
+            self.th = _.find("th").get_text()
+            self.th = re.sub(r'\W+', '', self.th)
+            if re.match("配送方法",self.th):
+                try:
+                    self.shipMethod = _.find(class_=shipMethod).get_text()
+                    self.shipMethod = re.sub(r'\W+', '', self.shipMethod)
+                except:
+                    self.shipMethod = "NA"
+            if re.match("事業者名",self.th):
+                try:
+                    self.compName = _.find(class_=compName).get_text()
+                    self.compName = re.sub(r'\W+', '', self.compName)
+                except:
+                    self.compName = "NA"
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
         except:
-            self.localNameFinder =  None
+            self.localNameFinder = "NA"
         try:
             self.titleFinder = self.html.find(class_=titleFinder).get_text()
             self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
         except:
-            self.titleFinder = None
+            self.titleFinder = "NA"
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
             self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
         except:
-            self.descriptionFinder = None
+            self.descriptionFinder = "NA"
         try:
             self.priceFinder = self.html.find(class_=priceFinder).find("span").get_text()
             self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
@@ -114,7 +143,7 @@ class DataParserClass(WebDriver):
             self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
             self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
         except:
-            self.capacityFinder = None
+            self.capacityFinder = "NA"
         try:
             self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("div", {"class":"p-detailMv__mainItem"})
             self.imageList = []
@@ -130,10 +159,13 @@ class DataParserClass(WebDriver):
                         index_ = DataParserClass.data.index(data)
                         DataParserClass.data[index_]["category"] =self.categoryFinder
                         DataParserClass.data[index_]["local_name"] =self.localNameFinder
+                        DataParserClass.data[index_]["management_number"] =self.managementNumber
                         DataParserClass.data[index_]["title"] =self.titleFinder
                         DataParserClass.data[index_]["description"] =self.descriptionFinder
                         DataParserClass.data[index_]["price"] =self.priceFinder
+                        DataParserClass.data[index_]["ship_method"] =self.shipMethod
                         DataParserClass.data[index_]["capacity"] =self.capacityFinder
+                        DataParserClass.data[index_]["comp_name"] =self.compName
                         DataParserClass.data[index_]["images"] =self.imageList
                         break
 
@@ -149,9 +181,11 @@ def DataCollectorFunction(data):
                            categoryFinder = "c-contents", 
                            localNameFinder = "p-detailName__municipality",
                            titleFinder = "p-detailName__ttl",
-                           descriptionFinder = "p-detailDescription",
+                           descriptionFinder = "p-detailDescription__txt",
                            priceFinder = "p-detailName__price",
-                           capacityFinder = "p-detailAddCart__info",
+                           shipMethod = "td",
+                           capacityFinder = "p-detailAddCart__ttl",
+                           compName = "td",
                            imageUrlFinder = "slick-track")
     except:
         scrapeURL.driver.quit()
@@ -201,10 +235,8 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag ="p-topCategory__list")
     data=site.categoryList
-    data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}]
-    # data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}
-    #     #   {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}
-    # ]
+    data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"},
+    {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}]
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} for fetching {len(data)} categories")
