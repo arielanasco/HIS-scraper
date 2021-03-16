@@ -78,15 +78,65 @@ class DataParserClass(WebDriver):
         self.url = url
         type(self).totalData +=1
         super().__init__(url)
+        self.managementNumber =  "NA"        
+        self.compName =  "NA"        
+        self.capacityFinder =  "NA"
+        self.shipMethod =  "NA"
+        self.stockStatus =  "NA"
+        self.localNameFinder =  "NA"
+        self.titleFinder = "NA"
+        self.descriptionFinder = "NA"
+        self.priceFinder = "NA"
+        self.imageList = "NA"
+        self.consumption = "NA"
 
 
-    def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
+    def dataParser(self,html,itemUrl,stockStatus,localNameFinder,managementNumber,titleFinder,descriptionFinder,priceFinder,
+                   shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
+        self.about = self.html.find(class_="info")
+        self.about = self.about.find_all("cell")
+        for _ in self.about:
+            self.th = _.find("l-cell").get_text()
+            self.th = re.sub(r'\W+', '', self.th)
+            if re.match("容量",self.th):
+                try:
+                    self.capacityFinder = _.find(class_ = capacityFinder).get_text()
+                    self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
+                except:
+                    self.capacityFinder = "NA"  
+            if re.match("賞味期限",self.th):
+                try:
+                    self.consumption = _.find(class_ = consumption).get_text()
+                    self.consumption = re.sub(r'\W+', '', self.consumption)
+                except:
+                    self.consumption = "NA"
+            if re.match("管理番号",self.th):                 
+                try:
+                    self.managementNumber = _.find(class_= managementNumber).get_text()
+                    self.managementNumber =  re.sub(r'\W+', '', self.managementNumber)
+                except:
+                    self.managementNumber =  "NA"
+        self.aboutShipment = self.html.find(class_="company-info")
+        self.aboutShipment = self.aboutShipment.find_all("cell")
+        for _ in self.aboutShipment:
+            self.th = _.find(class_ = "l-cell").get_text()
+            if re.match("事業者名",self.th): 
+                try:
+                    self.compName = self.aboutShipment.find(class_=compName).get_text()
+                    self.compName = re.sub(r'\W+', '', self.compName)
+                except:
+                    self.compName = "NA"
+        try:
+            self.stockStatus = self.html.find(class_=stockStatus).find("span").get_text()
+            self.stockStatus =  re.sub(r'\W+', '', self.stockStatus)
+        except:
+            self.stockStatus =  "NA"
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
         except:
-            self.localNameFinder =  None
+            self.localNameFinder =  "NA"
         try:
             self.titleFinder = self.html.find(class_=titleFinder).find("h1").get_text()
             self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
@@ -121,11 +171,16 @@ class DataParserClass(WebDriver):
                 for data in  DataParserClass.data:
                     if itemUrl == data["URL"]:
                         index_ = DataParserClass.data.index(data)
+                        DataParserClass.data[index_]["stock_status"] =self.stockStatus
                         DataParserClass.data[index_]["local_name"] =self.localNameFinder
+                        DataParserClass.data[index_]["management_number"] =self.managementNumber
                         DataParserClass.data[index_]["title"] =self.titleFinder
                         DataParserClass.data[index_]["description"] =self.descriptionFinder
                         DataParserClass.data[index_]["price"] =self.priceFinder
+                        DataParserClass.data[index_]["ship_method"] =self.shipMethod
                         DataParserClass.data[index_]["capacity"] =self.capacityFinder
+                        DataParserClass.data[index_]["consumption"] =self.consumption
+                        DataParserClass.data[index_]["comp_name"] =self.compName
                         DataParserClass.data[index_]["images"] =self.imageList
                         break
 
@@ -139,11 +194,16 @@ def DataCollectorFunction(data):
         item_info = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url, 
+                           stockStatus = "r-cell",
                            localNameFinder = "lg-info",
+                           managementNumber="r-cell",
                            titleFinder = "item_detail",
                            descriptionFinder = "item-description",
                            priceFinder = "price",
-                           capacityFinder = "info",
+                           shipMethod = "r-cell",
+                           capacityFinder = "r-cell",
+                           consumption = "r-cell",
+                           compName="r-cell",
                            imageUrlFinder = "slick-track" )
     except:
         scrapeURL.driver.quit()
@@ -189,7 +249,8 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
     site.categoryParser(html= site.driver.page_source, elementTag = "popover")
     data=site.categoryList
-    data=[{"URL":"https://furu-po.com/goods_list/152","category":"test:"},{"URL":"https://furu-po.com/goods_list/166/168","category":"test2"}]
+    data=[{"URL":"https://furu-po.com/goods_list/152","category":"test:"}]
+    #{"URL":"https://furu-po.com/goods_list/166/168","category":"test2"}]
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
