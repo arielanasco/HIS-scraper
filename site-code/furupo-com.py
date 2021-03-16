@@ -97,7 +97,7 @@ class DataParserClass(WebDriver):
         self.about = self.html.find(class_="info")
         self.about = self.about.find_all(class_="cell")
         for _ in self.about:
-            self.th = _.find("l-cell").get_text()
+            self.th = _.find(class_="l-cell").get_text()
             self.th = re.sub(r'\W+', '', self.th)
             if re.match("配送方法",self.th): 
                 try:
