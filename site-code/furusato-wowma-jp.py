@@ -36,9 +36,9 @@ class ScraperCategory(WebDriver):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
         self.category = self.html.find(class_=self.elementTag)
-        self.category = self.category.find("ul")
-        self.liTag = self.category.find("li")
-        self.liTag = self.liTag.find("li")
+        self.category = self.category.ul
+        self.liTag = self.category.li
+        self.liTag = self.liTag.li
         while True:
             self.parent_category_id = self.liTag.find("input").get("value")
             self.child_categories = self.liTag.find(class_="category-child").find_all("li")
