@@ -115,18 +115,18 @@ class DataParserClass(web_driver_1.WebDriver):
                     self.compName = self.dd[self.dt.index(_)].get_text()
                     # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
                 except:
-                    self.compName = "NA" 
-        self.guide = self.html.find(class_="guide").find(class_="guidelist")
-        self.dt = self.guide.find_all("dt")
-        self.dd = self.guide.find_all("dd")
-        for _ in self.dt:
-            self.dt_ = _.get_text()
-            if re.match("内容",self.dt_): 
-                try:
+                    self.compName = "NA"
+        try:
+            self.guide = self.html.find(class_="guidelist")
+            self.dt = self.guide.find_all("dt")
+            self.dd = self.guide.find_all("dd")
+            for _ in self.dt:
+                self.dt_ = _.get_text()
+                if re.match("内容",self.dt_): 
                     self.shipMethod = self.dd[self.dt.index(_)].get_text()
                     # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
-                except:
-                    self.shipMethod = "NA"
+        except:
+            self.shipMethod = "NA"
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).find("em",{"class":"text_area"}).get_text()
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
