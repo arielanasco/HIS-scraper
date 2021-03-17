@@ -96,7 +96,8 @@ class DataParserClass(web_driver_1.WebDriver):
         self.consumption = "NA"
         self.appDeadline ="NA"
 
-    def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
+    def dataParser(self,html,itemUrl,stockStatus,categoryFinder,localNameFinder,managementNumber,appDeadline,titleFinder,descriptionFinder,priceFinder,
+                   shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         self.about = self.html.find(class_="itembox-data")
         self.dt = about.find_all("dt")
