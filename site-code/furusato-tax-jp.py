@@ -94,7 +94,7 @@ class DataParserClass(WebDriver):
         self.appDeadline ="NA"
         
 
-    def dataParser(self,html,itemUrl,stockStatus,localNameFinder,managementNumber,appDeadline,titleFinder,descriptionFinder,priceFinder,
+    def dataParser(self,html,itemUrl,stockStatus,categoryFinder,localNameFinder,managementNumber,appDeadline,titleFinder,descriptionFinder,priceFinder,
                    shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         self.about = self.html.find(class_="basicinfo_pay")
