@@ -46,7 +46,7 @@ class ScraperCategory(WebDriver):
                 self.child_category_id = _.find("input").get("value")
                 self.child_category_name = _.find("label").get_text()
                 self.child_category_name =re.sub(r'\([0-9]+\)','',self.child_category_name)
-                ScraperCategory.categoryList.append({"URL":f"https://furusato.wowma.jp/products/list.php?parent_category={self.parent_category_id}&category_{self.child_category_id}={self.child_category_id}","category":f"{self.child_category_name}")
+                ScraperCategory.categoryList.append({"URL":f"https://furusato.wowma.jp/products/list.php?parent_category={self.parent_category_id}&category_{self.child_category_id}={self.child_category_id}","category":f"{self.child_category_name}"})
             if self.liTag.find_next_sibling():
                 self.liTag = self.liTag.find_next_sibling()
             else:
