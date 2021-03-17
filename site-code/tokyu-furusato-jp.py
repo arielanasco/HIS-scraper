@@ -191,6 +191,7 @@ def DataCollectorFunction(data):
                            priceFinder = "itembox-price",
                            capacityFinder = "itembox-data",
                            consumption = "NA",
+                           compName ="NA",
                            imageUrlFinder = "itembox-mainimage" )
     except:
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
