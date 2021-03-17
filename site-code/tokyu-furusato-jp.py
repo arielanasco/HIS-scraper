@@ -195,7 +195,6 @@ def DataCollectorFunction(data):
                            imageUrlFinder = "itembox-mainimage" )
     except:
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
-    scrapeURL.close()
 
 
 
