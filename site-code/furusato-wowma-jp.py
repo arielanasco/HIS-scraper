@@ -219,18 +219,18 @@ def DataCollectorFunction(data):
         time.sleep(3)
         scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
                            itemUrl = item_url,
-                           stockStatus ="",
+                           stockStatus ="NA",
                            categoryFinder = "breadcrumb", 
                            localNameFinder = "municipality-name",
-                           managementNumber="",
-                           appDeadline = "",
+                           managementNumber="NA",
+                           appDeadline = "NA",
                            titleFinder = "breadcrumb",
                            descriptionFinder = "gift-comment",
-                           shipMethod="",
+                           shipMethod="NA",
                            priceFinder = "gift-money-contents",
                            capacityFinder = "slider-txt",
-                           consumption = "",
-                           compName ="",
+                           consumption = "NA",
+                           compName ="NA",
                            imageUrlFinder = "thumbnail-photo" )
     except:
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
