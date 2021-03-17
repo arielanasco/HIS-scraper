@@ -45,7 +45,8 @@ class ScraperCategory(WebDriver):
             for _ in self.child_categories:
                 self.child_category_id = _.find("input").get("value")
                 self.child_category_name = _.find("label").get_text()
-                ScraperCategory.categoryList.append({"URL":f"https://furusato.wowma.jp/products/list.php?parent_category={self.parent_category_id}&category_{self.child_category_id}={self.child_category_id}","category":self.child_category_name})
+                self.child_category_name =re.sub(r'\([0-9]+\)','',self.child_category_name)
+                ScraperCategory.categoryList.append({"URL":f"https://furusato.wowma.jp/products/list.php?parent_category={self.parent_category_id}&category_{self.child_category_id}={self.child_category_id}","category":f"{self.child_category_name}")
             if self.liTag.find_next_sibling():
                 self.liTag = self.liTag.find_next_sibling()
             else:
@@ -185,7 +186,7 @@ if __name__ == '__main__':
     site=ScraperCategory("https://furusato.wowma.jp/products/list.php")
     site.driver.get(site.url)
     current_url, user_agent = site.displaySiteInfo()
-    logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
+    logging.info(f"{threading.current_thread().name}) -{current_url}")
     site.categoryParser(html= site.driver.page_source, elementTag = "list-contents")
     data=site.categoryList
     # data=[{'URL':'https://furusato.wowma.jp/products/list.php?parent_category=244','category':'Metalwork'},
