@@ -92,52 +92,82 @@ class DataParserClass(web_driver_1.WebDriver):
         self.titleFinder = "NA"
         self.descriptionFinder = "NA"
         self.priceFinder = "NA"
-        self.imageList = "NA"
+        self.imageList = []
         self.consumption = "NA"
+        self.appDeadline ="NA"
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        # try:
-        #     self.localNameFinder = self.html.find(class_=localNameFinder).find("em",{"class":"text_area"}).get_text()
-        #     self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
-        # except:
-        #     self.localNameFinder =  None
-        # try:
-        #     self.titleFinder = self.html.find(class_=titleFinder).find_all("li")
-        #     self.titleFinder = re.sub(r'\W+', '', self.titleFinder[-1].get_text())
-        # except:
-        #     self.titleFinder = None
-        # try:
-        #     self.descriptionFinder = self.html.find(class_=descriptionFinder).find("p").get_text()
-        #     self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
-        # except:
-        #     self.descriptionFinder = None
-        # try:
-        #     self.priceFinder = self.html.find(class_=priceFinder).find("dd").get_text()
-        #     self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
-        # except:
-        #     self.priceFinder = None
-        # try:
-        #     self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
-        #     self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
-        # except:
-        #     self.capacityFinder = None
-        # try:
-        #     self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("img")
-        #     self.imageList = []
-        #     for _ in self.imageUrlFinder:
-        #         self.imageList.append(_.get("src"))      
-        # except:
-        #     self.imageList = None
+        self.about = self.html.find(class_="itembox-data")
+        self.dt = about.find_all("dt")
+        self.dd = about.find_all("dd")
+        for _ in self.dt:
+            self.dt_ = _.get_text()
+            if re.match("内容",self.dt_): 
+                try:
+                    self.capacityFinder = self.dd[self.dt.index(_)].get_text()
+                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+                except:
+                    self.capacityFinder = "NA"
+            if re.match("配送",self.dt_): 
+                try:
+                    self.compName = self.dd[self.dt.index(_)].get_text()
+                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+                except:
+                    self.compName = "NA" 
+        self.about = self.html.find(class_="guidelist")
+        self.dt = about.find_all("dt")
+        self.dd = about.find_all("dd")
+        for _ in self.dt:
+            self.dt_ = _.get_text()
+            if re.match("内容",self.dt_): 
+                try:
+                    self.shipMethod = self.dd[self.dt.index(_)].get_text()
+                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+                except:
+                    self.shipMethod = "NA"
+        try:
+            self.localNameFinder = self.html.find(class_=localNameFinder).find("em",{"class":"text_area"}).get_text()
+            self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
+        except:
+            self.localNameFinder =  "NA"
+        try:
+            self.titleFinder = self.html.find(class_=titleFinder).find_all("li")
+            self.titleFinder = re.sub(r'\W+', '', self.titleFinder[-1].get_text())
+        except:
+            self.titleFinder = "NA"
+        try:
+            self.descriptionFinder = self.html.find(class_=descriptionFinder).find("p").get_text()
+            self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
+        except:
+            self.descriptionFinder = "NA"
+        try:
+            self.priceFinder = self.html.find(class_=priceFinder).find("dd").get_text()
+            self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
+        except:
+            self.priceFinder = None
+        try:
+            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("img")
+            self.imageList = []
+            for _ in self.imageUrlFinder:
+                self.imageList.append(_.get("src"))      
+        except:
+            self.imageList = None
         with data_lock:
                 for data in DataParserClass.data:
-                    if itemUrl ==  data["URL"]:
+                    if itemUrl == data["URL"]:
                         index_ = DataParserClass.data.index(data)
+                        DataParserClass.data[index_]["stock_status"] =self.stockStatus
                         DataParserClass.data[index_]["local_name"] =self.localNameFinder
+                        DataParserClass.data[index_]["management_number"] =self.managementNumber
+                        DataParserClass.data[index_]["app_deadline"] =self.appDeadline
                         DataParserClass.data[index_]["title"] =self.titleFinder
                         DataParserClass.data[index_]["description"] =self.descriptionFinder
                         DataParserClass.data[index_]["price"] =self.priceFinder
+                        DataParserClass.data[index_]["ship_method"] =self.shipMethod
                         DataParserClass.data[index_]["capacity"] =self.capacityFinder
+                        DataParserClass.data[index_]["consumption"] =self.consumption
+                        DataParserClass.data[index_]["comp_name"] =self.compName
                         DataParserClass.data[index_]["images"] =self.imageList
                         break
 
@@ -149,11 +179,17 @@ def DataCollectorFunction(data):
         time.sleep(3)
         scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
                            itemUrl = item_url,
+                           stockStatus ="NA",
+                           categoryFinder = "NA", 
                            localNameFinder = "heading_page",
+                           managementNumber="NA",
+                           appDeadline = "NA",
                            titleFinder = "topicpath",
                            descriptionFinder = "section_block",
+                           shipMethod="NA",
                            priceFinder = "itembox-price",
                            capacityFinder = "itembox-data",
+                           consumption = "NA",
                            imageUrlFinder = "itembox-mainimage" )
     except:
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
