@@ -17,7 +17,7 @@ class WebDriver:
             self.html = s.get(url, headers = self.headers)
         return self.html
 
-    def close(self,url):
+    def close(self):
         self.requests.close()
          
     def displaySiteInfo(self):
