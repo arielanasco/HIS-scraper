@@ -80,41 +80,109 @@ class DataParserClass(web_driver_1.WebDriver):
         self.url = url
         type(self).totalData +=1
         super().__init__()
+        self.categoryFinder =  []       
+        self.managementNumber =  "NA"        
+        self.compName =  "NA"        
+        self.capacityFinder =  "NA"
+        self.shipMethod =  "NA"
+        self.stockStatus =  "NA"
+        self.localNameFinder =  "NA"
+        self.titleFinder = "NA"
+        self.descriptionFinder = "NA"
+        self.priceFinder = "NA"
+        self.imageList = []
+        self.consumption = "NA"
+        self.appDeadline ="NA"
 
-    def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
+    def dataParser(self,html,itemUrl,stockStatus,localNameFinder,managementNumber,titleFinder,descriptionFinder,priceFinder,
+                   shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
+        self.about = self.html.find(class_="gift-detail")
+        self.about = self.html.find("dl")
+        self.dt = self.about.dl
+        self.dt = self.dt.dt
+        while True:
+            self.dt_ = self.dt.get_text()
+            if re.match("申込受付期間",self.dt_): 
+                try:
+                    self.dt = self.dt.find_next_sibling()
+                    self.appDeadline = self.dt.get_text()
+                    # self.appDeadline =re.sub(r'\s+', '', self.appDeadline)
+                except:
+                    self.appDeadline = "NA"            
+            if re.match("内容量",self.dt_): 
+                try:
+                    self.dt = self.dt.find_next_sibling()
+                    self.capacityFinder = self.dt.get_text()
+                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+                except:
+                    self.capacityFinder = "NA"         
+            if re.match("配送方法",self.dt_): 
+                try:
+                    self.dt = self.dt.find_next_sibling()
+                    self.shipMethod = self.dt.get_text()
+                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+                except:
+                    self.shipMethod = "NA"            
+            if re.match("提供者",self.dt_): 
+                try:
+                    self.dt = self.dt.find_next_sibling()
+                    self.compName = self.dt.get_text()
+                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+                except:
+                    self.compName = "NA"            
+            if re.match("消費期限/賞味期限",self.dt_): 
+                try:
+                    self.dt = self.dt.find_next_sibling()
+                    self.consumption = self.dt.get_text()
+                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+                except:
+                    self.consumption = "NA"
+            if self.dt.find_next_sibling():
+                self.dt = self.dt.find_next_sibling()
+            else:
+                break
+            
         try:
-            self.categoryFinder = self.html.find(class_=categoryFinder).find_all("li")
-            self.categoryFinder = self.categoryFinder[-2].find("a").get_text()
-            self.categoryFinder =  re.sub(r'\W+', '', self.categoryFinder)
+            self.categoryFinder = self.html.find(class_=categoryFinder).find_all("ul")
+            self.multiple_category = []
+            for _ in self.categoryFinder:
+                self.liTag = _.find_all("li")
+                self.categoryFinder = self.liTag[-2].find("a").get_text()
+                # self.categoryFinder =  re.sub(r'\W+', '', self.categoryFinder)
+                self.multiple_category.append(self.categoryFinder)
         except:
-            self.categoryFinder =  None
+            self.multiple_category =  []
+
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder = re.sub(r'\W+', '', self.localNameFinder)
         except:
-            self.localNameFinder = None
+            self.localNameFinder = "NA"
         try:
             self.titleFinder = self.html.find(class_=titleFinder).find_all("li")
             self.titleFinder = self.titleFinder[-1].get_text()
             self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
         except:
-            self.titleFinder = None
+            self.titleFinder = "NA"
         try:
-            self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
-            self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
+            self.item_info = self.html.find_all(class_="gift-comment")
+            self.descriptionFinder = self.item_info[0].get_text()
+            # self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
         except:
-            self.descriptionFinder = None
+            self.descriptionFinder = "NA"
+
+        try:
+            self.managementNumber = _.self.item_info[1].get_text()
+            # self.managementNumber =  re.sub(r'\W+', '', self.managementNumber)
+        except:
+            self.managementNumber =  "NA"
         try:
             self.priceFinder = self.html.find(id=priceFinder).get_text()
             self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
         except:
-            self.priceFinder = None
-        try:
-            self.capacityFinder = self.html.find(class_=capacityFinder).find("ul").get_text()
-            self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
-        except:
-            self.capacityFinder = None
+            self.priceFinder = "NA"
+
         try:
             self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("img")
             self.imageList = []
@@ -126,14 +194,20 @@ class DataParserClass(web_driver_1.WebDriver):
             self.imageList = []
         with data_lock:
                 for data in DataParserClass.data:
-                    if itemUrl ==  data["URL"]:
+                    if itemUrl == data["URL"]:
                         index_ = DataParserClass.data.index(data)
-                        DataParserClass.data[index_]["category"] =self.categoryFinder
+                        DataParserClass.data[index_]["category"] =self.multiple_category
+                        DataParserClass.data[index_]["stock_status"] =self.stockStatus
                         DataParserClass.data[index_]["local_name"] =self.localNameFinder
+                        DataParserClass.data[index_]["management_number"] =self.managementNumber
+                        DataParserClass.data[index_]["app_deadline"] =self.appDeadline
                         DataParserClass.data[index_]["title"] =self.titleFinder
                         DataParserClass.data[index_]["description"] =self.descriptionFinder
                         DataParserClass.data[index_]["price"] =self.priceFinder
+                        DataParserClass.data[index_]["ship_method"] =self.shipMethod
                         DataParserClass.data[index_]["capacity"] =self.capacityFinder
+                        DataParserClass.data[index_]["consumption"] =self.consumption
+                        DataParserClass.data[index_]["comp_name"] =self.compName
                         DataParserClass.data[index_]["images"] =self.imageList
                         break
 
@@ -145,12 +219,18 @@ def DataCollectorFunction(data):
         time.sleep(3)
         scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
                            itemUrl = item_url,
+                           stockStatus ="",
                            categoryFinder = "breadcrumb", 
                            localNameFinder = "municipality-name",
+                           managementNumber="",
+                           appDeadline = "",
                            titleFinder = "breadcrumb",
                            descriptionFinder = "gift-comment",
+                           shipMethod="",
                            priceFinder = "gift-money-contents",
                            capacityFinder = "slider-txt",
+                           consumption = "",
+                           compName ="",
                            imageUrlFinder = "thumbnail-photo" )
     except:
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
@@ -189,7 +269,7 @@ if __name__ == '__main__':
     logging.info(f"{threading.current_thread().name}) -{current_url}")
     site.categoryParser(html= site.driver.page_source, elementTag = "list-contents")
     data=site.categoryList
-    # data=[{'URL':'https://furusato.wowma.jp/products/list.php?parent_category=244','category':'Metalwork'},
+    data=[{'URL':'https://furusato.wowma.jp/products/list.php?parent_category=244','category':'Metalwork'}]
     # {'URL':'https://furusato.wowma.jp/products/list.php?parent_category=274','category':'Doll'}
     # ]
     site.driver.quit()
@@ -204,11 +284,11 @@ if __name__ == '__main__':
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
-    # start = time.perf_counter()
-    # with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
-    #     futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
-    #     for future in concurrent.futures.as_completed(futures):
-    #         if future.result():
-    #             logging.info(f"{threading.current_thread().name}) -{future.result()}")
-    # final = time.perf_counter()
-    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
+    start = time.perf_counter()
+    with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
+        futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
+        for future in concurrent.futures.as_completed(futures):
+            if future.result():
+                logging.info(f"{threading.current_thread().name}) -{future.result()}")
+    final = time.perf_counter()
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")

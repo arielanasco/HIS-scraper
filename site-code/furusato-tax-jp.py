@@ -91,9 +91,10 @@ class DataParserClass(WebDriver):
         self.priceFinder = "NA"
         self.imageList = "NA"
         self.consumption ="NA"
+        self.appDeadline ="NA"
         
 
-    def dataParser(self,html,itemUrl,stockStatus,localNameFinder,managementNumber,titleFinder,descriptionFinder,priceFinder,
+    def dataParser(self,html,itemUrl,stockStatus,localNameFinder,managementNumber,appDeadline,titleFinder,descriptionFinder,priceFinder,
                    shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         self.about = self.html.find(class_="basicinfo_pay")
@@ -179,6 +180,7 @@ class DataParserClass(WebDriver):
                         DataParserClass.data[index_]["stock_status"] =self.stockStatus
                         DataParserClass.data[index_]["local_name"] =self.localNameFinder
                         DataParserClass.data[index_]["management_number"] =self.managementNumber
+                        DataParserClass.data[index_]["app_deadline"] =self.appDeadline
                         DataParserClass.data[index_]["title"] =self.titleFinder
                         DataParserClass.data[index_]["description"] =self.descriptionFinder
                         DataParserClass.data[index_]["price"] =self.priceFinder
@@ -202,6 +204,7 @@ def DataCollectorFunction(data):
                            stockStatus = "stock", 
                            localNameFinder = "city-title",
                            managementNumber = "product-tbl-info__wrap",
+                           appDeadline = "None",
                            titleFinder = "ttl-h1__text",
                            descriptionFinder = "overview",
                            priceFinder = "basicinfo_price",

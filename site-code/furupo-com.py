@@ -107,19 +107,19 @@ class DataParserClass(WebDriver):
             if re.match("容量",self.th):
                 try:
                     self.capacityFinder = _.find(class_ = capacityFinder).get_text()
-                    self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
                 except:
                     self.capacityFinder = "NA"  
             if re.match("賞味期限",self.th):
                 try:
                     self.consumption = _.find(class_ = consumption).get_text()
-                    self.consumption = re.sub(r'\s+', '', self.consumption)
+                    # self.consumption = re.sub(r'\s+', '', self.consumption)
                 except:
                     self.consumption = "NA"
             if re.match("管理番号",self.th):                 
                 try:
                     self.managementNumber = _.find(class_= managementNumber).get_text()
-                    self.managementNumber =  re.sub(r'\s+', '', self.managementNumber)
+                    # self.managementNumber =  re.sub(r'\s+', '', self.managementNumber)
                 except:
                     self.managementNumber =  "NA"
             if re.match("事業者名",self.th): 

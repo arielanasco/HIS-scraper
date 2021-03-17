@@ -83,41 +83,52 @@ class DataParserClass(web_driver_1.WebDriver):
         type(self).totalData +=1
         self.itemList = []
         super().__init__()
+        self.managementNumber =  "NA"        
+        self.compName =  "NA"        
+        self.capacityFinder =  "NA"
+        self.shipMethod =  "NA"
+        self.stockStatus =  "NA"
+        self.localNameFinder =  "NA"
+        self.titleFinder = "NA"
+        self.descriptionFinder = "NA"
+        self.priceFinder = "NA"
+        self.imageList = "NA"
+        self.consumption = "NA"
 
     def dataParser(self,html,itemUrl,localNameFinder,titleFinder,descriptionFinder,priceFinder,capacityFinder,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        try:
-            self.localNameFinder = self.html.find(class_=localNameFinder).find("em",{"class":"text_area"}).get_text()
-            self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
-        except:
-            self.localNameFinder =  None
-        try:
-            self.titleFinder = self.html.find(class_=titleFinder).find_all("li")
-            self.titleFinder = re.sub(r'\W+', '', self.titleFinder[-1].get_text())
-        except:
-            self.titleFinder = None
-        try:
-            self.descriptionFinder = self.html.find(class_=descriptionFinder).find("p").get_text()
-            self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
-        except:
-            self.descriptionFinder = None
-        try:
-            self.priceFinder = self.html.find(class_=priceFinder).find("dd").get_text()
-            self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
-        except:
-            self.priceFinder = None
-        try:
-            self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
-            self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
-        except:
-            self.capacityFinder = None
-        try:
-            self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("img")
-            self.imageList = []
-            for _ in self.imageUrlFinder:
-                self.imageList.append(_.get("src"))      
-        except:
-            self.imageList = None
+        # try:
+        #     self.localNameFinder = self.html.find(class_=localNameFinder).find("em",{"class":"text_area"}).get_text()
+        #     self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
+        # except:
+        #     self.localNameFinder =  None
+        # try:
+        #     self.titleFinder = self.html.find(class_=titleFinder).find_all("li")
+        #     self.titleFinder = re.sub(r'\W+', '', self.titleFinder[-1].get_text())
+        # except:
+        #     self.titleFinder = None
+        # try:
+        #     self.descriptionFinder = self.html.find(class_=descriptionFinder).find("p").get_text()
+        #     self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
+        # except:
+        #     self.descriptionFinder = None
+        # try:
+        #     self.priceFinder = self.html.find(class_=priceFinder).find("dd").get_text()
+        #     self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
+        # except:
+        #     self.priceFinder = None
+        # try:
+        #     self.capacityFinder = self.html.find(class_=capacityFinder).get_text()
+        #     self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
+        # except:
+        #     self.capacityFinder = None
+        # try:
+        #     self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("img")
+        #     self.imageList = []
+        #     for _ in self.imageUrlFinder:
+        #         self.imageList.append(_.get("src"))      
+        # except:
+        #     self.imageList = None
         with data_lock:
                 for data in DataParserClass.data:
                     if itemUrl ==  data["URL"]:
