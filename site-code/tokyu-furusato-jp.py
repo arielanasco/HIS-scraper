@@ -100,8 +100,8 @@ class DataParserClass(web_driver_1.WebDriver):
                    shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         self.about = self.html.find(class_="itembox-data")
-        self.dt = about.find_all("dt")
-        self.dd = about.find_all("dd")
+        self.dt = self.about.find_all("dt")
+        self.dd = self.about.find_all("dd")
         for _ in self.dt:
             self.dt_ = _.get_text()
             if re.match("内容",self.dt_): 
@@ -117,8 +117,8 @@ class DataParserClass(web_driver_1.WebDriver):
                 except:
                     self.compName = "NA" 
         self.about = self.html.find(class_="guidelist")
-        self.dt = about.find_all("dt")
-        self.dd = about.find_all("dd")
+        self.dt = self.about.find_all("dt")
+        self.dd = self.about.find_all("dd")
         for _ in self.dt:
             self.dt_ = _.get_text()
             if re.match("内容",self.dt_): 
