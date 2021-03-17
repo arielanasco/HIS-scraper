@@ -189,7 +189,7 @@ def ItemLinkCollector(data):
 if __name__ == '__main__':
     start = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
-    site=ScraperCategory(LINK)
+    site=ScraperCategory("https://furusato.wowma.jp/products/list.php")
     site.driver.get(site.url)
     current_url, user_agent = site.displaySiteInfo()
     logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
