@@ -13,9 +13,12 @@ class WebDriver:
         self.headers = {"User-Agent": f"{sample(self.userAgentList,1)[0]}","Content-Type": "text/html"}
     
     def get(self,url):
-        with requests.session() as s:
+        with self.requests.session() as s:
             self.html = s.get(url, headers = self.headers)
-        return self.html             
+        return self.html
 
+    def close(self,url):
+        self.requests.close()
+         
     def displaySiteInfo(self):
         return f"User-Agent: {self.headers}"
