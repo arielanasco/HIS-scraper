@@ -116,9 +116,9 @@ class DataParserClass(web_driver_1.WebDriver):
                     # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
                 except:
                     self.compName = "NA" 
-        self.about = self.html.find(class_="guidelist")
-        self.dt = self.about.find_all("dt")
-        self.dd = self.about.find_all("dd")
+        self.guide = self.html.find(class_="guide").find(class_="guidelist")
+        self.dt = self.guide.find_all("dt")
+        self.dd = self.guide.find_all("dd")
         for _ in self.dt:
             self.dt_ = _.get_text()
             if re.match("内容",self.dt_): 
