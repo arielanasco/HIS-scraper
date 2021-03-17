@@ -110,7 +110,7 @@ class DataParserClass(web_driver_1.WebDriver):
                     # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
                 except:
                     self.capacityFinder = "NA"
-            if re.match("配送",self.dt_): 
+            if re.match("提供元",self.dt_): 
                 try:
                     self.compName = self.dd[self.dt.index(_)].get_text()
                     # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
