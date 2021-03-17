@@ -98,7 +98,6 @@ class DataParserClass(web_driver_1.WebDriver):
                    shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         self.about = self.html.find(class_="gift-detail")
-        self.about = self.html.find("dl")
         self.dt = self.about.dl
         self.dt = self.dt.dt
         while True:
