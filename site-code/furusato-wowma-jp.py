@@ -151,8 +151,10 @@ class DataParserClass(web_driver_1.WebDriver):
             self.titleFinder = self.titleFinder[-1].get_text()
         except:
             self.titleFinder = "NA"
+
+        self.item_info = self.html.find_all(class_="gift-comment")
+
         try:
-            self.item_info = self.html.find_all(class_="gift-comment")
             self.descriptionFinder = self.item_info[0].get_text()
         except:
             self.descriptionFinder = "NA"
@@ -161,9 +163,9 @@ class DataParserClass(web_driver_1.WebDriver):
             self.managementNumber = self.item_info[1].get_text()
             self.loc = self.managementNumber.index("#商品コード:")
             self.managementNumber = self.managementNumber[self.loc+len("#商品コード:"):self.loc+15]
-             
         except:
             self.managementNumber =  "NA"
+            
         try:
             self.priceFinder = self.html.find(id=priceFinder).get_text()
         except:
