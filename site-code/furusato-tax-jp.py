@@ -202,6 +202,7 @@ def DataCollectorFunction(data):
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url,
                            stockStatus = "stock", 
+                           categoryFinder = "NA",
                            localNameFinder = "city-title",
                            managementNumber = "product-tbl-info__wrap",
                            appDeadline = "None",
