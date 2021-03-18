@@ -161,11 +161,11 @@ class DataParserClass(web_driver_1.WebDriver):
 
         try:
             self.managementNumber = self.item_info[1].get_text()
-            self.loc = self.managementNumber.index("#商品コード:")
+            self.loc = self.managementNumber.index("商品コード:")
             self.managementNumber = self.managementNumber[self.loc+len("#商品コード:"):self.loc+15]
         except:
             self.managementNumber =  "NA"
-            
+
         try:
             self.priceFinder = self.html.find(id=priceFinder).get_text()
         except:

@@ -50,5 +50,4 @@ filename = os.path.join('test\testing1\img_1.jpg')
 
 
 for _ in DataParserClass.data:
-    if len(_)<14:
-        print(_)
+    print(_["management_number"])
