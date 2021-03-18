@@ -79,34 +79,51 @@ class DataParserClass(web_driver_1.WebDriver):
                 self.ChildElement = self.ChildElement.find_next_sibling()
             else:
                 break
-
-    def dataParser(self,html,itemUrl,stockStatus,localNameFinder,managementNumber,titleFinder,descriptionFinder,priceFinder,
+    def dataParser(self,html,itemUrl,stockStatus,categoryFinder,localNameFinder,managementNumber,appDeadline,titleFinder,descriptionFinder,priceFinder,
                    shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        self.about = self.html.find(class_="as-tbset")
-        self.about = self.about.find_all("tr")
-        for _ in self.about:
-            self.th = _.find("th").get_text()
-            self.th = re.sub(r'\W+', '', self.th)
-            if re.match("内容量",self.th):
+        self.table = self.html.find(class_="as-tbset")
+        self.th = self.table.find_all("th")
+        self.td = self.table.find_all("td")
+        for _ in self.th:
+            self.dt_ = _.get_text()
+            if re.match("内容量",self.dt_):
                 try:
-                    self.capacityFinder = _.find(capacityFinder).get_text()
-                    self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
+                    self.capacityFinder = self.td[self.th.index(_)].get_text()
                 except:
-                    self.capacityFinder = "NA"            
+                    self.capacityFinder = "NA" 
             if re.match("賞味期限",self.th):
                 try:
-                    self.consumption = _.find(consumption).get_text()
-                    self.consumption = re.sub(r'\W+', '', self.consumption)
+                    self.consumption = self.td[self.th.index(_)].get_text()
                 except:
                     self.consumption = "NA"
-
             if re.match("事業者名",self.th): 
                 try:
-                    self.compName = _.find(compName).get_text()
-                    self.compName = re.sub(r'\W+', '', self.compName)
+                    self.compName = self.td[self.th.index(_)].get_text()
                 except:
                     self.compName = "NA"
+        # for _ in self.about:
+        #     self.th = _.find("th").get_text()
+        #     self.th = re.sub(r'\W+', '', self.th)
+        #     if re.match("内容量",self.th):
+        #         try:
+        #             self.capacityFinder = _.find(capacityFinder).get_text()
+        #             self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
+        #         except:
+        #             self.capacityFinder = "NA"            
+        #     if re.match("賞味期限",self.th):
+        #         try:
+        #             self.consumption = _.find(consumption).get_text()
+        #             self.consumption = re.sub(r'\W+', '', self.consumption)
+        #         except:
+        #             self.consumption = "NA"
+
+        #     if re.match("事業者名",self.th): 
+        #         try:
+        #             self.compName = _.find(compName).get_text()
+        #             self.compName = re.sub(r'\W+', '', self.compName)
+        #         except:
+        #             self.compName = "NA"
 
         try:
             self.stockStatus = self.html.find(class_=stockStatus).find("span").get_text()
@@ -175,8 +192,10 @@ def DataCollectorFunction(data):
         scrapeURL.dataParser(html = html,
                            itemUrl = item_url,
                            stockStatus = "stock",
+                           categoryFinder = "NA",
                            localNameFinder = "as-item_pref_detail",
                            managementNumber = "product_code",
+                           appDeadline = "NA",
                            titleFinder = "as-item_name_detail",
                            descriptionFinder = "as-txarea_m",
                            priceFinder = "as-pl_m",

@@ -47,3 +47,8 @@ def download_images(link, category,product_name):
     save_image_to_file(response,category,product_name)
 
 filename = os.path.join('test\testing1\img_1.jpg')
+
+
+for _ in DataParserClass.data:
+    if len(_)<14:
+        print(_)
