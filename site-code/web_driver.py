@@ -16,11 +16,13 @@ import os
 from PIL import Image
 
 import mysql.connector as connect
-mydb = connect.connect(host="localhost",user="django",password="django1234",database="his_furusato")
-mycursor = mydb.cursor()
+
 
 class WebDriver:
+    mydb = connect.connect(host="localhost",user="django",password="django1234",database="his_furusato")
+    mycursor = mydb.cursor()
     warnings.filterwarnings('ignore')
+
     def __init__(self,url):
         self.url = url
         self.userAgentList = [
@@ -65,9 +67,8 @@ class SaveData:
         del self.response
         self.img_dir_list.append(self.dir_file)
 
-#     def query_db(self,data_dict):
-#         self.mycursor.execute("INSERT INTO table_name (url,category,local_name,title,description,price,capacity,images)VALUES (%s,%s,%s,%s,%s,%s,%s)",
-#             (data_dict["URL"],data_dict["category"],data_dict["local_name"],data_dict["title"],data_dict["description"],data_dict["price"],data_dict["capacity"],self.img_dir_list))
-#         self.mycursor.commit()
-#         self.img_dir_list = []
+    def query_db_save_catgy(self,datum):
+        self.mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm)VALUES (%s,%s)",(datum["URL"],datum["category"]))
+        self.mydb.commit()
+        self.img_dir_list = []
 
