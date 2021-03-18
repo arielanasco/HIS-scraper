@@ -240,9 +240,9 @@ if __name__ == '__main__':
     site=ScraperCategory()
     site.categoryParser(html= site.get(LINK).text, elementTag = "gnav_detail_contents")
     data=site.categoryList
-    save_data = SaveData()
-    for  datum in data:
-        save_data.query_db_save_catgy(datum)
+    # save_data = SaveData()
+    # for  datum in data:
+    #     save_data.query_db_save_catgy(datum)
     # data = [{'URL':'https://furusato.ana.co.jp/products/list.php?limit=30&s4=%E8%82%89_%E7%89%9B%E8%82%89_%E5%B1%B1%E5%BD%A2%E7%89%9B&sort=number5%2CNumber1%2CScore',
     # 'category':'Test'}]
     final = time.perf_counter()
