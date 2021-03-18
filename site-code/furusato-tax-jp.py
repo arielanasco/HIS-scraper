@@ -281,6 +281,5 @@ if __name__ == '__main__':
     for data_dict in DataParserClass.data:
         for image_link in data_dict["images"]:
             save_data.save_img(cwd,site_name,data_dict["category"],data_dict["title"],image_link)
-        save_data.query_db(data_dict)
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items images")
