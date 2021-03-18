@@ -235,11 +235,14 @@ if __name__ == '__main__':
         site.categoryParser(html= site.driver.current_url, elementCat =catt)
         cat.find_element_by_tag_name("input").click()
     data=site.categoryList
-    # data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}]
-    # {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}]
+    save_data = SaveData()
+    for  datum in data:
+        save_data.query_db_save_catgy(datum)
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} for fetching {len(data)} categories")
+    # data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}]
+    # {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}]
     # start = time.perf_counter()
     # with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
     #     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]

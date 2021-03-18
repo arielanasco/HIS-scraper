@@ -69,5 +69,4 @@ class SaveData:
     def query_db_save_catgy(self,datum):
         self.mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],"FCH"))
         self.mydb.commit()
-        self.img_dir_list = []
 
