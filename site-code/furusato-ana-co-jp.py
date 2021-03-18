@@ -69,6 +69,7 @@ class DataParserClass(web_driver_1.WebDriver):
         self.priceFinder = "NA"
         self.imageList = "NA"
         self.consumption = "NA"
+        self.appDeadline ="NA"  
 
     def listParser(self,html,elementContainer):
         self.elementContainer = elementContainer
@@ -105,28 +106,6 @@ class DataParserClass(web_driver_1.WebDriver):
                     self.compName = self.td[self.th.index(_)].get_text()
                 except:
                     self.compName = "NA"
-        # for _ in self.about:
-        #     self.th = _.find("th").get_text()
-        #     self.th = re.sub(r'\W+', '', self.th)
-        #     if re.match("内容量",self.th):
-        #         try:
-        #             self.capacityFinder = _.find(capacityFinder).get_text()
-        #             self.capacityFinder = re.sub(r'\W+', '', self.capacityFinder)
-        #         except:
-        #             self.capacityFinder = "NA"            
-        #     if re.match("賞味期限",self.th):
-        #         try:
-        #             self.consumption = _.find(consumption).get_text()
-        #             self.consumption = re.sub(r'\W+', '', self.consumption)
-        #         except:
-        #             self.consumption = "NA"
-
-        #     if re.match("事業者名",self.th): 
-        #         try:
-        #             self.compName = _.find(compName).get_text()
-        #             self.compName = re.sub(r'\W+', '', self.compName)
-        #         except:
-        #             self.compName = "NA"
 
         try:
             self.stockStatus = self.html.find(class_=stockStatus).find("span").get_text()
