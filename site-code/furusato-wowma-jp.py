@@ -129,47 +129,6 @@ class DataParserClass(web_driver_1.WebDriver):
                     self.consumption = self.dd[self.dt.index(_)].get_text()
                 except:
                     self.consumption = "NA"
-        # while True:
-        #     self.dt_ = self.dt.get_text()
-        #     if re.match("申込受付期間",self.dt_): 
-        #         try:
-        #             self.dt = self.dt.find_next_sibling()
-        #             self.appDeadline = self.dt.get_text()
-        #             # self.appDeadline =re.sub(r'\s+', '', self.appDeadline)
-        #         except:
-        #             self.appDeadline = "NA"            
-        #     if re.match("内容量",self.dt_): 
-        #         try:
-        #             self.dt = self.dt.find_next_sibling()
-        #             self.capacityFinder = self.dt.get_text()
-        #             # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
-        #         except:
-        #             self.capacityFinder = "NA"         
-        #     if re.match("配送方法",self.dt_): 
-        #         try:
-        #             self.dt = self.dt.find_next_sibling()
-        #             self.shipMethod = self.dt.get_text()
-        #             # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
-        #         except:
-        #             self.shipMethod = "NA"            
-        #     if re.match("提供者",self.dt_): 
-        #         try:
-        #             self.dt = self.dt.find_next_sibling()
-        #             self.compName = self.dt.get_text()
-        #             # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
-        #         except:
-        #             self.compName = "NA"            
-        #     if re.match("消費期限/賞味期限",self.dt_): 
-        #         try:
-        #             self.dt = self.dt.find_next_sibling()
-        #             self.consumption = self.dt.get_text()
-        #             # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
-        #         except:
-        #             self.consumption = "NA"
-        #     if self.dt.find_next_sibling():
-        #         self.dt = self.dt.find_next_sibling()
-        #     else:
-        #         break
             
         try:
             self.categoryFinder = self.html.find(class_=categoryFinder).find_all("ul")
@@ -199,7 +158,10 @@ class DataParserClass(web_driver_1.WebDriver):
             self.descriptionFinder = "NA"
 
         try:
-            self.managementNumber = _.self.item_info[1].get_text()
+            self.managementNumber = self.item_info[1].get_text()
+            self.loc = self.managementNumber.index("#商品コード:")
+            self.managementNumber = self.managementNumber[self.loc+len("#商品コード:"):self.loc+15]
+             
         except:
             self.managementNumber =  "NA"
         try:
