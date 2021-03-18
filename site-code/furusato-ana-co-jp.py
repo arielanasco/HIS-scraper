@@ -92,12 +92,12 @@ class DataParserClass(web_driver_1.WebDriver):
                     self.capacityFinder = self.td[self.th.index(_)].get_text()
                 except:
                     self.capacityFinder = "NA" 
-            if re.match("賞味期限",self.th):
+            if re.match("賞味期限",self.dt_):
                 try:
                     self.consumption = self.td[self.th.index(_)].get_text()
                 except:
                     self.consumption = "NA"
-            if re.match("事業者名",self.th): 
+            if re.match("事業者名",self.dt_): 
                 try:
                     self.compName = self.td[self.th.index(_)].get_text()
                 except:
