@@ -175,6 +175,7 @@ class DataParserClass(web_driver_1.WebDriver):
                         DataParserClass.data[index_]["stock_status"] =self.stockStatus
                         DataParserClass.data[index_]["local_name"] =self.localNameFinder
                         DataParserClass.data[index_]["management_number"] =self.managementNumber
+                        DataParserClass.data[index_]["app_deadline"] =self.appDeadline
                         DataParserClass.data[index_]["title"] =self.titleFinder
                         DataParserClass.data[index_]["description"] =self.descriptionFinder
                         DataParserClass.data[index_]["price"] =self.priceFinder
