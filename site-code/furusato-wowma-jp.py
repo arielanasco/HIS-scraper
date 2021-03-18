@@ -17,6 +17,8 @@ import logging
 import  concurrent.futures
 from bs4 import BeautifulSoup as bs
 import re
+
+import os
 """ This section declares all the variables used """
 LINK = "https://furusato.wowma.jp"
 
@@ -93,54 +95,81 @@ class DataParserClass(web_driver_1.WebDriver):
         self.imageList = []
         self.consumption = "NA"
         self.appDeadline ="NA"
-
+        
     def dataParser(self,html,itemUrl,stockStatus,categoryFinder,localNameFinder,managementNumber,appDeadline,titleFinder,descriptionFinder,priceFinder,
                    shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         self.about = self.html.find(class_="gift-detail")
-        self.dt = self.about.dl
-        self.dt = self.dt.dt
-        while True:
-            self.dt_ = self.dt.get_text()
+        self.dt = self.table.find_all("dt")
+        self.dd = self.table.find_all("dd")
+        for _ in self.dt:
+            self.dt_ = _.get_text()
             if re.match("申込受付期間",self.dt_): 
                 try:
-                    self.dt = self.dt.find_next_sibling()
-                    self.appDeadline = self.dt.get_text()
-                    # self.appDeadline =re.sub(r'\s+', '', self.appDeadline)
+                    self.appDeadline = self.dd[self.dt.index(_)].get_text()
                 except:
-                    self.appDeadline = "NA"            
+                    self.appDeadline = "NA" 
             if re.match("内容量",self.dt_): 
                 try:
-                    self.dt = self.dt.find_next_sibling()
-                    self.capacityFinder = self.dt.get_text()
-                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+                    self.capacityFinder = self.dd[self.dt.index(_)].get_text()
                 except:
-                    self.capacityFinder = "NA"         
+                    self.capacityFinder = "NA"
             if re.match("配送方法",self.dt_): 
                 try:
-                    self.dt = self.dt.find_next_sibling()
-                    self.shipMethod = self.dt.get_text()
-                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+                    self.shipMethod = self.dd[self.dt.index(_)].get_text()
                 except:
-                    self.shipMethod = "NA"            
-            if re.match("提供者",self.dt_): 
+                    self.shipMethod = "NA" 
+            if re.match("提供者",self.dt_):
                 try:
-                    self.dt = self.dt.find_next_sibling()
-                    self.compName = self.dt.get_text()
-                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+                    self.compName = self.dd[self.dt.index(_)].get_text()
                 except:
-                    self.compName = "NA"            
+                    self.compName = "NA"
             if re.match("消費期限/賞味期限",self.dt_): 
                 try:
-                    self.dt = self.dt.find_next_sibling()
-                    self.consumption = self.dt.get_text()
-                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+                    self.consumption = self.dd[self.dt.index(_)].get_text()
                 except:
                     self.consumption = "NA"
-            if self.dt.find_next_sibling():
-                self.dt = self.dt.find_next_sibling()
-            else:
-                break
+        # while True:
+        #     self.dt_ = self.dt.get_text()
+        #     if re.match("申込受付期間",self.dt_): 
+        #         try:
+        #             self.dt = self.dt.find_next_sibling()
+        #             self.appDeadline = self.dt.get_text()
+        #             # self.appDeadline =re.sub(r'\s+', '', self.appDeadline)
+        #         except:
+        #             self.appDeadline = "NA"            
+        #     if re.match("内容量",self.dt_): 
+        #         try:
+        #             self.dt = self.dt.find_next_sibling()
+        #             self.capacityFinder = self.dt.get_text()
+        #             # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+        #         except:
+        #             self.capacityFinder = "NA"         
+        #     if re.match("配送方法",self.dt_): 
+        #         try:
+        #             self.dt = self.dt.find_next_sibling()
+        #             self.shipMethod = self.dt.get_text()
+        #             # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+        #         except:
+        #             self.shipMethod = "NA"            
+        #     if re.match("提供者",self.dt_): 
+        #         try:
+        #             self.dt = self.dt.find_next_sibling()
+        #             self.compName = self.dt.get_text()
+        #             # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+        #         except:
+        #             self.compName = "NA"            
+        #     if re.match("消費期限/賞味期限",self.dt_): 
+        #         try:
+        #             self.dt = self.dt.find_next_sibling()
+        #             self.consumption = self.dt.get_text()
+        #             # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
+        #         except:
+        #             self.consumption = "NA"
+        #     if self.dt.find_next_sibling():
+        #         self.dt = self.dt.find_next_sibling()
+        #     else:
+        #         break
             
         try:
             self.categoryFinder = self.html.find(class_=categoryFinder).find_all("ul")
@@ -161,24 +190,20 @@ class DataParserClass(web_driver_1.WebDriver):
         try:
             self.titleFinder = self.html.find(class_=titleFinder).find_all("li")
             self.titleFinder = self.titleFinder[-1].get_text()
-            self.titleFinder = re.sub(r'\W+', '', self.titleFinder)
         except:
             self.titleFinder = "NA"
         try:
             self.item_info = self.html.find_all(class_="gift-comment")
             self.descriptionFinder = self.item_info[0].get_text()
-            # self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
         except:
             self.descriptionFinder = "NA"
 
         try:
             self.managementNumber = _.self.item_info[1].get_text()
-            # self.managementNumber =  re.sub(r'\W+', '', self.managementNumber)
         except:
             self.managementNumber =  "NA"
         try:
             self.priceFinder = self.html.find(id=priceFinder).get_text()
-            self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
         except:
             self.priceFinder = "NA"
 
@@ -267,28 +292,38 @@ if __name__ == '__main__':
     site.categoryParser(html= site.driver.page_source, elementTag = "list-contents")
     data=site.categoryList
     save_data = SaveData()
-    for  datum in data:
-        save_data.query_db_save_catgy(datum)
     site.driver.quit()
-    # data=[{'URL':'https://furusato.wowma.jp/products/list.php?parent_category=244','category':'Metalwork'}]
+    # for  datum in data:
+    #     save_data.query_db_save_catgy(datum)
+    data=[{'URL':'https://furusato.wowma.jp/products/list.php?parent_category=244','category':'Metalwork'}]
     # {'URL':'https://furusato.wowma.jp/products/list.php?parent_category=274','category':'Doll'}
     # ]
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
-    # start = time.perf_counter()
-    # with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
-    #     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
-    #     for future in concurrent.futures.as_completed(futures):
-    #         if future.result():
-    #             logging.info(f"{threading.current_thread().name}) -{future.result()}")
-    # final = time.perf_counter()
-    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
+    start = time.perf_counter()
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
+        futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
+        for future in concurrent.futures.as_completed(futures):
+            if future.result():
+                logging.info(f"{threading.current_thread().name}) -{future.result()}")
+    final = time.perf_counter()
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
-    # start = time.perf_counter()
-    # with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
-    #     futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
-    #     for future in concurrent.futures.as_completed(futures):
-    #         if future.result():
-    #             logging.info(f"{threading.current_thread().name}) -{future.result()}")
-    # final = time.perf_counter()
-    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
+    start = time.perf_counter()
+    with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
+        futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
+        for future in concurrent.futures.as_completed(futures):
+            if future.result():
+                logging.info(f"{threading.current_thread().name}) -{future.result()}")
+    final = time.perf_counter()
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
+
+    start = time.perf_counter()
+    site_name = os.path.basename(__file__).split(".")[0]
+    cwd = os.getcwd()
+    save_data = SaveData()
+    for data_dict in DataParserClass.data:
+        for image_link in data_dict["images"]:
+            save_data.save_img(cwd,site_name,data_dict["category"],data_dict["title"],image_link)
+    final = time.perf_counter()
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items images")

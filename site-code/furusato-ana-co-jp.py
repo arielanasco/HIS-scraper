@@ -182,10 +182,10 @@ def DataCollectorFunction(data):
                            titleFinder = "as-item_name_detail",
                            descriptionFinder = "as-txarea_m",
                            priceFinder = "as-pl_m",
-                           shipMethod = "td",
-                           capacityFinder = "td",
-                           consumption = "td",
-                           compName = "td",
+                           shipMethod = "NA",
+                           capacityFinder = "NA",
+                           consumption = "NA",
+                           compName = "NA",
                            imageUrlFinder = "as-main" )
     except:
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
