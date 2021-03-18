@@ -95,70 +95,36 @@ class DataParserClass(WebDriver):
     def dataParser(self,html,itemUrl,stockStatus,categoryFinder,localNameFinder,managementNumber,appDeadline,titleFinder,descriptionFinder,priceFinder,
                    shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        self.rcell = self.html.find_all(class_="r-cell")
         self.lcell = self.html.find_all(class_="l-cell")
-        for _ in self.rcell:
+        self.rcell = self.html.find_all(class_="r-cell")
+        for _ in self.lcell:
             self.dt_ = _.get_text()
             if re.match("配送方法",self.dt_):
                 try:
-                    self.shipMethod = self.lcell[self.rcell.index(_)].get_text()
+                    self.shipMethod = self.rcell[self.lcell.index(_)].get_text()
                 except:
                     self.shipMethod = "NA" 
             if re.match("容量",self.dt_):
                 try:
-                    self.capacityFinder = self.lcell[self.rcell.index(_)].get_text()
+                    self.capacityFinder = self.rcell[self.lcell.index(_)].get_text()
                 except:
                     self.capacityFinder = "NA" 
             if re.match("賞味期限",self.dt_):
                 try:
-                    self.consumption = self.lcell[self.rcell.index(_)].get_text()
+                    self.consumption = self.rcell[self.lcell.index(_)].get_text()
                 except:
                     self.consumption = "NA" 
             if re.match("管理番号",self.dt_):
                 try:
-                    self.managementNumber = self.lcell[self.rcell.index(_)].get_text()
+                    self.managementNumber = self.rcell[self.lcell.index(_)].get_text()
                 except:
                     self.managementNumber = "NA" 
             if re.match("事業者名",self.dt_):
                 try:
-                    self.compName = self.lcell[self.rcell.index(_)].get_text()
+                    self.compName = self.rcell[self.lcell.index(_)].get_text()
                 except:
                     self.compName = "NA" 
 
-
-        # for _ in self.about:
-        #     self.th = _.find(class_="l-cell").get_text()
-        #     self.th =re.sub(r'\s+', '', self.th)
-        #     if re.match("配送方法",self.th): 
-        #         try:
-        #             self.shipMethod = self.aboutShipment.find(class_=shipMethod).get_text()
-        #             self.shipMethod =re.sub(r'\s+', '', self.shipMethod)
-        #         except:
-        #             self.shipMethod = "NA"
-        #     if re.match("容量",self.th):
-        #         try:
-        #             self.capacityFinder = _.find(class_ = capacityFinder).get_text()
-        #             # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
-        #         except:
-        #             self.capacityFinder = "NA"  
-        #     if re.match("賞味期限",self.th):
-        #         try:
-        #             self.consumption = _.find(class_ = consumption).get_text()
-        #             # self.consumption = re.sub(r'\s+', '', self.consumption)
-        #         except:
-        #             self.consumption = "NA"
-        #     if re.match("管理番号",self.th):                 
-        #         try:
-        #             self.managementNumber = _.find(class_= managementNumber).get_text()
-        #             # self.managementNumber =  re.sub(r'\s+', '', self.managementNumber)
-        #         except:
-        #             self.managementNumber =  "NA"
-        #     if re.match("事業者名",self.th): 
-        #         try:
-        #             self.compName = self.aboutShipment.find(class_=compName).get_text()
-        #             self.compName = re.sub(r'\s+', '', self.compName)
-        #         except:
-        #             self.compName = "NA"
         try:
             self.stockStatus = self.html.find(class_=stockStatus).find("span").get_text()
             self.stockStatus =  re.sub(r'\s+', '', self.stockStatus)
