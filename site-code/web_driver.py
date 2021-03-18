@@ -16,7 +16,6 @@ import os
 from PIL import Image
 
 import mysql.connector as connect
-mydb = connect.connect(host="localhost",user="django",password="django1234",database="his_furusato")
 
 class WebDriver:
     warnings.filterwarnings('ignore')
@@ -47,13 +46,14 @@ class WebDriver:
         self.options.add_argument("--headless")
         self.options.add_argument(f'--user-agent="{sample(self.userAgentList,1)[0]}"')
         self.driver = webdriver.Chrome(options=self.options)
-        self.mycursor = mydb.cursor()
 
     def displaySiteInfo(self):
         return f"Target URL: {self.driver.current_url}" , f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}"
 
 class SaveData:
     img_dir_list = []
+    mydb = connect.connect(host="localhost",user="django",password="django1234",database="his_furusato")
+    mycursor = mydb.cursor()
     def save_img(self,cwd,site_name,category,title,image):
         self.response = requests.get(image, stream=True)
         self.dir_name= os.path.join(cwd,"scraper",site_name,category,title)
@@ -68,5 +68,6 @@ class SaveData:
 
     def query_db_save_catgy(self,datum):
         self.mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s)",(datum["URL"],datum["category"],"FCH"))
-        mydb.commit()
+        self.mydb.commit()
+        self.img_dir_list = []
 
