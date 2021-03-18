@@ -50,4 +50,4 @@ filename = os.path.join('test\testing1\img_1.jpg')
 
 
 for _ in DataParserClass.data:
-    print(_["management_number"])
+    print(_["URL"]'    '_["management_number"])
