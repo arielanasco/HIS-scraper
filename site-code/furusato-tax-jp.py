@@ -91,8 +91,7 @@ class DataParserClass(WebDriver):
         self.priceFinder = "NA"
         self.imageList = "NA"
         self.consumption ="NA"
-        self.appDeadline ="NA"
-        
+        self.appDeadline ="NA"  
 
     def dataParser(self,html,itemUrl,stockStatus,categoryFinder,localNameFinder,managementNumber,appDeadline,titleFinder,descriptionFinder,priceFinder,
                    shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
@@ -117,7 +116,7 @@ class DataParserClass(WebDriver):
                     self.compName =self.td[self.th.index(_)].get_text()
                 except:
                     self.compName = "NA"
-            if re.match("消費期限",self.th):
+            if re.match("消費期限",self.dt_):
                 try:
                     self.consumption = self.td[self.th.index(_)].get_text()
                 except:
