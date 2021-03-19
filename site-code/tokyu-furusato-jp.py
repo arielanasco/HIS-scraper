@@ -107,13 +107,11 @@ class DataParserClass(web_driver_1.WebDriver):
             if re.match("内容",self.dt_): 
                 try:
                     self.capacityFinder = self.dd[self.dt.index(_)].get_text()
-                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
                 except:
                     self.capacityFinder = "NA"
             if re.match("提供元",self.dt_): 
                 try:
                     self.compName = self.dd[self.dt.index(_)].get_text()
-                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
                 except:
                     self.compName = "NA"
         try:
@@ -124,7 +122,6 @@ class DataParserClass(web_driver_1.WebDriver):
                 self.dt_ = _.get_text()
                 if re.match("内容",self.dt_): 
                     self.shipMethod = self.dd[self.dt.index(_)].get_text()
-                    # self.capacityFinder = re.sub(r'\s+', '', self.capacityFinder)
         except:
             self.shipMethod = "NA"
         try:
@@ -134,17 +131,14 @@ class DataParserClass(web_driver_1.WebDriver):
             self.localNameFinder =  "NA"
         try:
             self.titleFinder = self.html.find(class_=titleFinder).find_all("li")
-            self.titleFinder = re.sub(r'\W+', '', self.titleFinder[-1].get_text())
         except:
             self.titleFinder = "NA"
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).find("p").get_text()
-            self.descriptionFinder = re.sub(r'\W+', '', self.descriptionFinder)
         except:
             self.descriptionFinder = "NA"
         try:
             self.priceFinder = self.html.find(class_=priceFinder).find("dd").get_text()
-            self.priceFinder = re.sub(r'\W+', '', self.priceFinder)
         except:
             self.priceFinder = None
         try:
