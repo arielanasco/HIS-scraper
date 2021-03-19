@@ -130,7 +130,7 @@ class DataParserClass(web_driver_1.WebDriver):
         except:
             self.localNameFinder =  "NA"
         try:
-            self.titleFinder = self.html.find(class_=titleFinder).find_all("li")[-1]
+            self.titleFinder = self.html.find(class_=titleFinder).find_all("li")[-1].get_text()
         except:
             self.titleFinder = "NA"
         try:
