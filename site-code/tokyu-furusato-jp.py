@@ -267,9 +267,9 @@ if __name__ == '__main__':
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
 
-    # start = time.perf_counter()
-    # site_name = os.path.basename(__file__).split(".")[0]
-    # cwd = os.getcwd()
+    start = time.perf_counter()
+    site_name = os.path.basename(__file__).split(".")[0]
+    cwd = os.getcwd()
     # save_data = SaveData()
     # save_data.save_img(cwd=cwd,site_name=site_name,data=DataParserClass.data)
     # final = time.perf_counter()

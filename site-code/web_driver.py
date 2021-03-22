@@ -52,7 +52,7 @@ class WebDriver:
 
 class SaveData:
     img_dir_list = []
-    mydb = connect.connect(host="127.0.0.1",user="user",password="password",database="his_furusato")
+    mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
     mycursor = mydb.cursor()
 
     def query_db_save_catgy(self,data,agt_cd):
@@ -65,9 +65,9 @@ class SaveData:
             self.mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(datum["URL"],datum["local_name"],datum["management_number"],datum["title"],datum["description"],datum["app_deadline"],datum["price"],datum["capacity"],datum["comp_name"],"FSH"))
             if type(datum["category"]) == list:
                 for cat in datum["category"][:8]:
-                    self.mycursor.execute('UPDATE  t_agt_mchan (agt_catgy_nm%s) VALUES (%s) WHERE agt_mchan_url = %s',(datum['category'].index(cat)+1,cat,datum["URL"]))
+                    mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm%s = %s  WHERE agt_mchan_url = %s",(datum['category'].index(cat)+1,cat,datum["URL"]))
             else:
-                self.mycursor.execute('UPDATE  t_agt_mchan (agt_catgy_nm1) VALUES (%s) WHERE agt_mchan_url = %s',(datum["category"],datum["URL"]))
+                mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
             for img_link in datum["images"]:
                 self.response = requests.get(image, stream=True)
                 self.dir_name= os.path.join(cwd,"scraper",site_name,datum["category"],datum["title"])
@@ -80,7 +80,7 @@ class SaveData:
                 del self.response
                 self.img_dir_list.append(self.dir_file)        
             for  img in self.img_dir_list[:5]:
-                self.mycursor.execute("UPDATE  t_agt_mchan (mchan_img_url%s) VALUES (%s) WHERE agt_mchan_url = %s",(self.img_dir_list.index(datum)+1,img,datum["URL"]))
+                mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s == %s  WHERE agt_mchan_url = %s",(img_dir_list.index(datum)+1,img,datum["URL"]))
             self.img_dir_list = []
             self.mydb.commit()
 
