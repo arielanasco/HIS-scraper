@@ -276,7 +276,7 @@ if __name__ == '__main__':
     site_name = os.path.basename(__file__).split(".")[0]
     cwd = os.getcwd()
     img_dir_list = []
-    agt_cd = "FSH"
+    agt_cd = "FPL"
     mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
     mycursor = mydb.cursor()
     for  datum in DataParserClass.data:
@@ -291,7 +291,6 @@ if __name__ == '__main__':
             mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
             mydb.commit()
         for img_link in datum["images"]:
-            print("Downnload  images")
             response = requests.get(img_link, stream=True)
             dir_name= os.path.join(cwd,"scraper",site_name,datum["category"],datum["title"])
             if not os.path.exists(dir_name):
@@ -303,12 +302,8 @@ if __name__ == '__main__':
             del response
             img_dir_list.append(dir_file)        
         for  img in img_dir_list[:5]:
-            print("Saving  images")
             mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(img_dir_list.index(img)+1,img,datum["URL"]))
             mydb.commit()
         img_dir_list = []
-    # save_data.query_db_save_item(data=DataParserClass.data,agt_cd = "FSH",cwd=cwd,site_name=site_name)
-    # save_data = SaveData()
-    # save_data.save_img(cwd=cwd,site_name=site_name,data=DataParserClass.data)
-    # final = time.perf_counter()
-    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items images")
+    final = time.perf_counter()
+    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  save  {len(DataParserClass.data)} items data")
