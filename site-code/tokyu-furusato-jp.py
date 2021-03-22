@@ -85,18 +85,18 @@ class DataParserClass(web_driver_1.WebDriver):
         type(self).totalData +=1
         self.itemList = []
         super().__init__()
-        self.managementNumber =  "NULL"       
-        self.compName =  "NULL"     
-        self.capacityFinder =  "NULL"    
-        self.shipMethod =  "NULL"    
-        self.stockStatus =  "NULL"    
-        self.localNameFinder = "NULL"    
-        self.titleFinder = "NULL"    
-        self.descriptionFinder = "NULL"    
-        self.priceFinder = "NULL"    
+        self.managementNumber =  "NA"        
+        self.compName =  "NA"        
+        self.capacityFinder =  "NA"
+        self.shipMethod =  "NA"
+        self.stockStatus =  "NA"
+        self.localNameFinder =  "NA"
+        self.titleFinder = "NA"
+        self.descriptionFinder = "NA"
+        self.priceFinder = "NA"
         self.imageList = []
-        self.consumption = "NULL"    
-        self.appDeadline ="NULL"    
+        self.consumption = "NA"
+        self.appDeadline ="NA"
 
     def dataParser(self,html,itemUrl,stockStatus,categoryFinder,localNameFinder,managementNumber,appDeadline,titleFinder,descriptionFinder,priceFinder,
                    shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
@@ -110,12 +110,12 @@ class DataParserClass(web_driver_1.WebDriver):
                 try:
                     self.capacityFinder = self.dd[self.dt.index(_)].get_text()
                 except:
-                    self.capacityFinder = "NULL"    
+                    self.capacityFinder = "NA"
             if re.match("提供元",self.dt_): 
                 try:
                     self.compName = self.dd[self.dt.index(_)].get_text()
                 except:
-                    self.compName = "NULL"    
+                    self.compName = "NA"
         try:
             self.guide = self.html.find(class_="guidelist")
             self.dt = self.guide.find_all("dt")
@@ -125,20 +125,20 @@ class DataParserClass(web_driver_1.WebDriver):
                 if re.match("内容",self.dt_): 
                     self.shipMethod = self.dd[self.dt.index(_)].get_text()
         except:
-            self.shipMethod = "NULL"    
+            self.shipMethod = "NA"
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).find("em",{"class":"text_area"}).get_text()
             self.localNameFinder =  re.sub(r'\W+', '', self.localNameFinder)
         except:
-            self.localNameFinder =  "NULL"    
+            self.localNameFinder =  "NA"
         try:
             self.titleFinder = self.html.find(class_=titleFinder).find_all("li")[-1].get_text()
         except:
-            self.titleFinder = "NULL"    
+            self.titleFinder = "NA"
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).find("p").get_text()
         except:
-            self.descriptionFinder = "NULL"    
+            self.descriptionFinder = "NA"
         try:
             self.priceFinder = self.html.find(class_=priceFinder).find("dd").get_text()
             self.priceFinder = self.priceFinder.replace("円","")
@@ -178,18 +178,18 @@ def DataCollectorFunction(data):
         time.sleep(3)
         scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
                            itemUrl = item_url,
-                           stockStatus ="NULL"    ,
-                           categoryFinder = "NULL"    , 
+                           stockStatus ="NA",
+                           categoryFinder = "NA", 
                            localNameFinder = "heading_page",
-                           managementNumber="NULL"    ,
-                           appDeadline = "NULL"    ,
+                           managementNumber="NA",
+                           appDeadline = "NA",
                            titleFinder = "topicpath",
                            descriptionFinder = "section_block",
-                           shipMethod="NULL"    ,
+                           shipMethod="NA",
                            priceFinder = "itembox-price",
                            capacityFinder = "itembox-data",
-                           consumption = "NULL"    ,
-                           compName ="NULL"    ,
+                           consumption = "NA",
+                           compName ="NA",
                            imageUrlFinder = "itembox-mainimage" )
     except:
         raise Exception (f"{threading.current_thread().name}) - Unable to load the element")
@@ -270,7 +270,7 @@ if __name__ == '__main__':
     start = time.perf_counter()
     site_name = os.path.basename(__file__).split(".")[0]
     cwd = os.getcwd()
-    save_data.query_db_save_item(data=data,agt_cd = "FSH",cwd=cwd,site_name=site_name)
+    save_data.query_db_save_item(data=DataParserClass.data,agt_cd = "FSH",cwd=cwd,site_name=site_name)
     
     # save_data = SaveData()
     # save_data.save_img(cwd=cwd,site_name=site_name,data=DataParserClass.data)
