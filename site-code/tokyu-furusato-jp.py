@@ -270,8 +270,7 @@ if __name__ == '__main__':
     start = time.perf_counter()
     site_name = os.path.basename(__file__).split(".")[0]
     cwd = os.getcwd()
-    agt_cd = "FSH"
-    save_data.query_db_save_item(data=data,agt_cd=agt_cd,cwd=agt_cd,site_name=site_name)
+    save_data.query_db_save_item(data=data,agt_cd = "FSH",cwd=cwd,site_name=site_name)
     
     # save_data = SaveData()
     # save_data.save_img(cwd=cwd,site_name=site_name,data=DataParserClass.data)
