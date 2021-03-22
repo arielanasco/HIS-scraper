@@ -67,9 +67,9 @@ class SaveData:
             self.mydb.commit()
             if type(datum["category"]) == list:
                 for cat in datum["category"][:8]:
-                    mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm%s = %s  WHERE agt_mchan_url = %s",(datum['category'].index(cat)+1,cat,datum["URL"]))
+                    self.mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm%s = %s  WHERE agt_mchan_url = %s",(datum['category'].index(cat)+1,cat,datum["URL"]))
             else:
-                mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
+                self.mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
             for img_link in datum["images"]:
                 self.response = requests.get(img_link, stream=True)
                 self.dir_name= os.path.join(cwd,"scraper",site_name,datum["category"],datum["title"])
