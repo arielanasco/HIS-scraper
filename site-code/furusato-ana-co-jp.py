@@ -141,6 +141,7 @@ class DataParserClass(web_driver_1.WebDriver):
         try:
             self.priceFinder = self.html.find(class_=priceFinder).get_text()
             self.priceFinder = re.sub(r'\s+', '', self.priceFinder)
+            self.priceFinder = int(self.priceFinder.replace(",",""))
         except:
             self.priceFinder = "NA"
         try:
