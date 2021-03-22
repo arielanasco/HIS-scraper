@@ -62,6 +62,7 @@ class SaveData:
 
     def query_db_save_item(self,data,agt_cd,cwd,site_name):
         for  datum in data:
+            print("Saving to database")
             self.mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
             (datum["URL"],datum["local_name"],datum["management_number"],datum["title"],datum["description"],datum["app_deadline"],datum["price"],datum["capacity"],datum["comp_name"],agt_cd))
             self.mydb.commit()
@@ -83,6 +84,6 @@ class SaveData:
                 self.img_dir_list.append(self.dir_file)        
             for  img in self.img_dir_list[:5]:
                 self.mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(img_dir_list.index(img)+1,img,datum["URL"]))
+                self.mydb.commit()
             self.img_dir_list = []
-            self.mydb.commit()
 
