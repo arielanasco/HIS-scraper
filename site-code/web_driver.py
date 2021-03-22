@@ -72,6 +72,7 @@ class SaveData:
             else:
                 self.mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
             for img_link in datum["images"]:
+                print("Downnload  images")
                 self.response = requests.get(img_link, stream=True)
                 self.dir_name= os.path.join(cwd,"scraper",site_name,datum["category"],datum["title"])
                 if not os.path.exists(self.dir_name):
@@ -83,6 +84,7 @@ class SaveData:
                 del self.response
                 self.img_dir_list.append(self.dir_file)        
             for  img in self.img_dir_list[:5]:
+                print("Saving  images")
                 self.mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(img_dir_list.index(img)+1,img,datum["URL"]))
                 self.mydb.commit()
             self.img_dir_list = []
