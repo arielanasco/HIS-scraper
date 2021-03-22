@@ -17,8 +17,6 @@ from PIL import Image
 
 import mysql.connector as connect
 
-mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
-mycursor = mydb.cursor()
 
 class WebDriver:
     warnings.filterwarnings('ignore')
@@ -53,24 +51,31 @@ class WebDriver:
     def displaySiteInfo(self):
         return f"Target URL: {self.driver.current_url}" , f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}"
 
+
+mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
+
 class SaveData:
     img_dir_list = []
 
+    def __init__(self):
+    self.mycursor = mydb.cursor()
+
     def query_db_save_catgy(self,data,agt_cd):
         for  datum in data:
-            mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],agt_cd))
+            self.mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],agt_cd))
         mydb.commit()
 
     def query_db_save_item(self,data,agt_cd,cwd,site_name):
         for  datum in data:
             print("Saving to database")
-            mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            self.mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
             (datum["URL"],datum["local_name"],datum["management_number"],datum["title"],datum["description"],datum["app_deadline"],datum["price"],datum["capacity"],datum["comp_name"],agt_cd))
+            mydb.commit()
             if type(datum["category"]) == list:
                 for cat in datum["category"][:8]:
-                    mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm%s = %s  WHERE agt_mchan_url = %s",(datum['category'].index(cat)+1,cat,datum["URL"]))
+                    self.mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm%s = %s  WHERE agt_mchan_url = %s",(datum['category'].index(cat)+1,cat,datum["URL"]))
             else:
-                mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
+                self.mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
             for img_link in datum["images"]:
                 print("Downnload  images")
                 self.response = requests.get(img_link, stream=True)
@@ -85,7 +90,7 @@ class SaveData:
                 self.img_dir_list.append(self.dir_file)        
             for  img in self.img_dir_list[:5]:
                 print("Saving  images")
-                mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(img_dir_list.index(img)+1,img,datum["URL"]))
+                self.mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(img_dir_list.index(img)+1,img,datum["URL"]))
             mydb.commit()
             self.img_dir_list = []
 
