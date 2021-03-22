@@ -286,8 +286,10 @@ if __name__ == '__main__':
         if type(datum["category"]) == list:
             for cat in datum["category"][:8]:
                 mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm%s = %s  WHERE agt_mchan_url = %s",(datum['category'].index(cat)+1,cat,datum["URL"]))
+                mydb.commit()
         else:
             mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
+            mydb.commit()
         for img_link in datum["images"]:
             print("Downnload  images")
             response = requests.get(img_link, stream=True)
@@ -303,7 +305,7 @@ if __name__ == '__main__':
         for  img in img_dir_list[:5]:
             print("Saving  images")
             mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(img_dir_list.index(img)+1,img,datum["URL"]))
-        mydb.commit()
+            mydb.commit()
         img_dir_list = []
     # save_data.query_db_save_item(data=DataParserClass.data,agt_cd = "FSH",cwd=cwd,site_name=site_name)
     # save_data = SaveData()
