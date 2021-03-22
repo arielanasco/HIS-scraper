@@ -80,7 +80,7 @@ class SaveData:
                 del self.response
                 self.img_dir_list.append(self.dir_file)        
             for  img in self.img_dir_list[:5]:
-                mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s == %s  WHERE agt_mchan_url = %s",(img_dir_list.index(datum)+1,img,datum["URL"]))
+                mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(img_dir_list.index(img)+1,img,datum["URL"]))
             self.img_dir_list = []
             self.mydb.commit()
 
