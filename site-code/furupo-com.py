@@ -4,7 +4,7 @@ Site : Furupo (JTB)
 Link : https://furu-po.com/
 
 """
-from web_driver import WebDriver,SaveData
+from web_driver import WebDriver
 import time
 import threading
 from selenium.webdriver.common.by import By

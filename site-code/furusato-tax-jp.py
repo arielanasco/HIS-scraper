@@ -4,7 +4,7 @@ Site : Hometown Choice
 Link : https://www.furusato-tax.jp/
 
 """
-from web_driver import WebDriver,SaveData
+from web_driver import WebDriver
 import  web_driver_1
 import time
 import threading

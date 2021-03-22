@@ -4,7 +4,6 @@ Site : ANA's hometown tax payment
 Link : https://furusato.ana.co.jp/	
 
 """
-from web_driver import SaveData
 import web_driver_1
 import time
 import threading 

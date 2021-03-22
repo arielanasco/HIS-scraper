@@ -4,8 +4,7 @@ Site : au PAY Hometown tax payment
 Link : https://furusato.wowma.jp/
 
 """
-from web_driver import WebDriver,SaveData
-import  web_driver_1
+from web_driver import WebDriver
 import time
 import threading
 from selenium.webdriver.common.by import By
