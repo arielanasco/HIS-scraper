@@ -266,10 +266,13 @@ if __name__ == '__main__':
                 logging.info(f"{threading.current_thread().name}) -{future.result()}")
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
-
+    save_data = SaveData()
     start = time.perf_counter()
     site_name = os.path.basename(__file__).split(".")[0]
     cwd = os.getcwd()
+    agt_cd = "FSH"
+    save_data.query_db_save_item(data,agt_cd,cwd,site_name)
+    
     # save_data = SaveData()
     # save_data.save_img(cwd=cwd,site_name=site_name,data=DataParserClass.data)
     # final = time.perf_counter()

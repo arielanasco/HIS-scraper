@@ -62,19 +62,19 @@ class SaveData:
 
     def query_db_save_item(self,data,agt_cd,cwd,site_name):
         for  datum in data:
-            self.mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(datum["URL"],datum["local_name"],datum["management_number"],datum["title"],datum["description"],datum["app_deadline"],datum["price"],datum["capacity"],datum["comp_name"],"FSH"))
+            self.mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(datum["URL"],datum["local_name"],datum["management_number"],datum["title"],datum["description"],datum["app_deadline"],datum["price"],datum["capacity"],datum["comp_name"],agt_cd))
             if type(datum["category"]) == list:
                 for cat in datum["category"][:8]:
                     mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm%s = %s  WHERE agt_mchan_url = %s",(datum['category'].index(cat)+1,cat,datum["URL"]))
             else:
                 mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
             for img_link in datum["images"]:
-                self.response = requests.get(image, stream=True)
+                self.response = requests.get(img_link, stream=True)
                 self.dir_name= os.path.join(cwd,"scraper",site_name,datum["category"],datum["title"])
                 if not os.path.exists(self.dir_name):
                     os.makedirs(self.dir_name)
-                self.image = image.split("/")
-                self.dir_file = os.path.join(self.dir_name,self.image[-1])
+                self.img_link = img_link.split("/")
+                self.dir_file = os.path.join(self.dir_name,self.img_link[-1])
                 with open(self.dir_file, 'wb') as out_file:
                     shutil.copyfileobj(self.response.raw, out_file)
                 del self.response
