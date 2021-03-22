@@ -58,7 +58,7 @@ class SaveData:
     img_dir_list = []
 
     def __init__(self):
-    self.mycursor = mydb.cursor()
+        self.mycursor = mydb.cursor()
 
     def query_db_save_catgy(self,data,agt_cd):
         for  datum in data:
