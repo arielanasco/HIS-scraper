@@ -52,7 +52,7 @@ class WebDriver:
 
 class SaveData:
     img_dir_list = []
-    mydb = connect.connect(host="127.0.0.1",user="root",password="root",database="his_furusato")
+    mydb = connect.connect(host="127.0.0.1",user="user",password="password",database="his_furusato")
     mycursor = mydb.cursor()
 
     def query_db_save_catgy(self,data,agt_cd):
