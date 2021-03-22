@@ -262,8 +262,8 @@ if __name__ == '__main__':
     site.driver.get(site.url)
     site.categoryParser(html= site.driver.page_source, elementTag = "list-contents")
     data=site.categoryList
-    save_data = SaveData()
     site.driver.quit()
+    # save_data = SaveData()
     # for  datum in data:
     #     save_data.query_db_save_catgy(datum)
     data=[{'URL':'https://furusato.wowma.jp/products/list.php?parent_category=244','category':'Metalwork'}]
