@@ -309,7 +309,7 @@ if __name__ == '__main__':
             mydb.commit()
         for img_link in datum["images"]:
             response = requests.get(img_link, stream=True)
-            dir_name= os.path.join(cwd,"scraper",site_name,datum["category"],datum["title"])
+            dir_name= os.path.join(cwd,"scraper",site_name,datum["category"][0],datum["title"])
             if not os.path.exists(dir_name):
                 os.makedirs(dir_name)
             img_link = img_link.split("/")
