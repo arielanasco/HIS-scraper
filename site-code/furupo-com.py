@@ -97,6 +97,7 @@ class DataParserClass(WebDriver):
         self.priceFinder = "NA"
         self.imageList = "NA"
         self.consumption = "NA"
+        self.appDeadline = "NA"
 
     def dataParser(self,html,itemUrl,stockStatus,categoryFinder,localNameFinder,managementNumber,appDeadline,titleFinder,descriptionFinder,priceFinder,
                    shipMethod,capacityFinder,consumption,compName,imageUrlFinder):
@@ -145,17 +146,18 @@ class DataParserClass(WebDriver):
             self.titleFinder = self.html.find(class_=titleFinder).find("h1").get_text()
             self.titleFinder = re.sub(r'\s+', '', self.titleFinder)
         except:
-            self.titleFinder = None
+            self.titleFinder = "NA"
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
             self.descriptionFinder = re.sub(r'\s+', '', self.descriptionFinder)
         except:
-            self.descriptionFinder = None
+            self.descriptionFinder = "NA"
         try:
             self.priceFinder = self.html.find(class_=priceFinder).get_text()
-            self.priceFinder = re.sub(r'\s+', '', self.priceFinder)
+            self.priceFinder = self.priceFinder.replace("円","")
+            self.priceFinder = int(self.priceFinder.replace(",",""))        
         except:
-            self.priceFinder = None
+            self.priceFinder = "NA"
         try:
             self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("li")
             self.imageList = []
