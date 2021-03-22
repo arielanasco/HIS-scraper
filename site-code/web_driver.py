@@ -65,9 +65,9 @@ class SaveData:
             self.mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(datum["URL"],datum["local_name"],datum["management_number"],datum["title"],datum["description"],datum["app_deadline"],datum["price"],datum["capacity"],datum["comp_name"],"FSH"))
             if type(datum["category"]) == list:
                 for cat in datum["category"][:8]:
-                    self.mycursor.execute('UPDATE  t_agt_mchan (agt_catgy_nm%s) VALUES (%s)',(datum['category'].index(cat)+1,cat))
+                    self.mycursor.execute('UPDATE  t_agt_mchan (agt_catgy_nm%s) VALUES (%s) WHERE agt_mchan_url = %s',(datum['category'].index(cat)+1,cat,datum["URL"]))
             else:
-                self.mycursor.execute('UPDATE  t_agt_mchan (agt_catgy_nm1) VALUES (%s)',(datum["category"],))
+                self.mycursor.execute('UPDATE  t_agt_mchan (agt_catgy_nm1) VALUES (%s) WHERE agt_mchan_url = %s',(datum["category"],datum["URL"]))
             for img_link in datum["images"]:
                 self.response = requests.get(image, stream=True)
                 self.dir_name= os.path.join(cwd,"scraper",site_name,datum["category"],datum["title"])
@@ -79,8 +79,8 @@ class SaveData:
                     shutil.copyfileobj(self.response.raw, out_file)
                 del self.response
                 self.img_dir_list.append(self.dir_file)        
-            for  datum in self.img_dir_list[:5]:
-                self.mycursor.execute("UPDATE  t_agt_mchan (mchan_img_url%s) VALUES (%s)",(self.img_dir_list.index(datum)+1,datum))
+            for  img in self.img_dir_list[:5]:
+                self.mycursor.execute("UPDATE  t_agt_mchan (mchan_img_url%s) VALUES (%s) WHERE agt_mchan_url = %s",(self.img_dir_list.index(datum)+1,img,datum["URL"]))
             self.img_dir_list = []
             self.mydb.commit()
 
