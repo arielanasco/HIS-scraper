@@ -172,6 +172,8 @@ class DataParserClass(web_driver_1.WebDriver):
 
         try:
             self.priceFinder = self.html.find(id=priceFinder).get_text()
+            self.priceFinder = self.priceFinder.replace("円","")
+            self.priceFinder = int(self.priceFinder.replace(",",""))
         except:
             self.priceFinder = "NA"
 
