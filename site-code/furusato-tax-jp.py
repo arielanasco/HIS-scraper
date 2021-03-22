@@ -278,38 +278,38 @@ if __name__ == '__main__':
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
 
-    start = time.perf_counter()
-    site_name = os.path.basename(__file__).split(".")[0]
-    cwd = os.getcwd()
-    img_dir_list = []
-    agt_cd = "FCH"
-    mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
-    mycursor = mydb.cursor()
-    for  datum in DataParserClass.data:
-        mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-        (datum["URL"],datum["local_name"],datum["management_number"],datum["title"],datum["description"],datum["app_deadline"],datum["price"],datum["capacity"],datum["comp_name"],agt_cd))
-        mydb.commit()
-        if type(datum["category"]) == list:
-            for cat in datum["category"][:8]:
-                mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm%s = %s  WHERE agt_mchan_url = %s",(datum['category'].index(cat)+1,cat,datum["URL"]))
-                mydb.commit()
-        else:
-            mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
-            mydb.commit()
-        for img_link in datum["images"]:
-            response = requests.get(img_link, stream=True)
-            dir_name= os.path.join(cwd,"scraper",site_name,datum["category"],datum["title"])
-            if not os.path.exists(dir_name):
-                os.makedirs(dir_name)
-            img_link = img_link.split("/")
-            dir_file = os.path.join(dir_name,img_link[-1])
-            with open(dir_file, 'wb') as out_file:
-                shutil.copyfileobj(response.raw, out_file)
-            del response
-            img_dir_list.append(dir_file)        
-        for  img in img_dir_list[:5]:
-            mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(img_dir_list.index(img)+1,img,datum["URL"]))
-            mydb.commit()
-        img_dir_list = []
-    final = time.perf_counter()
-    logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  save  {len(DataParserClass.data)} items data")
+    # start = time.perf_counter()
+    # site_name = os.path.basename(__file__).split(".")[0]
+    # cwd = os.getcwd()
+    # img_dir_list = []
+    # agt_cd = "FCH"
+    # mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
+    # mycursor = mydb.cursor()
+    # for  datum in DataParserClass.data:
+    #     mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+    #     (datum["URL"],datum["local_name"],datum["management_number"],datum["title"],datum["description"],datum["app_deadline"],datum["price"],datum["capacity"],datum["comp_name"],agt_cd))
+    #     mydb.commit()
+    #     if type(datum["category"]) == list:
+    #         for cat in datum["category"][:8]:
+    #             mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm%s = %s  WHERE agt_mchan_url = %s",(datum['category'].index(cat)+1,cat,datum["URL"]))
+    #             mydb.commit()
+    #     else:
+    #         mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
+    #         mydb.commit()
+    #     for img_link in datum["images"]:
+    #         response = requests.get(img_link, stream=True)
+    #         dir_name= os.path.join(cwd,"scraper",site_name,datum["category"],datum["title"])
+    #         if not os.path.exists(dir_name):
+    #             os.makedirs(dir_name)
+    #         img_link = img_link.split("/")
+    #         dir_file = os.path.join(dir_name,img_link[-1])
+    #         with open(dir_file, 'wb') as out_file:
+    #             shutil.copyfileobj(response.raw, out_file)
+    #         del response
+    #         img_dir_list.append(dir_file)        
+    #     for  img in img_dir_list[:5]:
+    #         mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(img_dir_list.index(img)+1,img,datum["URL"]))
+    #         mydb.commit()
+    #     img_dir_list = []
+    # final = time.perf_counter()
+    # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  save  {len(DataParserClass.data)} items data")
