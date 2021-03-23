@@ -43,7 +43,7 @@ class ScraperCategory(web_driver_1.WebDriver):
                 for _ in category_[2:]:
                     self.categoryData = re.sub(r'\([^()]*\)', '', _.find("a").get_text())
                     self.categoryData = re.sub(r'\W+', '', self.categoryData)
-                    ScraperCategory.categoryList.append([_.find("a").get("href"),self.categoryData])
+                    ScraperCategory.categoryList.append({"URL":_.find("a").get("href"),"category":self.categoryData})
             else:
                 self.categoryData = re.sub(r'\([^()]*\)', '', category_[-1].find("a").get_text())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
