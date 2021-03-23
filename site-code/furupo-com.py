@@ -64,6 +64,8 @@ class ScraperCategory(WebDriver):
             ScraperCategory.sub_categoryList.append({"URL":LINK+self.category.get("value"),"category":self.categoryData})
             if self.category.find_next_sibling():
                 self.category = self.category.find_next_sibling()
+            else:
+                break
 
         # print(self.category_)
         # self.category = self.category_.find_all("option")
@@ -309,12 +311,12 @@ site.driver.quit()
 # cwd = os.getcwd()
 # img_dir_list = []
 # agt_cd = "JTB"
-# mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
-# mycursor = mydb.cursor()
+mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
+mycursor = mydb.cursor()
 
-# for  datum in data:
-#     mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],agt_cd))
-#     mydb.commit()
+for  datum in data:
+    mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],agt_cd))
+    mydb.commit()
 
 # for  datum in DataParserClass.data:
 #     mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
