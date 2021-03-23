@@ -311,7 +311,7 @@ mydb = connect.connect(host="localhost",user="user",password="password",database
 mycursor = mydb.cursor()
 
 for  datum in data:
-    mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum[0],datum[1],agt_cd))
+    mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],agt_cd))
     mydb.commit()
 
 # for  datum in DataParserClass.data:
