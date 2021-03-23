@@ -277,10 +277,8 @@ site.driver.get(site.url)
 site.categoryParser(html= site.driver.page_source, elementTag = "popover")
 for datum in site.categoryList:
     site.url = datum["URL"]
-    print(datum["URL"])
     site.driver.get(site.url)
     time.sleep(1)
-    print(site.driver.page_source)
     site.subcategoryParser(html= site.driver.page_source, sub_elementTag = "ranking-menu")
 data=site.sub_categoryList
 
