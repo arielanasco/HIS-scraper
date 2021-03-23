@@ -272,13 +272,13 @@ start = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
 site=ScraperCategory(LINK)
 site.driver.get(site.url)
-current_url, user_agent = site.displaySiteInfo()
-logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
 site.categoryParser(html= site.driver.page_source, elementTag = "popover")
 for datum in site.categoryList:
     site.url = datum["URL"]
+    print(datum["URL"])
     site.driver.get(site.url)
     time.sleep(1)
+    print(site.driver.page_source)
     site.subcategoryParser(html= site.driver.page_source, sub_elementTag = "ranking-menu")
 data=site.sub_categoryList
 
