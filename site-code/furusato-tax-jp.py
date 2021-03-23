@@ -26,7 +26,7 @@ from PIL import Image
 
 import mysql.connector as connect
 """ This section declares all the variables used """
-LINK = "https://www.furusato-tax.jp/product?header"
+LINK = "https://www.furusato-tax.jp/search/"
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
