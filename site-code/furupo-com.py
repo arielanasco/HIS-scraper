@@ -34,6 +34,7 @@ data_lock = threading.Lock()
 
 class ScraperCategory(WebDriver):
     categoryList = []
+    sub_categoryList = []
 
     def __init__(self, url):
         self.url = url
@@ -54,6 +55,17 @@ class ScraperCategory(WebDriver):
                 self.liTag_ = self.liTag_.find_next_sibling()
             else:
                 break
+    def subcategoryParser(self,**kwargs):
+        self.elementTag = kwargs.get("sub_elementTag")
+        self.html = bs(kwargs.get("html"), 'html.parser')
+        self.category = self.html.find(id=self.elementTag)
+        self.category = self.category.find_all("option")
+        for _ in self.category[1:]:
+            self.categoryData = re.sub(r'\([^()]*\)', '', _.get_text())
+            self.categoryData = re.sub(r'\W+', '', self.categoryData)
+            ScraperCategory.sub_categoryList.append({"URL":LINK+_.get("value"),"category":self.categoryData})
+
+
 
 class ListParserClass(WebDriver):
     totalList = 0
@@ -257,7 +269,12 @@ site.driver.get(site.url)
 current_url, user_agent = site.displaySiteInfo()
 logging.info(f"{threading.current_thread().name}) -{current_url} {user_agent}")
 site.categoryParser(html= site.driver.page_source, elementTag = "popover")
-data=site.categoryList
+for datum in site.categoryList:
+    site.url = datum["URL"]
+    site.driver.get(site.url)
+    site.subcategoryParser(html= site.driver.page_source, sub_elementTag = "サブカテゴリ_選択")
+data=site.sub_categoryList
+
 site.driver.quit()
 # data=[{"URL":"https://furu-po.com/goods_list/152","category":"感謝状等"}]
 # final = time.perf_counter()
