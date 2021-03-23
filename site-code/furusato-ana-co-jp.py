@@ -97,16 +97,22 @@ class DataParserClass(web_driver_1.WebDriver):
             if re.match("内容量",self.dt_):
                 try:
                     self.capacityFinder = self.td[self.th.index(_)].get_text()
+                    self.capacityFinder = self.capacityFinder.replace(r"\n","")
+                    self.capacityFinder = self.capacityFinder.replace(r"\t","")
                 except:
                     self.capacityFinder = "NA" 
             if re.match("賞味期限",self.dt_):
                 try:
                     self.consumption = self.td[self.th.index(_)].get_text()
+                    self.consumption = self.consumption.replace(r"\n","")
+                    self.consumption = self.consumption.replace(r"\t","")
                 except:
                     self.consumption = "NA"
             if re.match("事業者名",self.dt_): 
                 try:
                     self.compName = self.td[self.th.index(_)].get_text()
+                    self.compName = self.compName.replace(r"\n","")
+                    self.compName = self.compName.replace(r"\t","")
                 except:
                     self.compName = "NA"
 
@@ -118,16 +124,21 @@ class DataParserClass(web_driver_1.WebDriver):
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
             self.localNameFinder = re.sub(r'\s+', '', self.localNameFinder)
+            self.localNameFinder = self.localNameFinder.replace(r"\n","")
+            self.localNameFinder = self.localNameFinder.replace(r"\t","")  
         except:
             self.localNameFinder = "NA"
         try:
             self.managementNumber = self.html.find(name=managementNumber).get_text()
-            self.managementNumber =  re.sub(r'\W+', '', self.managementNumber)
+            self.managementNumber = self.managementNumber.replace(r"\n","")
+            self.managementNumber = self.managementNumber.replace(r"\t","")        
         except:
-            self.managementNumber =  "NA"    
+            self.managementNumber =  "NA" 
+               
         try:
             self.titleFinder = self.html.find(class_=titleFinder).get_text()
-            self.titleFinder = re.sub(r'\s+', '', self.titleFinder)
+            self.titleFinder = self.titleFinder.replace(r"\n","")
+            self.titleFinder = self.titleFinder.replace(r"\t","")            
             if self.managementNumber != "NA":
                 self.titleFinder.replace(self.managementNumber,"")
                 self.titleFinder = self.titleFinder[2:]
@@ -135,7 +146,8 @@ class DataParserClass(web_driver_1.WebDriver):
             self.titleFinder = "NA"
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
-            self.descriptionFinder = re.sub(r'\s+', '', self.descriptionFinder)
+            self.descriptionFinder = self.descriptionFinder.replace(r"\n","")
+            self.descriptionFinder = self.descriptionFinder.replace(r"\t","")
         except:
             self.descriptionFinder = "NA"
         try:
