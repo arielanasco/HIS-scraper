@@ -223,7 +223,7 @@ def DataCollectorFunction(data):
                            itemUrl = item_url,
                            stockStatus = "stock", 
                            categoryFinder = "NA",
-                           localNameFinder = "city-title",
+                           localNameFinder = "city-title__text",
                            managementNumber = "NA",
                            appDeadline = "NA",
                            titleFinder = "ttl-h1__text",
