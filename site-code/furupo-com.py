@@ -56,12 +56,12 @@ class ScraperCategory(WebDriver):
             else:
                 break
     def subcategoryParser(self,**kwargs):
-        self.elementTag = kwargs.get("sub_elementTag")
+        self.sub_elementTag = kwargs.get("sub_elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(id=self.elementTag)
+        self.category = self.html.find(class_=self.sub_elementTag)
         self.category = self.category.find_all("option")
         for _ in self.category[1:]:
-            self.categoryData = re.sub(r'\([^()]*\)', '', _.get_text())
+            self.categoryData = _.get_text()
             self.categoryData = re.sub(r'\W+', '', self.categoryData)
             ScraperCategory.sub_categoryList.append({"URL":LINK+_.get("value"),"category":self.categoryData})
 
@@ -272,7 +272,7 @@ site.categoryParser(html= site.driver.page_source, elementTag = "popover")
 for datum in site.categoryList:
     site.url = datum["URL"]
     site.driver.get(site.url)
-    site.subcategoryParser(html= site.driver.page_source, sub_elementTag = "サブカテゴリ_選択")
+    site.subcategoryParser(html= site.driver.page_source, sub_elementTag = "ranking-menu")
 data=site.sub_categoryList
 
 site.driver.quit()
