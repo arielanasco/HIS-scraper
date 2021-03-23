@@ -108,21 +108,29 @@ class DataParserClass(WebDriver):
             if re.match("容量",self.dt_):
                 try:
                     self.capacityFinder = self.td[self.th.index(_)].get_text()
+                    self.capacityFinder = self.capacityFinder.replace("/n","")
+                    self.capacityFinder = self.capacityFinder.replace("/t","")
                 except:
                     self.capacityFinder = "NA"
             if re.match("自治体での管理番号",self.dt_):
                 try:
                     self.managementNumber = self.td[self.th.index(_)].get_text()
+                    self.managementNumber = self.managementNumber.replace("/n","")
+                    self.managementNumber = self.managementNumber.replace("/t","")
                 except:
                     self.managementNumber =  "NA"
             if re.match("事業者",self.dt_):
                 try:
                     self.compName =self.td[self.th.index(_)].get_text()
+                    self.compName = self.compName.replace("/n","")
+                    self.compName = self.compName.replace("/t","")
                 except:
                     self.compName = "NA"
             if re.match("消費期限",self.dt_):
                 try:
                     self.consumption = self.td[self.th.index(_)].get_text()
+                    self.consumption = self.consumption.replace("/n","")
+                    self.consumption = self.consumption.replace("/t","")
                 except:
                     self.consumption = "NA"
         self.th = self.info[1].find_all("th")
@@ -132,29 +140,41 @@ class DataParserClass(WebDriver):
             if re.match("配送",self.dt_): 
                 try:
                     self.shipMethod = self.td[self.th.index(_)].get_text()
+                    self.shipMethod = self.shipMethod.replace("/n","")
+                    self.shipMethod = self.shipMethod.replace("/t","")
                 except:
                     self.shipMethod = "NA"            
             if re.match("申込期日",self.dt_): 
                 try:
                     self.appDeadline = self.td[self.th.index(_)].get_text()
+                    self.appDeadline = self.appDeadline.replace("/n","")
+                    self.appDeadline = self.appDeadline.replace("/t","")
                 except:
                     self.appDeadline = "NA"
 
         try:
             self.stockStatus = self.html.find(class_=stockStatus).find("span").get_text()
+            self.stockStatus = self.stockStatus.replace("/n","")
+            self.stockStatus = self.stockStatus.replace("/t","")
         except:
             self.stockStatus =  "NA"
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
+            self.localNameFinder = self.localNameFinder.replace("/n","")
+            self.localNameFinder = self.localNameFinder.replace("/t","")
         except:
             self.localNameFinder =  "NA"
           
         try:
             self.titleFinder = self.html.find(class_=titleFinder).get_text()
+            self.titleFinder = self.titleFinder.replace("/n","")
+            self.titleFinder = self.titleFinder.replace("/t","")
         except:
             self.titleFinder = "NA"
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
+            self.descriptionFinder = self.descriptionFinder.replace("/n","")
+            self.descriptionFinder = self.descriptionFinder.replace("/t","")
         except:
             self.descriptionFinder = "NA"
         try:
@@ -253,13 +273,8 @@ if __name__ == '__main__':
     site.driver.get(site.url)
     site.categoryParser(html= site.driver.page_source, elementTag = "nv-select-categories")
     data=site.categoryList
-    # site.driver.quit()
-    # save_data = SaveData()
-    # for  datum in data:
-    #     save_data.query_db_save_catgy(datum)
 
-    data=[{'URL':'https://www.furusato-tax.jp/search/154?disabled_category_top=1&target=1','category':'test'},
-    {'URL':'https://www.furusato-tax.jp/search/153?disabled_category_top=1&target=1','category':'test2'}]
+    data=[{'URL':'https://www.furusato-tax.jp/search/154?disabled_category_top=1&target=1','category':'感謝状等'}]
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
     start = time.perf_counter()
