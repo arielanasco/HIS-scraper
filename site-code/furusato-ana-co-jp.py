@@ -69,7 +69,7 @@ class DataParserClass(web_driver_1.WebDriver):
         self.localNameFinder =  "NA"
         self.titleFinder = "NA"
         self.descriptionFinder = "NA"
-        self.priceFinder = "NA"
+        self.priceFinder = 0
         self.imageList = "NA"
         self.consumption = "NA"
         self.appDeadline ="NA"  
@@ -143,7 +143,7 @@ class DataParserClass(web_driver_1.WebDriver):
             self.priceFinder = re.sub(r'\s+', '', self.priceFinder)
             self.priceFinder = int(self.priceFinder.replace(",",""))
         except:
-            self.priceFinder = "NA"
+            self.priceFinder = 0
         try:
             self.imageUrlFinder = self.html.find(class_="as-detail_wrap").find(class_=imageUrlFinder).find_all("li")
             self.imageList = []
@@ -231,7 +231,7 @@ if __name__ == '__main__':
     # for  datum in data:
     #     save_data.query_db_save_catgy(datum)
     data = [{'URL':'https://furusato.ana.co.jp/products/list.php?limit=30&s4=%E8%82%89_%E7%89%9B%E8%82%89_%E5%B1%B1%E5%BD%A2%E7%89%9B&sort=number5%2CNumber1%2CScore',
-    'category':'Metalwork'}]
+    'category':'山形牛'}]
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
     start = time.perf_counter()
