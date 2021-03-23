@@ -62,9 +62,10 @@ class ScraperCategory(WebDriver):
         print(self.category_)
         # self.category = self.category_.find_all("option")
         for _ in self.category_[1:]:
-            self.categoryData = _.get_text()
-            self.categoryData = re.sub(r'\W+', '', self.categoryData)
-            ScraperCategory.sub_categoryList.append({"URL":LINK+_.get("value"),"category":self.categoryData})
+            # self.categoryData = 
+            print(_.get_text())
+            # self.categoryData = re.sub(r'\W+', '', self.categoryData)
+            # ScraperCategory.sub_categoryList.append({"URL":LINK+_.get("value"),"category":self.categoryData})
 
 
 
