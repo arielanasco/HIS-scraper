@@ -264,6 +264,16 @@ def ItemLinkCollector(data):
             with data_lock:
                 for _ in scrapeURL.itemList:
                     DataParserClass.data.append({"URL":LINK+_,"category":category})
+                seen = set()
+                result = []
+                for dic in DataParserClass.data:
+                    key = dic['URL']
+                    if key in seen:
+                        continue
+                    result.append(dic)
+                    seen.add(key)
+                DataParserClass.data = result
+                
                 logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
             break
         else:
