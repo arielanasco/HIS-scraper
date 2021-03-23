@@ -109,36 +109,31 @@ class DataParserClass(WebDriver):
             if re.match("配送方法",self.dt_):
                 try:
                     self.shipMethod = self.rcell[self.lcell.index(_)].get_text()
-                    self.shipMethod = self.shipMethod.replace(r"\n","")
-                    self.shipMethod = self.shipMethod.replace(r"\t","")
+                    self.shipMethod = re.sub('\s+', '', self.shipMethod)
                 except:
                     self.shipMethod = "NA" 
             if re.match("容量",self.dt_):
                 try:
                     self.capacityFinder = self.rcell[self.lcell.index(_)].get_text()
-                    self.capacityFinder = self.capacityFinder.replace(r"\n","")
-                    self.capacityFinder = self.capacityFinder.replace(r"\t","")
+                    self.capacityFinder = re.sub('\s+', '', self.capacityFinder)
                 except:
                     self.capacityFinder = "NA" 
             if re.match("賞味期限",self.dt_):
                 try:
                     self.consumption = self.rcell[self.lcell.index(_)].get_text()
-                    self.consumption = self.consumption.replace(r"\n","")
-                    self.consumption = self.consumption.replace(r"\t","")
+                    self.capacityFinder = re.sub('\s+', '', self.consumption)
                 except:
                     self.consumption = "NA" 
             if re.match("管理番号",self.dt_):
                 try:
                     self.managementNumber = self.rcell[self.lcell.index(_)].get_text()
-                    self.managementNumber = self.managementNumber.replace(r"\n","")
-                    self.managementNumber = self.managementNumber.replace(r"\t","")
+                    self.managementNumber = re.sub('\s+', '', self.managementNumber)
                 except:
                     self.managementNumber = "NA" 
             if re.match("事業者名",self.dt_):
                 try:
                     self.compName = self.rcell[self.lcell.index(_)].get_text()
-                    self.compName = self.compName.replace(r"\n","")
-                    self.compName = self.compName.replace(r"\t","")
+                    self.compName = re.sub('\s+', '', self.compName)
                 except:
                     self.compName = "NA" 
 
@@ -148,22 +143,19 @@ class DataParserClass(WebDriver):
             self.stockStatus =  "NA"
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
-            self.localNameFinder = self.localNameFinder.replace(r"\n","")
-            self.localNameFinder = self.localNameFinder.replace(r"\t","")        
+            self.localNameFinder = re.sub('\s+', '', self.localNameFinder)
         except:
             self.localNameFinder =  "NA"
 
         try:
             self.titleFinder = self.html.find(class_=titleFinder).find("h1").get_text()
-            self.titleFinder = self.titleFinder.replace(r"\n","")
-            self.titleFinder = self.titleFinder.replace(r"\t","")        
+            self.titleFinder = re.sub('\s+', '', self.titleFinder)
         except:
             self.titleFinder = "NA"
 
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
-            self.descriptionFinder = self.descriptionFinder.replace(r"\n","")
-            self.descriptionFinder = self.descriptionFinder.replace(r"\t","")
+            self.descriptionFinder = re.sub('\s+', '', self.descriptionFinder)
         except:
             self.descriptionFinder = "NA"
         try:
