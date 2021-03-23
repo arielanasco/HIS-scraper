@@ -266,7 +266,7 @@ if __name__ == '__main__':
     # save_data = SaveData()
     # for  datum in data:
     #     save_data.query_db_save_catgy(datum)
-    data=[{'URL':'https://furusato.wowma.jp/products/list.php?parent_category=244','category':'Metalwork'}]
+    data=[{'URL':'https://furusato.wowma.jp/products/list.php?parent_category=244','category':'金工品'}]
     # {'URL':'https://furusato.wowma.jp/products/list.php?parent_category=274','category':'Doll'}
     # ]
     final = time.perf_counter()
