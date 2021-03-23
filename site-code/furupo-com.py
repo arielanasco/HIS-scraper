@@ -58,9 +58,9 @@ class ScraperCategory(WebDriver):
     def subcategoryParser(self,**kwargs):
         self.sub_elementTag = kwargs.get("sub_elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_=self.sub_elementTag)
-        print(self.category)
-        self.category = self.category.find_all("option")
+        self.category_ = self.html.find(class_=self.sub_elementTag)
+        print(self.category_)
+        self.category = self.category_.find_all("option")
         for _ in self.category[1:]:
             self.categoryData = _.get_text()
             self.categoryData = re.sub(r'\W+', '', self.categoryData)
