@@ -282,27 +282,27 @@ site.categoryParser(html= site.driver.page_source, elementTag = "list-contents")
 data=site.categoryList
 site.driver.quit()
 # data=[{'URL':'https://furusato.wowma.jp/products/list.php?parent_category=244','category':'金工品'}]
-final = time.perf_counter()
-logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
-start = time.perf_counter()
-with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
-    futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
-    for future in concurrent.futures.as_completed(futures):
-        if future.result():
-            logging.info(f"{threading.current_thread().name}) -{future.result()}")
-final = time.perf_counter()
-logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
+# final = time.perf_counter()
+# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
+# start = time.perf_counter()
+# with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
+#     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
+#     for future in concurrent.futures.as_completed(futures):
+#         if future.result():
+#             logging.info(f"{threading.current_thread().name}) -{future.result()}")
+# final = time.perf_counter()
+# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
-start = time.perf_counter()
-with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
-    futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
-    for future in concurrent.futures.as_completed(futures):
-        if future.result():
-            logging.info(f"{threading.current_thread().name}) -{future.result()}")
-final = time.perf_counter()
-logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
+# start = time.perf_counter()
+# with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
+#     futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
+#     for future in concurrent.futures.as_completed(futures):
+#         if future.result():
+#             logging.info(f"{threading.current_thread().name}) -{future.result()}")
+# final = time.perf_counter()
+# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
 
-start = time.perf_counter()
+# start = time.perf_counter()
 site_name = os.path.basename(__file__).split(".")[0]
 cwd = os.getcwd()
 img_dir_list = []
