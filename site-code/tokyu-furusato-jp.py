@@ -145,10 +145,14 @@ class DataParserClass(web_driver_1.WebDriver):
             self.localNameFinder =  "NA"
         try:
             self.titleFinder = self.html.find(class_=titleFinder).find_all("li")[-1].get_text()
+            self.titleFinder =  re.sub('\s+', '', self.titleFinder)
+
         except:
             self.titleFinder = "NA"
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).find("p").get_text()
+            self.descriptionFinder =  re.sub('\s+', '', self.descriptionFinder)
+
         except:
             self.descriptionFinder = "NA"
         try:
@@ -258,8 +262,7 @@ if __name__ == '__main__':
     site.driver.quit()
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(data)} categories")
-    data=[{'URL':'https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D=82', 'category':'Testing'}
-    # {'URL':'https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D=76', 'category':'toiletries'}
+    data=[{'URL':'https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D=82', 'category':'東急オリジナルお礼品'}]
     ]
     start = time.perf_counter()
     with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
