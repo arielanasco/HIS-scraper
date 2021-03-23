@@ -96,7 +96,7 @@ class DataParserClass(web_driver_1.WebDriver):
         self.localNameFinder =  "NA"
         self.titleFinder = "NA"
         self.descriptionFinder = "NA"
-        self.priceFinder = "NA"
+        self.priceFinder = 0
         self.imageList = []
         self.consumption = "NA"
         self.appDeadline ="NA"
@@ -176,7 +176,7 @@ class DataParserClass(web_driver_1.WebDriver):
             self.priceFinder = self.priceFinder.replace("円","")
             self.priceFinder = int(self.priceFinder.replace(",",""))
         except:
-            self.priceFinder = "NA"
+            self.priceFinder = 0
 
         try:
             self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("img")
