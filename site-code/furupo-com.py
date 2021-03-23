@@ -94,7 +94,7 @@ class DataParserClass(WebDriver):
         self.localNameFinder =  "NA"
         self.titleFinder = "NA"
         self.descriptionFinder = "NA"
-        self.priceFinder = "NA"
+        self.priceFinder = 0
         self.imageList = "NA"
         self.consumption = "NA"
         self.appDeadline = "NA"
@@ -109,47 +109,61 @@ class DataParserClass(WebDriver):
             if re.match("配送方法",self.dt_):
                 try:
                     self.shipMethod = self.rcell[self.lcell.index(_)].get_text()
+                    self.shipMethod = self.shipMethod.replace(r"\n","")
+                    self.shipMethod = self.shipMethod.replace(r"\t","")
                 except:
                     self.shipMethod = "NA" 
             if re.match("容量",self.dt_):
                 try:
                     self.capacityFinder = self.rcell[self.lcell.index(_)].get_text()
+                    self.capacityFinder = self.capacityFinder.replace(r"\n","")
+                    self.capacityFinder = self.capacityFinder.replace(r"\t","")
                 except:
                     self.capacityFinder = "NA" 
             if re.match("賞味期限",self.dt_):
                 try:
                     self.consumption = self.rcell[self.lcell.index(_)].get_text()
+                    self.consumption = self.consumption.replace(r"\n","")
+                    self.consumption = self.consumption.replace(r"\t","")
                 except:
                     self.consumption = "NA" 
             if re.match("管理番号",self.dt_):
                 try:
                     self.managementNumber = self.rcell[self.lcell.index(_)].get_text()
+                    self.managementNumber = self.managementNumber.replace(r"\n","")
+                    self.managementNumber = self.managementNumber.replace(r"\t","")
                 except:
                     self.managementNumber = "NA" 
             if re.match("事業者名",self.dt_):
                 try:
                     self.compName = self.rcell[self.lcell.index(_)].get_text()
+                    self.compName = self.compName.replace(r"\n","")
+                    self.compName = self.compName.replace(r"\t","")
                 except:
                     self.compName = "NA" 
 
         try:
             self.stockStatus = self.html.find(class_=stockStatus).find("span").get_text()
-            self.stockStatus =  re.sub(r'\s+', '', self.stockStatus)
         except:
             self.stockStatus =  "NA"
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
-            self.localNameFinder =  re.sub(r'\s+', '', self.localNameFinder)
+            self.localNameFinder = self.localNameFinder.replace(r"\n","")
+            self.localNameFinder = self.localNameFinder.replace(r"\t","")        
         except:
             self.localNameFinder =  "NA"
+
         try:
             self.titleFinder = self.html.find(class_=titleFinder).find("h1").get_text()
-            self.titleFinder = re.sub(r'\s+', '', self.titleFinder)
+            self.titleFinder = self.titleFinder.replace(r"\n","")
+            self.titleFinder = self.titleFinder.replace(r"\t","")        
         except:
             self.titleFinder = "NA"
+
         try:
             self.descriptionFinder = self.html.find(class_=descriptionFinder).get_text()
-            self.descriptionFinder = re.sub(r'\s+', '', self.descriptionFinder)
+            self.descriptionFinder = self.descriptionFinder.replace(r"\n","")
+            self.descriptionFinder = self.descriptionFinder.replace(r"\t","")
         except:
             self.descriptionFinder = "NA"
         try:
@@ -157,7 +171,7 @@ class DataParserClass(WebDriver):
             self.priceFinder = self.priceFinder.replace("円","")
             self.priceFinder = int(self.priceFinder.replace(",",""))        
         except:
-            self.priceFinder = "NA"
+            self.priceFinder = 0
         try:
             self.imageUrlFinder = self.html.find(class_=imageUrlFinder).find_all("li")
             self.imageList = []
@@ -257,8 +271,7 @@ if __name__ == '__main__':
     # save_data = SaveData()
     # for  datum in data:
     #     save_data.query_db_save_catgy(datum)
-    data=[{"URL":"https://furu-po.com/goods_list/152","category":"test"}]
-    # {"URL":"https://furu-po.com/goods_list/166/168","category":"test2"}]
+    data=[{"URL":"https://furu-po.com/goods_list/152","category":"感謝状等"}]
     final = time.perf_counter()
     logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
     start = time.perf_counter()
