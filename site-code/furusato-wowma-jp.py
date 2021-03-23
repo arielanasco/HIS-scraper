@@ -112,26 +112,36 @@ class DataParserClass(web_driver_1.WebDriver):
             if re.match("申込受付期間",self.dt_): 
                 try:
                     self.appDeadline = self.dd[self.dt.index(_)].get_text()
+                    self.appDeadline = self.appDeadline.replace(r"\n","")
+                    self.appDeadline = self.appDeadline.replace(r"\t","")
                 except:
                     self.appDeadline = "NA" 
             if re.match("内容量",self.dt_): 
                 try:
                     self.capacityFinder = self.dd[self.dt.index(_)].get_text()
+                    self.capacityFinder = self.capacityFinder.replace(r"\n","")
+                    self.capacityFinder = self.capacityFinder.replace(r"\t","")
                 except:
                     self.capacityFinder = "NA"
             if re.match("配送方法",self.dt_): 
                 try:
                     self.shipMethod = self.dd[self.dt.index(_)].get_text()
+                    self.shipMethod = self.shipMethod.replace(r"\n","")
+                    self.shipMethod = self.shipMethod.replace(r"\t","")
                 except:
                     self.shipMethod = "NA" 
             if re.match("提供者",self.dt_):
                 try:
                     self.compName = self.dd[self.dt.index(_)].get_text()
+                    self.compName = self.compName.replace(r"\n","")
+                    self.compName = self.compName.replace(r"\t","")
                 except:
                     self.compName = "NA"
             if re.match("消費期限/賞味期限",self.dt_): 
                 try:
                     self.consumption = self.dd[self.dt.index(_)].get_text()
+                    self.consumption = self.consumption.replace(r"\n","")
+                    self.consumption = self.consumption.replace(r"\t","")
                 except:
                     self.consumption = "NA"
             
@@ -141,19 +151,21 @@ class DataParserClass(web_driver_1.WebDriver):
             for _ in self.categoryFinder:
                 self.liTag = _.find_all("li")
                 self.categoryFinder = self.liTag[-2].find("a").get_text()
-                # self.categoryFinder =  re.sub(r'\W+', '', self.categoryFinder)
                 self.multiple_category.append(self.categoryFinder)
         except:
             self.multiple_category =  []
 
         try:
             self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
-            self.localNameFinder = re.sub(r'\W+', '', self.localNameFinder)
+            self.localNameFinder = self.localNameFinder.replace(r"\n","")
+            self.localNameFinder = self.localNameFinder.replace(r"\t","")        
         except:
             self.localNameFinder = "NA"
         try:
             self.titleFinder = self.html.find(class_=titleFinder).find_all("li")
             self.titleFinder = self.titleFinder[-1].get_text()
+            self.titleFinder = self.titleFinder.replace(r"\n","")
+            self.titleFinder = self.titleFinder.replace(r"\t","")
         except:
             self.titleFinder = "NA"
 
@@ -161,6 +173,8 @@ class DataParserClass(web_driver_1.WebDriver):
 
         try:
             self.descriptionFinder = self.item_info[0].get_text()
+            self.descriptionFinder = self.descriptionFinder.replace(r"\n","")
+            self.descriptionFinder = self.descriptionFinder.replace(r"\t","")
         except:
             self.descriptionFinder = "NA"
 
@@ -168,6 +182,8 @@ class DataParserClass(web_driver_1.WebDriver):
             self.managementNumber = self.item_info[1].get_text()
             self.loc = self.managementNumber.index("商品コード:")
             self.managementNumber = self.managementNumber[self.loc+len("#商品コード:"):self.loc+15]
+            self.managementNumber = self.managementNumber.replace(r"\n","")
+            self.managementNumber = self.managementNumber.replace(r"\t","")
         except:
             self.managementNumber =  "NA"
 
