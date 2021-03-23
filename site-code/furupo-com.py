@@ -206,8 +206,8 @@ def DataCollectorFunction(data):
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
-        time.sleep(1)
-        item_info = WebDriverWait(scrapeURL.driver, 1).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
+        time.sleep(3)
+        item_info = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url, 
                            stockStatus = "NA",
