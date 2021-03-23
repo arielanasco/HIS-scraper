@@ -4,7 +4,7 @@ Site : Hometown Choice
 Link : https://www.furusato-tax.jp/
 
 """
-#coding=utf-8 
+# -*- coding: utf-8 -*-
 
 from web_driver import WebDriver
 import  web_driver_1
