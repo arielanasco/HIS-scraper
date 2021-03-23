@@ -294,7 +294,6 @@ if __name__ == '__main__':
 
 start = time.perf_counter()
 site_name = os.path.basename(__file__).split(".")[0]
-site_name = "Testing"
 cwd = os.getcwd()
 img_dir_list = []
 agt_cd = "JTB"
