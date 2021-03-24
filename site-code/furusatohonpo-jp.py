@@ -34,9 +34,33 @@ class ScraperCategory(WebDriver):
         super().__init__(url)
 
     def categoryParser(self,**kwargs):
-        self.elementCat = kwargs.get("elementCat")
-        self.html = kwargs.get("html")
-        ScraperCategory.categoryList.append({"URL":self.html,"category":self.elementCat})
+        self.driver.get(self.url)
+        self.elementTag = kwargs.get("elementTag")
+        self.html = self.driver.find_element_by_class_name(self.elementTag)
+        self.parent = self.html.find_elements_by_class_name("p-sortNavPCCategory__itemLv1")
+        for parent in self.parent:
+            self.parent_category = parent.find_element_by_class_name("js-sortAccBtn").text
+            try:
+                self.category  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv3")
+                self.mid_category = parent.find_element_by_class_name("p-sortNavPCCategory__itemLv2").find_element_by_class_name("js-sortAccBtn").text
+                for category in self.category:
+                    category.find_element_by_tag_name("input").click()
+                    self.last_category =category.find_element_by_tag_name("span").text
+                    time.sleep(1)
+                    ScraperCategory.categoryList.append({"URL":site.driver.current_url,"category":self.parent_category+"_"+self.mid_category+"_"+self.last_category})
+            except NoSuchElementException:
+                self.category  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv2")
+                for category in self.category:
+                    category.find_element_by_tag_name("input").click()
+                    self.mid_category = category.find_element_by_class_name("js-sortAccBtn")
+                    time.sleep(1)
+                    ScraperCategory.categoryList.append({"URL":site.driver.current_url,"category":self.parent_category+"_"+self.mid_category})
+
+
+
+
+
+        
 
 class ListParserClass(WebDriver):
     totalList = 0
@@ -226,7 +250,7 @@ def ItemLinkCollector(data):
 start = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
 site=ScraperCategory("https://furusatohonpo.jp/donate/s/?")
-site.categoryParser(0)
+site.categoryParser(elementTag="p-sortNavPCCategory")
 data=site.categoryList
 site.driver.quit()
 final = time.perf_counter()
