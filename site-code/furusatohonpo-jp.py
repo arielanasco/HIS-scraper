@@ -48,6 +48,7 @@ class ScraperCategory(WebDriver):
                     self.last_category =category.find_element_by_tag_name("span").text
                     time.sleep(1)
                     ScraperCategory.categoryList.append({"URL":site.driver.current_url,"category":self.parent_category+"_"+self.mid_category+"_"+self.last_category})
+                    category.find_element_by_tag_name("input").click()
             except NoSuchElementException:
                 self.category  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv2")
                 for category in self.category:
@@ -55,6 +56,7 @@ class ScraperCategory(WebDriver):
                     self.mid_category = category.find_element_by_class_name("js-sortAccBtn")
                     time.sleep(1)
                     ScraperCategory.categoryList.append({"URL":site.driver.current_url,"category":self.parent_category+"_"+self.mid_category})
+                    category.find_element_by_tag_name("input").click()
 
 
 
