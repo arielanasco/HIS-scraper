@@ -46,10 +46,10 @@ class ScraperCategory(WebDriver):
             print(len(self.sortNavPCCategory__itemLv2))
             for category in self.sortNavPCCategory__itemLv2:
                 WebDriverWait(self.driver, 5)  
-                category.find_element_by_tag_name("input").click()
+                category.find_element_by_tag_name("input").send_keys(Keys.ENTER)
                 site.driver.current_url
                 WebDriverWait(self.driver, 5)  
-                category.find_element_by_tag_name("input").click()
+                category.find_element_by_tag_name("input").send_keys(Keys.ENTER)
 
 
             # if len(self.sortNavPCCategory__itemLv3) != 0:
