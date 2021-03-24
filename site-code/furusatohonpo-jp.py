@@ -42,22 +42,25 @@ class ScraperCategory(WebDriver):
             self.parent_category = parent.find_element_by_class_name("js-sortAccBtn").text
             self.sortNavPCCategory__itemLv3  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv3")
             self.sortNavPCCategory__itemLv2  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv2")
-
             if len(self.sortNavPCCategory__itemLv3) != 0:
-                self.mid_category = parent.find_element_by_class_name("p-sortNavPCCategory__itemLv2").find_element_by_class_name("js-sortAccBtn").text
                 for category in self.sortNavPCCategory__itemLv3:
-                    category.find_element_by_tag_name("input").click()
-                    self.last_category =category.find_element_by_tag_name("span").text
-                    time.sleep(1)
-                    ScraperCategory.categoryList.append({"URL":site.driver.current_url,"category":self.parent_category+"_"+self.mid_category+"_"+self.last_category})
-                    category.find_element_by_tag_name("input").click()
-            else:
-                for category in self.sortNavPCCategory__itemLv2:
-                    category.find_element_by_tag_name("input").click()
-                    self.mid_category = category.find_element_by_class_name("js-sortAccBtn")
-                    time.sleep(1)
-                    ScraperCategory.categoryList.append({"URL":site.driver.current_url,"category":self.parent_category+"_"+self.mid_category})
-                    category.find_element_by_tag_name("input").click()
+                    print(f"{category.find_element_by_tag_name('span').text}")
+
+            # if len(self.sortNavPCCategory__itemLv3) != 0:
+            #     self.mid_category = parent.find_element_by_class_name("p-sortNavPCCategory__itemLv2").find_element_by_class_name("js-sortAccBtn").text
+            #     for category in self.sortNavPCCategory__itemLv3:
+            #         category.find_element_by_tag_name("input").click()
+            #         self.last_category =category.find_element_by_tag_name("span").text
+            #         time.sleep(1)
+            #         ScraperCategory.categoryList.append({"URL":site.driver.current_url,"category":self.parent_category+"_"+self.mid_category+"_"+self.last_category})
+            #         category.find_element_by_tag_name("input").click()
+            # else:
+            #     for category in self.sortNavPCCategory__itemLv2:
+            #         category.find_element_by_tag_name("input").click()
+            #         self.mid_category = category.find_element_by_class_name("js-sortAccBtn")
+            #         time.sleep(1)
+            #         ScraperCategory.categoryList.append({"URL":site.driver.current_url,"category":self.parent_category+"_"+self.mid_category})
+            #         category.find_element_by_tag_name("input").click()
 
 
 
