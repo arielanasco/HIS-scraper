@@ -39,12 +39,14 @@ class ScraperCategory(WebDriver):
         self.html = self.driver.find_element_by_class_name(self.elementTag)
         self.parent = self.html.find_elements_by_class_name("p-sortNavPCCategory__itemLv1")
         for parent in self.parent[0]:
+            site.driver.current_url
             self.parent_category = parent.find_element_by_class_name("js-sortAccBtn").text
             self.sortNavPCCategory__itemLv3  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv3")
             self.sortNavPCCategory__itemLv2  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv2")
             print(self.parent_category)
             print(len(self.sortNavPCCategory__itemLv2))
             self.sortNavPCCategory__itemLv2[0].find_element_by_tag_name("input").click()
+            site.driver.current_url
             # for category in self.sortNavPCCategory__itemLv2:
             #     # WebDriverWait(self.driver, 5)  
             #     print(category.get_attribute('innerHTML'))
