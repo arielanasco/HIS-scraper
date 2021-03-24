@@ -49,9 +49,11 @@ class ScraperCategory(WebDriver):
         self.liTag = self.category_container.li
         while True:
             self.subcat = self.liTag.find_all("li")
-            self.parent = re.sub(r'\([^()]*\)', "",self.liTag.find("label").find("span").get_text())  
+            self.parent = self.liTag.find("label").find("span").get_text()
+            self.parent = self.parent[:self.parent.index('（')]
             for _ in self.subcat:
-                self.categoryData = re.sub(r'\([^()]*\)', "", _.find("span").get_text())
+                self.categoryData = _.find("span").get_text()
+                self.categoryData = self.categoryData[:self.categoryData.index('（')]
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 self.link = _.find("input").get("value")
                 ScraperCategory.categoryList.append({"URL":"https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D="+self.link,"category":self.parent+"_"+self.categoryData})
