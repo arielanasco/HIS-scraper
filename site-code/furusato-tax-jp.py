@@ -30,7 +30,7 @@ class ScraperCategory(WebDriver):
         super().__init__(url)
 
     def categoryParser(self,**kwargs):
-        self.html = self.driver.get(self.url)
+        self.html = self.driver.get(self.url).page_source
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(self.html, 'html.parser')
         self.category = self.html.find(class_=self.elementTag)
