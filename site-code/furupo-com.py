@@ -56,6 +56,12 @@ class ScraperCategory(WebDriver):
                 self.liTag_ = self.liTag_.find_next_sibling()
             else:
                 break
+        for item in self.categoryList:
+            self.driver.get(item["URL"])
+            self.html = bs(self.driver.page_source, 'html.parser')
+            self.sub_category = self.html.find(class_="subcategory").find_all("option")
+            print(self.sub_category)
+
 
 class ListParserClass(WebDriver):
     totalList = 0
@@ -255,8 +261,7 @@ def ItemLinkCollector(data):
 start = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
 site=ScraperCategory(LINK)
-site.categoryParser(html= site.driver.page_source, elementTag = "popover")
-data=site.sub_categoryList
+site.categoryParser(elementTag = "popover")
 
 site.driver.quit()
 # data=[{"URL":"https://furu-po.com/goods_list/152","category":"感謝状等"}]
