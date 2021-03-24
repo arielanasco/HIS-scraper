@@ -48,7 +48,7 @@ class ScraperCategory(WebDriver):
         self.liTag_ = self.category.li
         while True:
             self.liTag = self.liTag_.find_all("li")
-            self.parent = self.liTag_.find("strong").get_text()
+            self.parent = self.liTag_.find("a").get_text()
             for _ in self.liTag:
                 self.categoryData = re.sub(r'\([^()]*\)', '', _.find("a").get_text())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
