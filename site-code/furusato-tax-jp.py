@@ -38,6 +38,7 @@ class ScraperCategory(WebDriver):
         for category in self.category:
             self.parent = category.get("data-breadcrumb")
             self.parent = self.parent.replace("[","")
+            self.parent = self.parent.replace('"',"")
             self.parent = self.parent.replace("]","")
             self.parent = self.parent.split(",")
             self.holder = category.find_all("li")
