@@ -48,10 +48,11 @@ class ScraperCategory(WebDriver):
         self.liTag_ = self.category.li
         while True:
             self.liTag = self.liTag_.find_all("li")
+            self.parent = self.liTag_.find("strong").get_text()
             for _ in self.liTag:
                 self.categoryData = re.sub(r'\([^()]*\)', '', _.find("a").get_text())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
-                ScraperCategory.categoryList.append({"URL":_.find("a").get("href"),"category":self.categoryData})
+                ScraperCategory.categoryList.append({"URL":_.find("a").get("href"),"category":self.parent+"_"+self.categoryData})
             if self.liTag_.find_next_sibling():
                 self.liTag_ = self.liTag_.find_next_sibling()
             else:
@@ -63,7 +64,7 @@ class ScraperCategory(WebDriver):
             try:
                 self.sub_category = self.html.find(class_="subcategory").find_all("option")
                 for item in self.sub_category[1:]:
-                    ScraperCategory.sub_categoryList.append({"URL":"https://furu-po.com/"+item.get("value"),"category":item.get_text()})
+                    ScraperCategory.sub_categoryList.append({"URL":"https://furu-po.com/"+item.get("value"),"category":item["category"]+"_"+item.get_text()})
             except:
                 ScraperCategory.sub_categoryList.append(item)
                     
