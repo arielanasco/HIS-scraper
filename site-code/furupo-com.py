@@ -62,8 +62,8 @@ class ScraperCategory(WebDriver):
             self.html = bs(self.driver.page_source, 'html.parser')
             try:
                 self.sub_category = self.html.find(class_="subcategory").find_all("option")
-                for item in self.sub_category[1:]:
-                    ScraperCategory.sub_categoryList.append({"URL":"https://furu-po.com/"+item.get("value"),"category":item["category"]+"_"+item.get_text()})
+                for _ in self.sub_category[1:]:
+                    ScraperCategory.sub_categoryList.append({"URL":"https://furu-po.com/"+_.get("value"),"category":item["category"]+"_"+_.get_text()})
             except:
                 ScraperCategory.sub_categoryList.append(item)
                     
