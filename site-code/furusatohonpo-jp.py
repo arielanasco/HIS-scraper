@@ -40,9 +40,13 @@ class ScraperCategory(WebDriver):
         self.parent = self.html.find_elements_by_class_name("p-sortNavPCCategory__itemLv1")
         for parent in self.parent:
             self.parent_category = parent.find_element_by_class_name("js-sortAccBtn").text
-            try:
-                self.category  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv3")
-                print(f"Length of level 3 is {len(self.category)}")
+            self.sortNavPCCategory__itemLv3  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv3")
+            self.sortNavPCCategory__itemLv2  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv2")
+            print(f"Length of level 3 is {len(self.sortNavPCCategory__itemLv3)}")
+            print(f"Length of level 2 is {len(self.sortNavPCCategory__itemLv2)}")
+            # try:
+            #     self.category  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv3")
+            #     print(f"Length of level 3 is {len(self.category)}")
                 # self.mid_category = parent.find_element_by_class_name("p-sortNavPCCategory__itemLv2").find_element_by_class_name("js-sortAccBtn").text
                 # for category in self.category:
                 #     category.find_element_by_tag_name("input").click()
@@ -50,9 +54,9 @@ class ScraperCategory(WebDriver):
                 #     time.sleep(1)
                 #     ScraperCategory.categoryList.append({"URL":site.driver.current_url,"category":self.parent_category+"_"+self.mid_category+"_"+self.last_category})
                 #     category.find_element_by_tag_name("input").click()
-            except NoSuchElementException:
-                self.category  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv2")
-                print(f"Length of level 2 is {len(self.category)}")
+            # except NoSuchElementException:
+            #     self.category  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv2")
+            #     print(f"Length of level 2 is {len(self.category)}")
                 # for category in self.category:
                 #     category.find_element_by_tag_name("input").click()
                 #     self.mid_category = category.find_element_by_class_name("js-sortAccBtn")
