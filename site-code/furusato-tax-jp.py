@@ -36,6 +36,8 @@ class ScraperCategory(WebDriver):
         self.category = self.html.find(class_=self.elementTag)
         self.category = self.category.find_all("ul")
         for category in self.category:
+            self.parent = category.get("data-breadcrumb")
+            print(self.parent)
             self.holder = category.find_all("li")
             for holder in self.holder[3:]:
                 self.categoryData = re.sub(r'\([^()]*\)', '', holder.find(class_="categories__name").text.strip())
