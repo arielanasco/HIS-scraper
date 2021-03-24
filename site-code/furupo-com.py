@@ -51,7 +51,6 @@ class ScraperCategory(WebDriver):
             self.parent =  re.sub(r'\([^()]*\)', '', self.liTag_.find("a").get_text())    
             for _ in self.liTag:
                 self.categoryData = re.sub(r'\([^()]*\)', '', _.find("a").get_text())
-                self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 ScraperCategory.categoryList.append({"URL":_.find("a").get("href"),"category":self.parent+"_"+self.categoryData})
             if self.liTag_.find_next_sibling():
                 self.liTag_ = self.liTag_.find_next_sibling()
