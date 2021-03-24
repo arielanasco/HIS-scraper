@@ -46,7 +46,7 @@ class ScraperCategory(WebDriver):
             print(len(self.sortNavPCCategory__itemLv2))
             # for _ in self.sortNavPCCategory__itemLv2:
             if len(self.sortNavPCCategory__itemLv2) != 0:
-                print(f"This is the level 2 {self.sortNavPCCategory__itemLv2[0].find_element_by_class_name('js-sortAccBtn').text}")
+                print(f"This is the level 2 {self.sortNavPCCategory__itemLv2[0].text}")
 
             # if len(self.sortNavPCCategory__itemLv3) != 0:
             #     self.mid_category = parent.find_element_by_class_name("p-sortNavPCCategory__itemLv2").find_element_by_class_name("js-sortAccBtn").text
