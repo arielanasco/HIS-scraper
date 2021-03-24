@@ -55,6 +55,7 @@ logging.info(f"{threading.current_thread().name}) -Scraping has been started..."
 site=ScraperCategory(LINK)
 site.categoryParser(elementTag = "search-grandson-categories")
 data=site.categoryList
+site.driver.quit()
 final = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
 
