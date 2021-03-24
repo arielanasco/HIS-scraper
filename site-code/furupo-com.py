@@ -58,6 +58,7 @@ class ScraperCategory(WebDriver):
                 break
         for item in self.categoryList:
             self.driver.get(item["URL"])
+            print(item["URL"])
             self.html = bs(self.driver.page_source, 'html.parser')
             self.sub_category = self.html.find(class_="subcategory").find_all("option")
             print(self.sub_category)
@@ -262,7 +263,6 @@ start = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
 site=ScraperCategory(LINK)
 site.categoryParser(elementTag = "popover")
-
 site.driver.quit()
 # data=[{"URL":"https://furu-po.com/goods_list/152","category":"感謝状等"}]
 # final = time.perf_counter()
