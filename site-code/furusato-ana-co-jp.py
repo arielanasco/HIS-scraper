@@ -36,9 +36,9 @@ class ScraperCategory(web_driver_1.WebDriver):
     def categoryParser(self,**kwargs):
         self.elementTag = kwargs.get("elementTag")
         self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category_container = self.html.find(class_="gNavContainer1")
-        self.category_container = self.category_container.find_all(class_=self.elementTag)
-        self.parent_container = self.category_container.find_all(class_="gnav_detail_medium_contents")
+        self.category_container_ = self.html.find(class_="gNavContainer1")
+        self.category_container = self.category_container_.find_all(class_=self.elementTag)
+        self.parent_container = self.category_container_.find_all(class_="gnav_detail_medium_contents")
         for _ in self.parent_container:
             self.parent_li = _.find_all("li")
             self.holder = []
