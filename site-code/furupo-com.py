@@ -41,8 +41,9 @@ class ScraperCategory(WebDriver):
         super().__init__(url)
 
     def categoryParser(self,**kwargs):
+        self.driver.get(self.url)
         self.elementTag = kwargs.get("elementTag")
-        self.html = bs(kwargs.get("html"), 'html.parser')
+        self.html = bs(self.driver.page_source, 'html.parser')
         self.category = self.html.find(class_=self.elementTag)
         self.liTag_ = self.category.li
         while True:
@@ -55,25 +56,6 @@ class ScraperCategory(WebDriver):
                 self.liTag_ = self.liTag_.find_next_sibling()
             else:
                 break
-    def subcategoryParser(self,**kwargs):
-        self.sub_elementTag = kwargs.get("sub_elementTag")
-        self.html = bs(kwargs.get("html"), 'html.parser')
-        self.category = self.html.find(class_=self.sub_elementTag).find_all("option")
-        while True:
-            self.categoryData = self.category.get_text()
-            ScraperCategory.sub_categoryList.append({"URL":LINK+self.category.get("value"),"category":self.categoryData})
-            if self.category.find_next_sibling():
-                self.category = self.category.find_next_sibling()
-            else:
-                break
-
-        # print(self.category_)
-        # self.category = self.category_.find_all("option")
-        # for _ in self.category_[1:]:
-        #     self.categoryData = _.get_text()
-        #     ScraperCategory.sub_categoryList.append({"URL":LINK+_.get("value"),"category":self.categoryData})
-
-
 
 class ListParserClass(WebDriver):
     totalList = 0
@@ -273,13 +255,7 @@ def ItemLinkCollector(data):
 start = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
 site=ScraperCategory(LINK)
-site.driver.get(site.url)
 site.categoryParser(html= site.driver.page_source, elementTag = "popover")
-for datum in site.categoryList:
-    site.url = datum["URL"]
-    site.driver.get(site.url)
-    time.sleep(1)
-    site.subcategoryParser(html= site.driver.page_source, sub_elementTag = "ranking-menu")
 data=site.sub_categoryList
 
 site.driver.quit()
@@ -309,12 +285,12 @@ site.driver.quit()
 # cwd = os.getcwd()
 # img_dir_list = []
 # agt_cd = "JTB"
-mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
-mycursor = mydb.cursor()
+# mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
+# mycursor = mydb.cursor()
 
-for  datum in data:
-    mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],agt_cd))
-    mydb.commit()
+# for  datum in data:
+#     mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],agt_cd))
+#     mydb.commit()
 
 # for  datum in DataParserClass.data:
 #     mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
