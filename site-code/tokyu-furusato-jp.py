@@ -42,17 +42,19 @@ class ScraperCategory(WebDriver):
         super().__init__(url)
 
     def categoryParser(self,**kwargs):
+        self.driver.get(self.url)
         self.elementTag = kwargs.get("elementTag")
-        self.html = bs(kwargs.get("html"), 'html.parser')
+        self.html = bs(self.driver.page_source, 'html.parser')
         self.category_container = self.html.find(class_=self.elementTag)
         self.liTag = self.category_container.li
         while True:
             self.subcat = self.liTag.find_all("li")
+            self.parent = re.sub(r"\([0-9]+\)", "",self.liTag.find("label").find("span").get_text())  
             for _ in self.subcat:
                 self.categoryData = re.sub(r"\([0-9]+\)", "", _.find("span").get_text())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
                 self.link = _.find("input").get("value")
-                ScraperCategory.categoryList.append({"URL":"https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D="+self.link,"category":self.categoryData})
+                ScraperCategory.categoryList.append({"URL":"https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D="+self.link,"category":self.parent+"_"+self.categoryData})
             if self.liTag.find_next_sibling():
                 self.liTag = self.liTag.find_next_sibling()
             else:
@@ -250,70 +252,67 @@ def ItemLinkCollector(data):
 start = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Scraping for category has been started...")
 site=ScraperCategory(LINK)
-site.driver.get(site.url)
-current_url, user_agent = site.displaySiteInfo()
-logging.info(f"{threading.current_thread().name}) - {current_url} {user_agent}")
-site.categoryParser(html= site.driver.page_source, elementTag ="dropdownlist")
+site.categoryParser(elementTag ="dropdownlist")
 data=site.categoryList
-
 site.driver.quit()
 final = time.perf_counter()
-logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(data)} categories")
-data=[{'URL':'https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D=82', 'category':'東急オリジナルお礼品'}]
-start = time.perf_counter()
-with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
-    futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
-    for future in concurrent.futures.as_completed(futures):
-        if future.result():
-            logging.info(f"{threading.current_thread().name}) -{future.result()}")
-final = time.perf_counter()
-logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
+logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(data)} categories"
 
-start = time.perf_counter()
-with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
-    futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
-    for future in concurrent.futures.as_completed(futures):
-        if future.result():
-            logging.info(f"{threading.current_thread().name}) -{future.result()}")
-final = time.perf_counter()
-logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
-start = time.perf_counter()
-site_name = os.path.basename(__file__).split(".")[0]
-cwd = os.getcwd()
-img_dir_list = []
-agt_cd = "FPL"
-mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
-mycursor = mydb.cursor()
+# data=[{'URL':'https://tokyu-furusato.jp/goods/result?limit=&order=1&chk_sub_ctg%5B%5D=82', 'category':'東急オリジナルお礼品'}]
+# start = time.perf_counter()
+# with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
+#     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
+#     for future in concurrent.futures.as_completed(futures):
+#         if future.result():
+#             logging.info(f"{threading.current_thread().name}) -{future.result()}")
+# final = time.perf_counter()
+# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
-for  datum in data:
-    mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],agt_cd))
-    mydb.commit()
+# start = time.perf_counter()
+# with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
+#     futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
+#     for future in concurrent.futures.as_completed(futures):
+#         if future.result():
+#             logging.info(f"{threading.current_thread().name}) -{future.result()}")
+# final = time.perf_counter()
+# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
+# start = time.perf_counter()
+# site_name = os.path.basename(__file__).split(".")[0]
+# cwd = os.getcwd()
+# img_dir_list = []
+# agt_cd = "FPL"
+# mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
+# mycursor = mydb.cursor()
 
-for  datum in DataParserClass.data:
-    mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-    (datum["URL"],datum["local_name"],datum["management_number"],datum["title"],datum["description"],datum["app_deadline"],datum["price"],datum["capacity"],datum["comp_name"],agt_cd))
-    mydb.commit()
-    if type(datum["category"]) == list:
-        for cat in datum["category"][:8]:
-            mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm%s = %s  WHERE agt_mchan_url = %s",(datum['category'].index(cat)+1,cat,datum["URL"]))
-            mydb.commit()
-    else:
-        mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
-        mydb.commit()
-    for img_link in datum["images"]:
-        response = requests.get(img_link, stream=True)
-        dir_name= os.path.join(cwd,"scraper",site_name,datum["category"],datum["title"])
-        if not os.path.exists(dir_name):
-            os.makedirs(dir_name)
-        img_link = img_link.split("/")
-        dir_file = os.path.join(dir_name,img_link[-1])
-        with open(dir_file, 'wb') as out_file:
-            shutil.copyfileobj(response.raw, out_file)
-        del response
-        img_dir_list.append(dir_file)        
-    for  img in img_dir_list[:5]:
-        mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(img_dir_list.index(img)+1,img,datum["URL"]))
-        mydb.commit()
-    img_dir_list = []
-final = time.perf_counter()
-logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  save  {len(DataParserClass.data)} items data")
+# for  datum in data:
+#     mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],agt_cd))
+#     mydb.commit()
+
+# for  datum in DataParserClass.data:
+#     mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+#     (datum["URL"],datum["local_name"],datum["management_number"],datum["title"],datum["description"],datum["app_deadline"],datum["price"],datum["capacity"],datum["comp_name"],agt_cd))
+#     mydb.commit()
+#     if type(datum["category"]) == list:
+#         for cat in datum["category"][:8]:
+#             mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm%s = %s  WHERE agt_mchan_url = %s",(datum['category'].index(cat)+1,cat,datum["URL"]))
+#             mydb.commit()
+#     else:
+#         mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
+#         mydb.commit()
+#     for img_link in datum["images"]:
+#         response = requests.get(img_link, stream=True)
+#         dir_name= os.path.join(cwd,"scraper",site_name,datum["category"],datum["title"])
+#         if not os.path.exists(dir_name):
+#             os.makedirs(dir_name)
+#         img_link = img_link.split("/")
+#         dir_file = os.path.join(dir_name,img_link[-1])
+#         with open(dir_file, 'wb') as out_file:
+#             shutil.copyfileobj(response.raw, out_file)
+#         del response
+#         img_dir_list.append(dir_file)        
+#     for  img in img_dir_list[:5]:
+#         mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(img_dir_list.index(img)+1,img,datum["URL"]))
+#         mydb.commit()
+#     img_dir_list = []
+# final = time.perf_counter()
+# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  save  {len(DataParserClass.data)} items data")
