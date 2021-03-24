@@ -48,9 +48,6 @@ class WebDriver:
         self.options.add_argument(f'--user-agent="{sample(self.userAgentList,1)[0]}"')
         self.driver = webdriver.Chrome(options=self.options)
 
-    def displaySiteInfo(self):
-        return f"Target URL: {self.driver.current_url}" , f"User-Agent: {self.driver.execute_script('return navigator.userAgent;')}"
-
 
 
 # class SaveData:
