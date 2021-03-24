@@ -60,9 +60,13 @@ class ScraperCategory(WebDriver):
             self.driver.get(item["URL"])
             print(item["URL"])
             self.html = bs(self.driver.page_source, 'html.parser')
-            self.sub_category = self.html.find(class_="subcategory").find_all("option")
-            print(self.sub_category)
-
+            try:
+                self.sub_category = self.html.find(class_="subcategory").find_all("option")
+                for item in self.sub_category[1:]:
+                    ScraperCategory.sub_categoryList.append({"URL":"https://furu-po.com/"+item.get("value"),"category":item.get_text()})
+            except:
+                ScraperCategory.sub_categoryList.append(item)
+                    
 
 class ListParserClass(WebDriver):
     totalList = 0
@@ -264,6 +268,7 @@ logging.info(f"{threading.current_thread().name}) -Scraping has been started..."
 site=ScraperCategory(LINK)
 site.categoryParser(elementTag = "popover")
 site.driver.quit()
+data = site.sub_categoryList
 # data=[{"URL":"https://furu-po.com/goods_list/152","category":"感謝状等"}]
 # final = time.perf_counter()
 # logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
