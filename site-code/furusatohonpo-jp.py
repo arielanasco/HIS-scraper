@@ -38,7 +38,7 @@ class ScraperCategory(WebDriver):
         self.elementTag = kwargs.get("elementTag")
         self.html = self.driver.find_element_by_class_name(self.elementTag)
         self.parent = self.html.find_elements_by_class_name("p-sortNavPCCategory__itemLv1")
-        for parent in self.parent[0]:
+        for parent in self.parent:
             site.driver.current_url
             self.parent_category = parent.find_element_by_class_name("js-sortAccBtn").text
             self.sortNavPCCategory__itemLv3  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv3")
