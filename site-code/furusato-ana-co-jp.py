@@ -53,10 +53,16 @@ class ScraperCategory(web_driver_1.WebDriver):
                 for _ in category_[2:]:
                     self.categoryData = re.sub(r'\([^()]*\)', '', _.find("a").get_text())
                     self.categoryData = re.sub(r'\W+', '', self.categoryData)
+                    for parent in ScraperCategory.temp:
+                        if category_[0].get_text() in parent["base"]:
+                            self.categoryData = parent["main"]+"_"+category_[0].get_text()+"_"+self.categoryData
                     ScraperCategory.categoryList.append({"URL":_.find("a").get("href"),"category":self.categoryData})
             else:
                 self.categoryData = re.sub(r'\([^()]*\)', '', category_[-1].find("a").get_text())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
+                for parent in ScraperCategory.temp:
+                    if category_[0].get_text() in parent["base"]:
+                        self.categoryData = parent["main"]+"_"+category_[0].get_text()
                 ScraperCategory.categoryList.append({"URL":category_[-1].find("a").get("href"),"category":self.categoryData})                
 
 class DataParserClass(web_driver_1.WebDriver):
