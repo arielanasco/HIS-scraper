@@ -59,7 +59,6 @@ class ScraperCategory(WebDriver):
                 break
         for item in self.categoryList:
             self.driver.get(item["URL"])
-            print(item["URL"])
             self.html = bs(self.driver.page_source, 'html.parser')
             try:
                 self.sub_category = self.html.find(class_="subcategory").find_all("option")
