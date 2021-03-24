@@ -44,7 +44,7 @@ class ScraperCategory(web_driver_1.WebDriver):
             self.holder = []
             for base in self.parent_li[2:]:
                 self.holder.append(base.get_text())
-            temp.append({"main":self.parent_li[0].get_text(),"base":self.holder})
+            ScraperCategory.temp.append({"main":self.parent_li[0].get_text(),"base":self.holder})
 
 
         for category in  self.category_container:
