@@ -48,13 +48,14 @@ class ScraperCategory(WebDriver):
         self.liTag = self.category.li
         self.liTag = self.liTag.find_next_sibling()
         while True:
+            self.parent_category = self.liTag.find("label").find("span").get_text()
             self.parent_category_id = self.liTag.find("input").get("value")
             self.child_categories = self.liTag.find(class_="category-child").find_all("li")
             for _ in self.child_categories:
                 self.child_category_id = _.find("input").get("value")
                 self.child_category_name = _.find("label").get_text()
                 self.child_category_name =re.sub(r'\([0-9]+\)','',self.child_category_name)
-                ScraperCategory.categoryList.append({"URL":f"https://furusato.wowma.jp/products/list.php?parent_category={self.parent_category_id}&category_{self.child_category_id}={self.child_category_id}","category":f"{self.child_category_name}"})
+                ScraperCategory.categoryList.append({"URL":f"https://furusato.wowma.jp/products/list.php?parent_category={self.parent_category_id}&category_{self.child_category_id}={self.child_category_id}","category":f"{self.parent_category}_{self.child_category_name}"})
             if self.liTag.find_next_sibling():
                 self.liTag = self.liTag.find_next_sibling()
             else:
