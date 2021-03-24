@@ -45,7 +45,7 @@ class ScraperCategory(WebDriver):
             print(self.parent_category)
             print(len(self.sortNavPCCategory__itemLv2))
             print(site.driver.current_url)
-            parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv2")[0].find_element_by_tag_name("input").click()
+            self.driver.find_elements_by_class_name("p-sortNavPCCategory__itemLv1").find_elements_by_class_name("p-sortNavPCCategory__itemLv2").find_element_by_tag_name("input").click()
             print(site.driver.current_url)
             # for category in self.sortNavPCCategory__itemLv2:
             #     print(f"type{category.get_attribute('innerHTML')}")
