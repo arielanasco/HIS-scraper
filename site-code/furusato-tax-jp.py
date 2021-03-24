@@ -37,12 +37,14 @@ class ScraperCategory(WebDriver):
         self.category = self.category.find_all("ul")
         for category in self.category:
             self.parent = category.get("data-breadcrumb")
-            print(self.parent)
+            self.parent = self.parent.replace("[","")
+            self.parent = self.parent.replace("]","")
+            self.parent = self.parent.split(",")
             self.holder = category.find_all("li")
             for holder in self.holder[3:]:
                 self.categoryData = re.sub(r'\([^()]*\)', '', holder.find(class_="categories__name").text.strip())
                 self.categoryData = re.sub(r'\W+', '', self.categoryData)
-                ScraperCategory.categoryList.append({"URL":"https://www.furusato-tax.jp"+holder.find("a").get("href"),"category":self.categoryData})
+                ScraperCategory.categoryList.append({"URL":"https://www.furusato-tax.jp"+holder.find("a").get("href"),"category":self.parent[0]+"_"+self.parent[1]+"_"+self.categoryData})
 
 
 
