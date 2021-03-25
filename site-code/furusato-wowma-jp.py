@@ -262,19 +262,6 @@ def ItemLinkCollector(data):
                     if key not in DataParserClass.seen:
                         DataParserClass.data.append({"URL":LINK+_,"category":category})
                         DataParserClass.seen.add(key)
-
-                # for _ in scrapeURL.itemList:
-                #     DataParserClass.data.append({"URL":LINK+_,"category":category})
-                # seen = set()
-                # result = []
-                # for dic in DataParserClass.data:
-                #     key = dic['URL']
-                #     if key in DataParserClass.seen:
-                #         continue
-                #     DataParserClass.result.append(dic)
-                #     seen.add(key)
-                # DataParserClass.data = result
-
                 logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
             break
         else:
@@ -291,7 +278,7 @@ site.driver.quit()
 final = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
 
-data=[{'URL':'https://furusato.wowma.jp/products/list.php?parent_category=244','category':'金工品'}]
+data=[data[0]]
 start = time.perf_counter()
 with concurrent.futures.ThreadPoolExecutor(max_workers=5 , thread_name_prefix='Fetching_URL') as executor:
     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]

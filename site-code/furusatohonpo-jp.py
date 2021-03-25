@@ -241,8 +241,7 @@ site.driver.quit()
 final = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} for fetching {len(data)} categories")
 
-# data=[{"URL":"https://furusatohonpo.jp/donate/s/?categories=18","category":"test"}]
-# {"URL":"https://furusatohonpo.jp/donate/s/?categories=1601","category":"test2"}]
+data=[data[0]]
 start = time.perf_counter()
 with concurrent.futures.ThreadPoolExecutor(max_workers=5 , thread_name_prefix='Fetching_URL') as executor:
     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]

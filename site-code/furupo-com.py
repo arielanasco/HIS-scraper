@@ -269,7 +269,7 @@ data = site.sub_categoryList
 final = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
 
-data=[{"URL":"https://furu-po.com/goods_list/152","category":"感謝状等"}]
+data=[data[0]]
 start = time.perf_counter()
 with concurrent.futures.ThreadPoolExecutor(max_workers=5 , thread_name_prefix='Scraper') as executor:
     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]

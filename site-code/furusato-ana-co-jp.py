@@ -247,8 +247,7 @@ data=site.categoryList
 final = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
 
-data = [{'URL':'https://furusato.ana.co.jp/products/list.php?limit=30&s4=%E8%82%89_%E7%89%9B%E8%82%89_%E5%B1%B1%E5%BD%A2%E7%89%9B&sort=number5%2CNumber1%2CScore',
-'category':'山形牛'}]
+data=[data[0]]
 start = time.perf_counter()
 with concurrent.futures.ThreadPoolExecutor(max_workers=5,thread_name_prefix='Fetching_URL') as executor:
     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
