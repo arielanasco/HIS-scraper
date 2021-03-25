@@ -42,7 +42,7 @@ class ScraperCategory(WebDriver):
 
         for parent in self.parent:
             self.child = parent.find_all("li")
-            self.parent_category = parent.find("a").find("span").get_text()
+            self.parent_category = parent.find("a").get_text()
             for child in self.child:
                 ScraperCategory.categoryList.append({"URL":child.find("a").get("href"),"category":self.parent_category+"_"+child.get_text()})
 
