@@ -223,7 +223,7 @@ def DataCollectorFunction(data):
     scrapeURL = DataParserClass(item_url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
-        time.sleep(3)
+        time.sleep(2)
         scrapeURL.dataParser(html = scrapeURL.get(item_url).text,
                            itemUrl = item_url,
                            stockStatus ="NA",
@@ -251,7 +251,7 @@ def ItemLinkCollector(data):
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraping([{category}]{url_category})")
     while True:
-        itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
+        itemlist = WebDriverWait(scrapeURL.driver, 2).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
         scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
         nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
         if nextButton.get_attribute("href") == 'javascript:void(0);':
@@ -294,7 +294,7 @@ logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)}
 
 data=[data[0]]
 start = time.perf_counter()
-with concurrent.futures.ThreadPoolExecutor(max_workers=5 , thread_name_prefix='Fetching_URL') as executor:
+with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
     for future in concurrent.futures.as_completed(futures):
         if future.result():
@@ -303,7 +303,7 @@ final = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
 start = time.perf_counter()
-with concurrent.futures.ThreadPoolExecutor(max_workers=5, thread_name_prefix='Fetching_Item_Data') as executor:
+with concurrent.futures.ThreadPoolExecutor(max_workers=8, thread_name_prefix='Fetching_Item_Data') as executor:
     futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
     for future in concurrent.futures.as_completed(futures):
         if future.result():
