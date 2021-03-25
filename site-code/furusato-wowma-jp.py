@@ -84,7 +84,8 @@ class DataParserClass(web_driver_1.WebDriver):
     isNotActive = True
     data = []
     totalData = 0
-
+    seen = set()
+    
     def __init__(self, url):
         self.url = url
         type(self).totalData +=1
@@ -250,7 +251,7 @@ def ItemLinkCollector(data):
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraping([{category}]{url_category})")
     while True:
-        time.sleep(1)
+        time.sleep(3)
         itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
         scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
         nextButton = scrapeURL.driver.find_element_by_class_name(nxt_btn)
@@ -258,16 +259,22 @@ def ItemLinkCollector(data):
             logging.info(f"{threading.current_thread().name}) -Active_thread({int(threading.activeCount())-1}) -Exiting({category}) -Scraped_categories({ListParserClass.totalList}/{len(ScraperCategory.categoryList)})")
             with data_lock:
                 for _ in scrapeURL.itemList:
-                    DataParserClass.data.append({"URL":LINK+_,"category":category})
-                seen = set()
-                result = []
-                for dic in DataParserClass.data:
-                    key = dic['URL']
-                    if key in seen:
-                        continue
-                    result.append(dic)
-                    seen.add(key)
-                DataParserClass.data = result
+                    key = LINK+_
+                    if key not in DataParserClass.seen:
+                        DataParserClass.data.append({"URL":LINK+_,"category":category})
+                        DataParserClass.seen.add(key)
+
+                # for _ in scrapeURL.itemList:
+                #     DataParserClass.data.append({"URL":LINK+_,"category":category})
+                # seen = set()
+                # result = []
+                # for dic in DataParserClass.data:
+                #     key = dic['URL']
+                #     if key in DataParserClass.seen:
+                #         continue
+                #     DataParserClass.result.append(dic)
+                #     seen.add(key)
+                # DataParserClass.data = result
 
                 logging.info(f"{threading.current_thread().name}) -Adding_items({len(scrapeURL.itemList)})  -Total_item({len(DataParserClass.data)})")
             break
@@ -284,15 +291,16 @@ data=site.categoryList
 site.driver.quit()
 final = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
-# data=[{'URL':'https://furusato.wowma.jp/products/list.php?parent_category=244','category':'金工品'}]
-# start = time.perf_counter()
-# with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
-#     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
-#     for future in concurrent.futures.as_completed(futures):
-#         if future.result():
-#             logging.info(f"{threading.current_thread().name}) -{future.result()}")
-# final = time.perf_counter()
-# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
+
+data=[{'URL':'https://furusato.wowma.jp/products/list.php?parent_category=244','category':'金工品'}]
+start = time.perf_counter()
+with concurrent.futures.ThreadPoolExecutor(max_workers=5 , thread_name_prefix='Fetching_URL') as executor:
+    futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
+    for future in concurrent.futures.as_completed(futures):
+        if future.result():
+            logging.info(f"{threading.current_thread().name}) -{future.result()}")
+final = time.perf_counter()
+logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
 # start = time.perf_counter()
 # with concurrent.futures.ThreadPoolExecutor(thread_name_prefix='Fetching_Item_Data') as executor:
