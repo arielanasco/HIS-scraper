@@ -44,7 +44,7 @@ class ScraperCategory(WebDriver):
             self.child = parent.find_all("li")
             self.parent_category = parent.find("a").get_text()
             for child in self.child:
-                ScraperCategory.categoryList.append({"URL":child.find("a").get("href"),"category":self.parent_category+"_"+child.get_text()})
+                ScraperCategory.categoryList.append({"URL":"https://furusatohonpo.jp/"+child.find("a").get("href"),"category":self.parent_category+"_"+child.get_text()})
 
 
 
