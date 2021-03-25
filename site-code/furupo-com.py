@@ -210,7 +210,6 @@ def DataCollectorFunction(data):
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
-        time.sleep(3)
         item_info = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, "lg-info")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url, 
@@ -242,7 +241,6 @@ def ItemLinkCollector(data):
     logging.info(f"{threading.current_thread().name}) -Scraping([{category}]{url_category})")
     while True:
         try:
-            time.sleep(3)
             itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
             scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
             try:
@@ -311,18 +309,7 @@ for  datum in DataParserClass.data:
             mydb.commit()
     else:
         mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
-        mydb.commit()
-    for img_link in datum["images"]:
-        response = requests.get(img_link, stream=True)
-        dir_name= os.path.join(cwd,"scraper",site_name,datum["category"],datum["title"])
-        if not os.path.exists(dir_name):
-            os.makedirs(dir_name)
-        img_link = img_link.split("/")
-        dir_file = os.path.join(dir_name,img_link[-1])
-        with open(dir_file, 'wb') as out_file:
-            shutil.copyfileobj(response.raw, out_file)
-        del response
-        img_dir_list.append(dir_file)        
+        mydb.commit()       
     for  img in datum["images"][:5]:
         mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(datum["images"].index(img)+1,img,datum["URL"]))
         mydb.commit()

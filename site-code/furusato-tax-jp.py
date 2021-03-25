@@ -205,7 +205,6 @@ def DataCollectorFunction(data):
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
     try:
-        time.sleep(3)
         item_info = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, "city-title__text")))
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url,
@@ -236,7 +235,6 @@ def ItemLinkCollector(data):
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraping([{category}]{url_category})")
     while True:
-        time.sleep(3)
         itemlist = WebDriverWait(scrapeURL.driver, 3).until(EC.presence_of_element_located((By.CLASS_NAME, element_container)))
         scrapeURL.listParser(html =scrapeURL.driver.page_source, elementContainer = element_container)
         nextButton = scrapeURL.driver.find_element_by_class_name("nv-pager")
