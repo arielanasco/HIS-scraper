@@ -36,23 +36,18 @@ class ScraperCategory(WebDriver):
     def categoryParser(self,**kwargs):
         self.driver.get(self.url)
         self.elementTag = kwargs.get("elementTag")
-        self.html = self.driver.find_element_by_class_name(self.elementTag)
-        self.parent = self.html.find_elements_by_class_name("p-sortNavPCCategory__itemLv1")
+        self.html = bs(self.driver.page_source, 'html.parser')
+        self.parent =  self.html.find(class_=self.elementTag)
+        self.parent =  self.parent.find_all("li")
+
         for parent in self.parent:
-            site.driver.current_url
-            self.parent_category = parent.find_element_by_class_name("js-sortAccBtn").text
-            self.sortNavPCCategory__itemLv3  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv3")
-            self.sortNavPCCategory__itemLv2  = parent.find_elements_by_class_name("p-sortNavPCCategory__itemLv2")
-            print(self.parent_category)
-            print(len(self.sortNavPCCategory__itemLv2))
-            self.sortNavPCCategory__itemLv2[0].find_element_by_css_selector("input").click()
-            site.driver.current_url
-            # for category in self.sortNavPCCategory__itemLv2:
-            #     # WebDriverWait(self.driver, 5)  
-            #     print(category.get_attribute('innerHTML'))
-                # site.driver.current_url
-                # WebDriverWait(self.driver, 5)  
-                # category.find_element_by_tag_name("input").send_keys(Keys.ENTER)
+            self.child = parent.find_all("li")
+            self.parent_category = parent.find("a").find("span").get_text()
+            for child in self.child:
+                ScraperCategory.categoryList.append({"URL":child.find("a").get("href"),"category":self.parent_category+"_"+child.get_text()})
+
+
+
 
 
             # if len(self.sortNavPCCategory__itemLv3) != 0:
@@ -287,7 +282,7 @@ def ItemLinkCollector(data):
 start = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Scraping has been started...")
 site=ScraperCategory("https://furusatohonpo.jp/donate/s/?")
-site.categoryParser(elementTag="p-sortNavPCCategory")
+site.categoryParser(elementTag="vue-footer-categories")
 data=site.categoryList
 site.driver.quit()
 final = time.perf_counter()
