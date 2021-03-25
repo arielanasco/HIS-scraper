@@ -154,7 +154,9 @@ class DataParserClass(WebDriver):
         except:
             self.stockStatus =  "NA"
         try:
-            self.localNameFinder = self.html.find(class_=localNameFinder).get_text()
+            self.localNameFinder = self.html.find(class_=localNameFinder)
+            self.localNameFinder = self.localNameFinder.find_all(class_="icon")
+            self.localNameFinder = self.localNameFinder[1].get_text()
             self.localNameFinder = re.sub('\s+', '', self.localNameFinder)
         except:
             self.localNameFinder =  "NA"
