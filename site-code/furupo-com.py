@@ -314,6 +314,7 @@ logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)}
 #     mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],agt_cd))
 #     mydb.commit()
 
+
 # for  datum in DataParserClass.data:
 #     try:
 #         mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
