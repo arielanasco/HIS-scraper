@@ -1,3 +1,70 @@
+import queue
+import threading
+import time
+import requests
+# Class
+class MultiThread(threading.Thread):
+    def __init__(self, name):
+        threading.Thread.__init__(self)
+        self.name = name
+
+    def run(self):
+        print(f"{threading.current_thread().name}")
+        process_queue()
+
+# Process thr queue
+def process_queue():
+    while True:
+        try:
+            site = my_queue.get(block=False)
+        except queue.Empty:
+            return
+        else:
+            get_web(site)
+            time.sleep(2)
+
+# function to multiply
+def get_web(site):
+    x = requests.get(site)
+    print(f"{threading.current_thread().name} thread handled {site}:{x.status_code}")
+
+
+# Input variables
+input_values = [
+                'https://w3schools.com',
+                'https://google.com',
+                'https://facebook.com',
+                'https://github.com',
+                'https://youtube.com',
+                'https://apple.com',
+                'https://en.wikipedia.org',
+                'https://docs.google.com',
+                'https://mozilla.org',
+                'https://cloudflare.com',
+                'https://twitter.com'
+                ]
+
+# fill the queue
+my_queue = queue.Queue()
+for x in input_values:
+    my_queue.put(x)
+# initializing and starting 3 threads
+thread1 = MultiThread('First')
+thread2 = MultiThread('Second')
+thread3 = MultiThread('Third')
+
+
+# Start the threads
+thread1.start()
+thread2.start()
+thread3.start()
+
+
+
+# Join the threads
+thread1.join()
+thread2.join()
+thread3.join()
 
 
 # import requests

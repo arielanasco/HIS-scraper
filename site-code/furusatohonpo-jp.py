@@ -22,6 +22,11 @@ import mysql.connector as connect
 """ This section declares all the variables used """
 LINK = "https://furusatohonpo.jp"
 
+agt_cd = "FHP"
+mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
+mycursor = mydb.cursor()
+
+
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger(__name__)
 
@@ -76,6 +81,7 @@ class DataParserClass(WebDriver):
     isNotActive = True
     data = []
     totalData = 0
+    seen = set()
 
     def __init__(self, url):
         self.url = url
@@ -94,15 +100,23 @@ class DataParserClass(WebDriver):
         self.stockStatus =  "NA"
 
 
-    def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,shipMethod,capacityFinder,compName,imageUrlFinder):
+    def dataParser(self,html,itemUrl,parent_cat,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,shipMethod,capacityFinder,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        # try:
-        #     self.categoryFinder = self.html.find(class_=categoryFinder).find_all("li")
-        #     self.categoryFinder = self.categoryFinder[-2].find("a").get_text()
-        #     self.categoryFinder =  re.sub(r'\W+', '', self.categoryFinder)
-        #     self.categoryFinder =  re.sub(r'のふるさと納税一覧', '', self.categoryFinder)
-        # except:
-        #      self.categoryFinder = "NA"
+        try:
+            self.categoryFinder = self.html.find(class_=categoryFinder).find_all("li")
+            self.categoryFinder = self.categoryFinder[-2].find("a").get_text()
+            self.categoryFinderLink = self.categoryFinder[-2].find("a")
+            self.categoryFinder =  re.sub(r'\W+', '', self.categoryFinder)
+            self.categoryFinder =  re.sub(r'のふるさと納税一覧', '', self.categoryFinder)
+        except:
+             self.categoryFinder = "NA"
+        
+        if self.categoryFinderLink not in DataParserClass.seen:
+            mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",("https://furusatohonpo.jp"+self.categoryFinderLink,
+            parent_cat+"_"+self.categoryFinder,agt_cd))
+            mydb.commit()
+            DataParserClass.seen.add(self.categoryFinderLink)
+
 
         self.about = self.html.find(class_="p-detailInfo")
         self.about = self.about.find_all("tr")
@@ -180,6 +194,7 @@ class DataParserClass(WebDriver):
 
 def DataCollectorFunction(data):
     item_url = data["URL"]
+    category = data["category"]
     scrapeURL = DataParserClass(item_url)
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
@@ -187,6 +202,7 @@ def DataCollectorFunction(data):
         time.sleep(3)
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url,
+                           parent_cat = category,
                            categoryFinder = "c-contents", 
                            localNameFinder = "p-detailName__municipality",
                            titleFinder = "p-detailName__ttl",
@@ -277,15 +293,6 @@ final = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
 
 start = time.perf_counter()
-site_name = os.path.basename(__file__).split(".")[0]
-cwd = os.getcwd()
-agt_cd = "FHP"
-mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
-mycursor = mydb.cursor()
-
-for  datum in data:
-    mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],agt_cd))
-    mydb.commit()
 
 for  datum in DataParserClass.data:
     try:
