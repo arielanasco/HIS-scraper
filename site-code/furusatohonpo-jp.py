@@ -112,7 +112,7 @@ class DataParserClass(WebDriver):
              self.categoryFinder = "NA"
         
         if self.categoryFinderLink not in DataParserClass.seen:
-            mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",("https://furusatohonpo.jp"+self.categoryFinderLink,
+            mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",("https://furusatohonpo.jp"+str(self.categoryFinderLink),
             parent_cat+"_"+self.categoryFinder,agt_cd))
             mydb.commit()
             DataParserClass.seen.add(self.categoryFinderLink)
