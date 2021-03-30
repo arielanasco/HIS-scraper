@@ -122,4 +122,11 @@ thread3.join()
 #     print(f'({_["URL"]}    {_["management_number"]}')
 
 
-
+test = set()
+ctr = 0
+for _ in DataParserClass.data:
+    if _["URL"] not in test:
+        test.add(_["URL"])
+    else:
+        ctr+=1
+        print(f'{_["URL"]}   {ctr}')
