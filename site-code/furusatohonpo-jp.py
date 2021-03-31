@@ -108,16 +108,14 @@ class DataParserClass(WebDriver):
             self.categoryFinderLink = self.categoryFinder[-2].find("a").get("href")
             self.categoryFinder =  re.sub(r'\W+', '', self.categoryFinder)
             self.categoryFinder =  re.sub(r'のふるさと納税一覧', '', self.categoryFinder)
+            with data_lock:
+                if self.categoryFinderLink not in self.seen:
+                    mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",("https://furusatohonpo.jp"+str(self.categoryFinderLink),
+                    parent_cat+"_"+self.categoryFinder,agt_cd))
+                    mydb.commit()
+                    self.seen.add(self.categoryFinderLink)
         except:
              self.categoryFinder = "NA"
-
-        with data_lock:
-            if self.categoryFinderLink not in self.seen:
-                mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",("https://furusatohonpo.jp"+str(self.categoryFinderLink),
-                parent_cat+"_"+self.categoryFinder,agt_cd))
-                mydb.commit()
-                self.seen.add(self.categoryFinderLink)
-
 
         self.about = self.html.find(class_="p-detailInfo")
         self.about = self.about.find_all("tr")
