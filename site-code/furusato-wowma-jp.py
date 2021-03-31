@@ -149,8 +149,9 @@ class DataParserClass(web_driver_1.WebDriver):
             self.multiple_category = []
             for _ in self.categoryFinder:
                 self.liTag = _.find_all("li")
-                self.categoryFinder = self.liTag[-2].find("a").get_text()
-                self.multiple_category.append(self.categoryFinder)
+                self.categoryFinderSub = self.liTag[-2].find("a").get_text()
+                self.categoryFinderMain = self.liTag[-3].find("a").get_text()
+                self.multiple_category.append(self.categoryFinderMain+"_"+self.categoryFinderSub)
         except:
             self.multiple_category =  []
 
