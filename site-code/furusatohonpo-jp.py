@@ -105,7 +105,7 @@ class DataParserClass(WebDriver):
         try:
             self.categoryFinder = self.html.find(class_=categoryFinder).find_all("li")
             self.categoryFinder = self.categoryFinder[-2].find("a").get_text()
-            self.categoryFinderLink = self.categoryFinder[-2].find("a")
+            self.categoryFinderLink = self.categoryFinder[-2].find("a").get("href")
             self.categoryFinder =  re.sub(r'\W+', '', self.categoryFinder)
             self.categoryFinder =  re.sub(r'のふるさと納税一覧', '', self.categoryFinder)
         except:
