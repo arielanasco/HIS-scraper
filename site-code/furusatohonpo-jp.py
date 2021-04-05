@@ -104,14 +104,15 @@ class DataParserClass(WebDriver):
             self.temp = _.find("a").get_text()
             self.temp = re.sub(r'のふるさと納税一覧', '', self.temp)
             self.temp = re.sub(r'\W+', '', self.temp)
-            if (i == len(self.categoryFinder[1:-1]) - 1):
+            if (i == (len(self.categoryFinder[1:-1]) - 1)):
                 self.parent_category += self.temp
             else:
                 self.parent_category +=self.temp+"_"
         self.categoryFinderLink = self.categoryFinder[-2].find("a").get("href")
         with data_lock:
             print(f"https://furusatohonpo.jp{str(self.categoryFinderLink)}   {self.parent_category}")
-            self.categoryFinder = self.parent_category
+            DataParserClass.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":self.parent_category})
+        self.categoryFinder = self.parent_category
         # self.categoryFinderChild = self.categoryFinder[-2].find("a").get_text()
         # self.categoryFinderChild =  re.sub(r'のふるさと納税一覧', '', self.categoryFinderChild)
         # self.categoryFinderChild =  re.sub(r'\W+', '', self.categoryFinderChild)
@@ -289,23 +290,23 @@ logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)}
 
 data=[data[20]]
 
-# start = time.perf_counter()
-# with concurrent.futures.ThreadPoolExecutor(max_workers=5 , thread_name_prefix='Fetching_URL') as executor:
-#     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
-#     for future in concurrent.futures.as_completed(futures):
-#         if future.result():
-#             logging.info(f"{threading.current_thread().name}) -{future.result()}")
-# final = time.perf_counter()
-# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
+start = time.perf_counter()
+with concurrent.futures.ThreadPoolExecutor(max_workers=5 , thread_name_prefix='Fetching_URL') as executor:
+    futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
+    for future in concurrent.futures.as_completed(futures):
+        if future.result():
+            logging.info(f"{threading.current_thread().name}) -{future.result()}")
+final = time.perf_counter()
+logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
-# start = time.perf_counter()
-# with concurrent.futures.ThreadPoolExecutor(max_workers=5,thread_name_prefix='Fetching_Item_Data') as executor:
-#     futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
-#     for future in concurrent.futures.as_completed(futures):
-#         if future.result():
-#             logging.info(f"{threading.current_thread().name}) -{future.result()}")
-# final = time.perf_counter()
-# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
+start = time.perf_counter()
+with concurrent.futures.ThreadPoolExecutor(max_workers=5,thread_name_prefix='Fetching_Item_Data') as executor:
+    futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
+    for future in concurrent.futures.as_completed(futures):
+        if future.result():
+            logging.info(f"{threading.current_thread().name}) -{future.result()}")
+final = time.perf_counter()
+logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
 
 # agt_cd = "FHP"
 # mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
