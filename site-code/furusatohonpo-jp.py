@@ -99,20 +99,38 @@ class DataParserClass(WebDriver):
     def dataParser(self,html,itemUrl,parent_category,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,shipMethod,capacityFinder,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         self.categoryFinder = self.html.find(class_=categoryFinder).find_all("li")
-        self.categoryFinderChild = self.categoryFinder[-2].find("a").get_text()
-        self.categoryFinderChild =  re.sub(r'のふるさと納税一覧', '', self.categoryFinderChild)
-        self.categoryFinderChild =  re.sub(r'\W+', '', self.categoryFinderChild)
-        self.categoryFinderLink = self.categoryFinder[-2].find("a").get("href")
-        self.parent_category = parent_category.split("_")
-        with data_lock:
-            if self.parent_category[-1] == self.categoryFinderChild:
-                print(f"https://furusatohonpo.jp{str(self.categoryFinderLink)}   {self.parent_category[0]}_{self.parent_category[1]}")
-                DataParserClass.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":self.parent_category[0]+"_"+self.parent_category[1]})
-                self.categoryFinder = self.parent_category[0]+"_"+self.parent_category[1]
+        self.parent_category = ""
+        for i,_ in enumerate(self.categoryFinder[1:-1]):
+            self.temp = _.find("a").get_text()
+            self.temp = re.sub(r'のふるさと納税一覧', '', self.temp)
+            self.temp = re.sub(r'\W+', '', self.temp)
+            if (i == len(self.categoryFinder[1:-1]) - 1):
+                self.parent_category.append(self.temp)
             else:
-                print(f"https://furusatohonpo.jp{str(self.categoryFinderLink)}   {self.parent_category[0]}_{self.parent_category[1]}_{self.categoryFinderChild}")
-                DataParserClass.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":self.parent_category[0]+"_"+self.parent_category[1]+"_"+self.categoryFinderChild})
-                self.categoryFinder = self.parent_category[0]+"_"+self.parent_category[1]+"_"+self.categoryFinderChild
+                self.parent_category.append(self.temp+"_")
+        
+        with data_lock:
+            print(f"https://furusatohonpo.jp{str(self.categoryFinderLink)}   {self.parent_category}")
+        # self.categoryFinderChild = self.categoryFinder[-2].find("a").get_text()
+        # self.categoryFinderChild =  re.sub(r'のふるさと納税一覧', '', self.categoryFinderChild)
+        # self.categoryFinderChild =  re.sub(r'\W+', '', self.categoryFinderChild)
+
+        # self.categoryFinderMid = self.categoryFinder[-2].find("a").get_text()
+        # self.categoryFinderMid =  re.sub(r'のふるさと納税一覧', '', self.categoryFinderMid)
+        # self.categoryFinderMid =  re.sub(r'\W+', '', self.categoryFinderMid)
+
+        # self.categoryFinderLink = self.categoryFinder[-2].find("a").get("href")
+        # self.parent_category = parent_category.split("_")
+        # with data_lock:
+
+        #     if self.parent_category[-1] == self.categoryFinderChild:
+        #         print(f"https://furusatohonpo.jp{str(self.categoryFinderLink)}   {self.parent_category[0]}_{self.parent_category[1]}")
+        #         DataParserClass.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":self.parent_category[0]+"_"+self.parent_category[1]})
+        #         self.categoryFinder = self.parent_category[0]+"_"+self.parent_category[1]
+        #     else:
+        #         print(f"https://furusatohonpo.jp{str(self.categoryFinderLink)}   {self.parent_category[0]}_{self.parent_category[1]}_{self.categoryFinderChild}")
+        #         DataParserClass.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":self.parent_category[0]+"_"+self.parent_category[1]+"_"+self.categoryFinderChild})
+        #         self.categoryFinder = self.parent_category[0]+"_"+self.parent_category[1]+"_"+self.categoryFinderChild
         self.about = self.html.find(class_="p-detailInfo")
         self.about = self.about.find_all("tr")
         for _ in self.about:
