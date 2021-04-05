@@ -96,24 +96,23 @@ class DataParserClass(WebDriver):
         self.stockStatus =  "NA"
 
 
-    def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,shipMethod,capacityFinder,compName,imageUrlFinder):
+    def dataParser(self,html,itemUrl,parent_category,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,shipMethod,capacityFinder,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
-        try:
-            self.categoryFinder = self.html.find(class_=categoryFinder).find_all("li")
-            self.categoryFinderChild = self.categoryFinder[-2].find("a").get_text()
-            self.categoryFinderChild =  re.sub(r'のふるさと納税一覧', '', self.categoryFinderChild)
-            self.categoryFinderParent = self.categoryFinder[-3].find("a").get_text()
-            self.categoryFinderParent =  re.sub(r'のふるさと納税一覧', '', self.categoryFinderParent)
-            self.categoryFinderChild =  re.sub(r'\W+', '', self.categoryFinderChild)
-            self.categoryFinderParent =  re.sub(r'\W+', '', self.categoryFinderParent)
-            self.categoryFinderLink = self.categoryFinder[-2].find("a").get("href")
-            
-            with data_lock:
-                print(f"https://furusatohonpo.jp{str(self.categoryFinderLink)}   {self.categoryFinderParent}_{self.categoryFinderChild}")
-                DataParserClass.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":self.categoryFinderParent+"_"+self.categoryFinderChild})
-            self.categoryFinder = self.categoryFinderParent+"_"+self.categoryFinder
-        except:
-             self.categoryFinder = "NA"
+        self.categoryFinder = self.html.find(class_=categoryFinder).find_all("li")
+        self.categoryFinderChild = self.categoryFinder[-2].find("a").get_text()
+        self.categoryFinderChild =  re.sub(r'のふるさと納税一覧', '', self.categoryFinderChild)
+        self.categoryFinderChild =  re.sub(r'\W+', '', self.categoryFinderChild)
+        self.categoryFinderLink = self.categoryFinder[-2].find("a").get("href")
+        self.parent_category = parent_category.split("_")
+        with data_lock:
+            if self.parent_category[-1] == self.categoryFinderChild:
+                print(f"https://furusatohonpo.jp{str(self.categoryFinderLink)}   {self.parent_category[0]}_{self.parent_category[1]}")
+                DataParserClass.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":self.parent_category[0]+"_"+self.parent_category[1]})
+                self.categoryFinder = self.parent_category[0]+"_"+self.parent_category[1]
+            else:
+                print(f"https://furusatohonpo.jp{str(self.categoryFinderLink)}   {self.parent_category[0]}_{self.parent_category[1]}_{self.categoryFinderChild}")
+                DataParserClass.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":self.parent_category[0]+"_"+self.parent_category[1]+"_"+self.categoryFinderChild})
+                self.categoryFinder = self.parent_category[0]+"_"+self.parent_category[1]+"_"+self.categoryFinderChild
 
         self.about = self.html.find(class_="p-detailInfo")
         self.about = self.about.find_all("tr")
@@ -191,6 +190,7 @@ class DataParserClass(WebDriver):
 
 def DataCollectorFunction(data):
     item_url = data["URL"]
+    category=data["category"]
     scrapeURL = DataParserClass(item_url)
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
@@ -198,6 +198,7 @@ def DataCollectorFunction(data):
         time.sleep(3)
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url,
+                           parent_category =category,
                            categoryFinder = "c-contents", 
                            localNameFinder = "p-detailName__municipality",
                            titleFinder = "p-detailName__ttl",
