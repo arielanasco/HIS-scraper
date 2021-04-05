@@ -98,16 +98,21 @@ class DataParserClass(WebDriver):
         self.stockStatus =  "NA"
 
 
-    def dataParser(self,html,itemUrl,parent_cat,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,shipMethod,capacityFinder,compName,imageUrlFinder):
+    def dataParser(self,html,itemUrl,categoryFinder,localNameFinder,titleFinder,descriptionFinder,priceFinder,shipMethod,capacityFinder,compName,imageUrlFinder):
         self.html = bs(html, 'html.parser')
         try:
             self.categoryFinder = self.html.find(class_=categoryFinder).find_all("li")
-            self.categoryFinder = self.categoryFinder[-2].find("a").get_text()
+            self.categoryFinderChild = self.categoryFinder[-2].find("a").get_text()
+            self.categoryFinderChild =  re.sub(r'のふるさと納税一覧', '', self.categoryFinderChild)
+            self.categoryFinderParent = self.categoryFinder[-3].find("a").get_text()
+            self.categoryFinderParent =  re.sub(r'のふるさと納税一覧', '', self.categoryFinderChild)
             self.categoryFinderLink = self.categoryFinder[-2].find("a").get("href")
-            self.categoryFinder =  re.sub(r'\W+', '', self.categoryFinder)
-            self.categoryFinder =  re.sub(r'のふるさと納税一覧', '', self.categoryFinder)
+            self.categoryFinderChild =  re.sub(r'\W+', '', self.categoryFinderChild)
+            self.categoryFinderParent =  re.sub(r'\W+', '', self.categoryFinderParent)
+            
             with data_lock:
-                    self.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":parent_cat+"_"+self.categoryFinder})
+                    self.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":self.categoryFinderParent+"_"+self.categoryFinder})
+            self.categoryFinder = self.categoryFinderParent+"_"+self.categoryFinder
         except:
              self.categoryFinder = "NA"
 
@@ -187,7 +192,6 @@ class DataParserClass(WebDriver):
 
 def DataCollectorFunction(data):
     item_url = data["URL"]
-    category = data["category"]
     scrapeURL = DataParserClass(item_url)
     scrapeURL.driver.get(scrapeURL.url)
     logging.info(f"{threading.current_thread().name}) -Scraped_items({DataParserClass.totalData}/{len(DataParserClass.data)}) -Fetching({item_url})")
@@ -195,7 +199,6 @@ def DataCollectorFunction(data):
         time.sleep(3)
         scrapeURL.dataParser(html = scrapeURL.driver.page_source,
                            itemUrl = item_url,
-                           parent_cat = category,
                            categoryFinder = "c-contents", 
                            localNameFinder = "p-detailName__municipality",
                            titleFinder = "p-detailName__ttl",
@@ -268,14 +271,14 @@ logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)}
 
 # data=[data[20]]
 
-# start = time.perf_counter()
-# with concurrent.futures.ThreadPoolExecutor(max_workers=5 , thread_name_prefix='Fetching_URL') as executor:
-#     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
-#     for future in concurrent.futures.as_completed(futures):
-#         if future.result():
-#             logging.info(f"{threading.current_thread().name}) -{future.result()}")
-# final = time.perf_counter()
-# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
+start = time.perf_counter()
+with concurrent.futures.ThreadPoolExecutor(max_workers=5 , thread_name_prefix='Fetching_URL') as executor:
+    futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
+    for future in concurrent.futures.as_completed(futures):
+        if future.result():
+            logging.info(f"{threading.current_thread().name}) -{future.result()}")
+final = time.perf_counter()
+logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
 # start = time.perf_counter()
 # with concurrent.futures.ThreadPoolExecutor(max_workers=5,thread_name_prefix='Fetching_Item_Data') as executor:
