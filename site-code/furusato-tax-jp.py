@@ -278,52 +278,50 @@ site.driver.quit()
 final = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds for fetching {len(data)} categories")
 
-# data=[data[0]]
-# start = time.perf_counter()
-# with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
-#     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
-#     for future in concurrent.futures.as_completed(futures):
-#         if future.result():
-#             logging.info(f"{threading.current_thread().name}) -{future.result()}")
-# final = time.perf_counter()
-# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
+data=[data[0]]
+start = time.perf_counter()
+with concurrent.futures.ThreadPoolExecutor(max_workers=8 , thread_name_prefix='Fetching_URL') as executor:
+    futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
+    for future in concurrent.futures.as_completed(futures):
+        if future.result():
+            logging.info(f"{threading.current_thread().name}) -{future.result()}")
+final = time.perf_counter()
+logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
-# start = time.perf_counter()
-# with concurrent.futures.ThreadPoolExecutor(max_workers=8, thread_name_prefix='Fetching_Item_Data') as executor:
-#     futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
-#     for future in concurrent.futures.as_completed(futures):
-#         if future.result():
-#             logging.info(f"{threading.current_thread().name}) -{future.result()}")
-# final = time.perf_counter()
-# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
+start = time.perf_counter()
+with concurrent.futures.ThreadPoolExecutor(max_workers=8, thread_name_prefix='Fetching_Item_Data') as executor:
+    futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
+    for future in concurrent.futures.as_completed(futures):
+        if future.result():
+            logging.info(f"{threading.current_thread().name}) -{future.result()}")
+final = time.perf_counter()
+logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
 
-# start = time.perf_counter()
-# site_name = os.path.basename(__file__).split(".")[0]
-# cwd = os.getcwd()
-# agt_cd = "FCH"
-# mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
-# mycursor = mydb.cursor()
 
-# for  datum in data:
-#     mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],agt_cd))
-#     mydb.commit()
+agt_cd = "FCH"
+mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
+mycursor = mydb.cursor()
 
-# for  datum in DataParserClass.data:
-#     try:
-#         mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-#         (datum["URL"],datum["local_name"],datum["management_number"],datum["title"],datum["description"],datum["app_deadline"],datum["price"],datum["capacity"],datum["comp_name"][:30],agt_cd))
-#         mydb.commit()
-#         if type(datum["category"]) == list:
-#             for cat in datum["category"][:8]:
-#                 mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm%s = %s  WHERE agt_mchan_url = %s",(datum['category'].index(cat)+1,cat,datum["URL"]))
-#                 mydb.commit()
-#         else:
-#             mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
-#             mydb.commit()       
-#         for  img in datum["images"][:5]:
-#             mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(datum["images"].index(img)+1,img,datum["URL"]))
-#             mydb.commit()
-#     except:
-#         logging.info(f"{threading.current_thread().name}) -Data failed to be saved...{datum['URL']}")
-# final = time.perf_counter()
-# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  save  {len(DataParserClass.data)} items data")
+for  datum in data:
+    mycursor.execute("INSERT INTO m_agt_catgy (agt_catgy_url,agt_catgy_nm,agt_cd)VALUES (%s,%s,%s)",(datum["URL"],datum["category"],agt_cd))
+    mydb.commit()
+
+for  datum in DataParserClass.data:
+    try:
+        mycursor.execute("INSERT INTO t_agt_mchan (agt_mchan_url,agt_city_nm,agt_mchan_cd,mchan_nm,mchan_desc,appli_dline,price,capacity,mchan_co,agt_cd) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+        (datum["URL"],datum["local_name"],datum["management_number"],datum["title"],datum["description"],datum["app_deadline"],datum["price"],datum["capacity"],datum["comp_name"][:30],agt_cd))
+        mydb.commit()
+        if type(datum["category"]) == list:
+            for cat in datum["category"][:8]:
+                mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm%s = %s  WHERE agt_mchan_url = %s",(datum['category'].index(cat)+1,cat,datum["URL"]))
+                mydb.commit()
+        else:
+            mycursor.execute("UPDATE  t_agt_mchan SET agt_catgy_nm1 = %s WHERE agt_mchan_url = %s",(datum["category"],datum["URL"]))
+            mydb.commit()       
+        for  img in datum["images"][:5]:
+            mycursor.execute("UPDATE  t_agt_mchan SET mchan_img_url%s = %s  WHERE agt_mchan_url = %s",(datum["images"].index(img)+1,img,datum["URL"]))
+            mydb.commit()
+    except:
+        logging.info(f"{threading.current_thread().name}) -Data failed to be saved...{datum['URL']}")
+final = time.perf_counter()
+logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  save  {len(DataParserClass.data)} items data")

@@ -125,8 +125,6 @@ thread3.join()
 test = set()
 ctr = 0
 for _ in DataParserClass.data:
-    if _["URL"] not in test:
-        test.add(_["URL"])
-    else:
-        ctr+=1
-        print(f'{_["URL"]}   {ctr}')
+    if _["URL"] == "https://www.furusato-tax.jp/product/detail/30366/4680040":
+        print(_)
+        test = _
