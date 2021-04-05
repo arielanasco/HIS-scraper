@@ -108,11 +108,11 @@ class DataParserClass(WebDriver):
             if self.parent_category[-1] == self.categoryFinderChild:
                 print(f"https://furusatohonpo.jp{str(self.categoryFinderLink)}   {self.parent_category[0]}_{self.parent_category[1]}")
                 DataParserClass.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":self.parent_category[0]+"_"+self.parent_category[1]})
-                self.categoryFinder = self.parent_category[0]+"_"+self.parent_category[1]+"_"+self.categoryFinderChild
+                self.categoryFinder = self.parent_category[0]+"_"+self.parent_category[1]
             else:
                 print(f"https://furusatohonpo.jp{str(self.categoryFinderLink)}   {self.parent_category[0]}_{self.parent_category[1]}_{self.categoryFinderChild}")
                 DataParserClass.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":self.parent_category[0]+"_"+self.parent_category[1]+"_"+self.categoryFinderChild})
-                self.categoryFinder = self.parent_category[0]+"_"+self.parent_category[1]
+                self.categoryFinder = self.parent_category[0]+"_"+self.parent_category[1]+"_"+self.categoryFinderChild
         self.about = self.html.find(class_="p-detailInfo")
         self.about = self.about.find_all("tr")
         for _ in self.about:
