@@ -128,3 +128,21 @@ for _ in DataParserClass.data:
     if _["URL"] == "https://www.furusato-tax.jp/product/detail/30366/4680040":
         print(_)
         test = _
+
+data = [
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=300', 'category': '果物・フルーツ_季節のフルーツ'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=301', 'category': '果物・フルーツ_いちご'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=302', 'category': '果物・フルーツ_マンゴー'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=303', 'category': '果物・フルーツ_ぶどう・マスカット'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=304', 'category': '果物・フルーツ_みかん・柑橘類'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=305', 'category': '果物・フルーツ_りんご'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=306', 'category': '果物・フルーツ_梨'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=307', 'category': '果物・フルーツ_さくらんぼ'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=308', 'category': '果物・フルーツ_メロン'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=309', 'category': '果物・フルーツ_もも'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=310', 'category': '果物・フルーツ_バナナ'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=311', 'category': '果物・フルーツ_ドライフルーツ'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=330', 'category': '果物・フルーツ_その他果物'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=390', 'category': '果物・フルーツ_セット・詰合せ'},
+{'URL': 'https://furusatohonpo.jp/donate/s/?categories=391', 'category': '果物・フルーツ_月変わり'}
+]

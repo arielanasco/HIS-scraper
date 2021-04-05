@@ -22,9 +22,7 @@ import mysql.connector as connect
 """ This section declares all the variables used """
 LINK = "https://furusatohonpo.jp"
 
-agt_cd = "FHP"
-mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
-mycursor = mydb.cursor()
+
 
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
@@ -105,13 +103,14 @@ class DataParserClass(WebDriver):
             self.categoryFinderChild = self.categoryFinder[-2].find("a").get_text()
             self.categoryFinderChild =  re.sub(r'のふるさと納税一覧', '', self.categoryFinderChild)
             self.categoryFinderParent = self.categoryFinder[-3].find("a").get_text()
-            self.categoryFinderParent =  re.sub(r'のふるさと納税一覧', '', self.categoryFinderChild)
-            self.categoryFinderLink = self.categoryFinder[-2].find("a").get("href")
+            self.categoryFinderParent =  re.sub(r'のふるさと納税一覧', '', self.categoryFinderParent)
             self.categoryFinderChild =  re.sub(r'\W+', '', self.categoryFinderChild)
             self.categoryFinderParent =  re.sub(r'\W+', '', self.categoryFinderParent)
+            self.categoryFinderLink = self.categoryFinder[-2].find("a").get("href")
             
             with data_lock:
-                    self.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":self.categoryFinderParent+"_"+self.categoryFinder})
+                print(f"https://furusatohonpo.jp{str(self.categoryFinderLink)}   {self.categoryFinderParent}_{self.categoryFinder}")
+                self.seen.append({"URL":"https://furusatohonpo.jp"+str(self.categoryFinderLink),"category":self.categoryFinderParent+"_"+self.categoryFinder})
             self.categoryFinder = self.categoryFinderParent+"_"+self.categoryFinder
         except:
              self.categoryFinder = "NA"
@@ -269,25 +268,29 @@ site.driver.quit()
 final = time.perf_counter()
 logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} for fetching {len(data)} categories")
 
-# data=[data[20]]
+data=[data[20]]
 
-# start = time.perf_counter()
-# with concurrent.futures.ThreadPoolExecutor(max_workers=5 , thread_name_prefix='Fetching_URL') as executor:
-#     futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
-#     for future in concurrent.futures.as_completed(futures):
-#         if future.result():
-#             logging.info(f"{threading.current_thread().name}) -{future.result()}")
-# final = time.perf_counter()
-# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
+start = time.perf_counter()
+with concurrent.futures.ThreadPoolExecutor(max_workers=5 , thread_name_prefix='Fetching_URL') as executor:
+    futures = [executor.submit(ItemLinkCollector, datum) for datum in data]
+    for future in concurrent.futures.as_completed(futures):
+        if future.result():
+            logging.info(f"{threading.current_thread().name}) -{future.result()}")
+final = time.perf_counter()
+logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  fetch  {len(DataParserClass.data)} items URL")
 
-# start = time.perf_counter()
-# with concurrent.futures.ThreadPoolExecutor(max_workers=5,thread_name_prefix='Fetching_Item_Data') as executor:
-#     futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
-#     for future in concurrent.futures.as_completed(futures):
-#         if future.result():
-#             logging.info(f"{threading.current_thread().name}) -{future.result()}")
-# final = time.perf_counter()
-# logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
+start = time.perf_counter()
+with concurrent.futures.ThreadPoolExecutor(max_workers=5,thread_name_prefix='Fetching_Item_Data') as executor:
+    futures = [executor.submit(DataCollectorFunction, data) for data in DataParserClass.data]
+    for future in concurrent.futures.as_completed(futures):
+        if future.result():
+            logging.info(f"{threading.current_thread().name}) -{future.result()}")
+final = time.perf_counter()
+logging.info(f"{threading.current_thread().name}) -Took {round((final-start),2)} seconds to  scrape  {len(DataParserClass.data)} items data")
+
+agt_cd = "FHP"
+mydb = connect.connect(host="localhost",user="user",password="password",database="his_furusato")
+mycursor = mydb.cursor()
 
 
 # for  datum in DataParserClass.seen:
