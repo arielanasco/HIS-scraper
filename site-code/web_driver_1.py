@@ -11,13 +11,13 @@ class WebDriver:
         "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:24.0) Gecko/20100101 Firefox/24.0"
         ]
         self.headers = {"User-Agent": f"{sample(self.userAgentList,1)[0]}","Content-Type": "text/html","keep_alive":"False"}
-        self.proxies = {"http": "http://13.230.110.97:8888" ,'https': 'http://13.230.110.97:8888',}
+        # self.proxies = {"http": "http://13.230.110.97:8888" ,'https': 'http://13.230.110.97:8888',}
     
     def get(self,url):
         with requests.session() as s:
             s.headers = self.headers
-            s.proxies = self.proxies
-            self.html = requests.get(url,headers = self.headers,proxies = self.proxies)
+            # s.proxies = self.proxies
+            self.html = requests.get(url,headers = self.headers)
         return self.html
 
 
