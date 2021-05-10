@@ -49,12 +49,14 @@ class ScraperCategory(web_driver_1.WebDriver):
             if len(category_) > 2 :
                 for _ in category_[2:]:
                     # self.categoryData = re.sub(r'\([^()]*\)', '', _.find("a").get_text())
+                    self.categoryData =  _.find("a").get_text()
                     for parent in ScraperCategory.temp:
                         if category_[0].get_text() in parent["base"]:
                             self.categoryData = parent["main"]+"_"+category_[0].get_text()+"_"+self.categoryData
                     ScraperCategory.category_list.append({"URL":_.find("a").get("href"),"category":self.categoryData})
             else:
                 # self.categoryData = re.sub(r'\([^()]*\)', '', category_[-1].find("a").get_text())
+                self.categoryData = category_[-1].find("a").get_text()
                 for parent in ScraperCategory.temp:
                     if category_[0].get_text() in parent["base"]:
                         self.categoryData = parent["main"]+"_"+category_[0].get_text()
