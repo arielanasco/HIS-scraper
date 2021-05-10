@@ -1,8 +1,23 @@
+# isActive = True
+
+
+# print("testing")
+# if isActive:
+#     print("Incluyded source code")
+
+# import logging
+# from datetime import datetime
+
+# date = datetime.now().strftime("%Y_%m_%d")
+# logging.basicConfig(filename=f"filename_{date}.log",filemode='a',level=logging.INFO, format='[%(asctime)s](%(levelname)s@%(message)s', datefmt='%d-%b-%y %H:%M:%S')
+# logging.info(f" -Took seconds to  save items data on {__file__.split('.')[0]}")
+# logging.warning(f" -Took seconds to  save items data on {__file__.split('.')[0]}")
+
 # import queue
 # import threading
 # import time
 # import requests
-# # Class
+# Class
 # class MultiThread(threading.Thread):
 #     def __init__(self, name):
 #         threading.Thread.__init__(self)
@@ -37,7 +52,7 @@
 #                 'https://github.com',
 #                 'https://youtube.com',
 #                 'https://apple.com',
-#                 'https://en.wikipedia.org',
+#                 'https://en.wikipedia.org',~
 #                 'https://docs.google.com',
 #                 'https://mozilla.org',
 #                 'https://cloudflare.com',
@@ -125,40 +140,39 @@
 # test = set()
 # ctr = 0
 # for _ in DataParserClass.data:
-#     if _["URL"] == "https://www.furusato-tax.jp/product/detail/30366/4680040":
-#         print(_)
-#         test = _
+#     print(f'{_["category"]}    {_["stock_status"]}      {_["local_name"]}   {_["management_number"]}  {_["app_deadline"]} {_["price"]}' )
 
-data = [
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=300', 'category': '果物・フルーツ_季節のフルーツ'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=301', 'category': '果物・フルーツ_いちご'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=302', 'category': '果物・フルーツ_マンゴー'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=303', 'category': '果物・フルーツ_ぶどう・マスカット'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=304', 'category': '果物・フルーツ_みかん・柑橘類'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=305', 'category': '果物・フルーツ_りんご'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=306', 'category': '果物・フルーツ_梨'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=307', 'category': '果物・フルーツ_さくらんぼ'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=308', 'category': '果物・フルーツ_メロン'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=309', 'category': '果物・フルーツ_もも'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=310', 'category': '果物・フルーツ_バナナ'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=311', 'category': '果物・フルーツ_ドライフルーツ'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=330', 'category': '果物・フルーツ_その他果物'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=390', 'category': '果物・フルーツ_セット・詰合せ'},
-{'URL': 'https://furusatohonpo.jp/donate/s/?categories=391', 'category': '果物・フルーツ_月変わり'}
-]
+
+# data = [
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=300', 'category': '果物・フルーツ_季節のフルーツ'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=301', 'category': '果物・フルーツ_いちご'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=302', 'category': '果物・フルーツ_マンゴー'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=303', 'category': '果物・フルーツ_ぶどう・マスカット'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=304', 'category': '果物・フルーツ_みかん・柑橘類'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=305', 'category': '果物・フルーツ_りんご'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=306', 'category': '果物・フルーツ_梨'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=307', 'category': '果物・フルーツ_さくらんぼ'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=308', 'category': '果物・フルーツ_メロン'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=309', 'category': '果物・フルーツ_もも'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=310', 'category': '果物・フルーツ_バナナ'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=311', 'category': '果物・フルーツ_ドライフルーツ'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=330', 'category': '果物・フルーツ_その他果物'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=390', 'category': '果物・フルーツ_セット・詰合せ'},
+# {'URL': 'https://furusatohonpo.jp/donate/s/?categories=391', 'category': '果物・フルーツ_月変わり'}
+# ]
 
 # 果物フルーツ_[<li class="c-breadcrumb__item"><a class="c-breadcrumb__link" href="/">ふるさと本舗 ふるさと納税返礼品</a></li>, 
 # <li class="c-breadcrumb__item"><a class="c-breadcrumb__link" href="/donate/s/?categories=3">果物・フルーツのふるさと納税一覧</a></li>, 
 # <li class="c-breadcrumb__item"><a class="c-breadcrumb__link" href="/donate/s/?categories=301">いちごのふるさと納税一覧</a></li>, 
 # <li class="c-breadcrumb__item">濃厚な「伊賀のいちご」欲張り3種セット（ よつぼし/紅ほっぺ/淡雪）約1800g【出荷2021年1月中旬～4月下旬】</li>]
-class TestClass:
-    var = 1
+# class TestClass:
+#     var = 1
 
-    def adder(self):
-        self.var = self.var+1
+#     def adder(self):
+#         self.var = self.var+1
 
-test = TestClass()
-test.adder()
-print(test.var)
-TestClass.var=test.var
-print(TestClass.var)
+# test = TestClass()
+# test.adder()
+# print(test.var)
+# TestClass.var=test.var
+# print(TestClass.var)
